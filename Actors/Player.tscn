@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://Assets/animation/RUN2.png" type="Texture" id=1]
 [ext_resource path="res://Actors/Script/Player.gd" type="Script" id=2]
@@ -87,6 +87,192 @@ extents = Vector2( 3, 12 )
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 7, 6 )
 
+[sub_resource type="Animation" id=11]
+resource_name = "DoubleJump_Anim"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationPlayer/AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 27, 28, 29, 30, 31, 32, 33, 34 ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "Fall_Anim"
+length = 0.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationPlayer/AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 7, 8, 9, 10 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "Idle_Anim"
+length = 0.7
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationPlayer/AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 11, 12, 13, 14, 15, 16, 17 ]
+}
+
+[sub_resource type="Animation" id=12]
+resource_name = "Jump_Anim"
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationPlayer/AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 35, 36 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "RunAnim"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationPlayer/AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 19, 20, 21, 22, 23, 24, 25, 26 ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "UpToDown_Anim"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationPlayer/AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6 ]
+}
+
+[sub_resource type="AnimationNodeAnimation" id=15]
+animation = "DoubleJump_Anim"
+
+[sub_resource type="AnimationNodeAnimation" id=16]
+animation = "Fall_Anim"
+
+[sub_resource type="AnimationNodeAnimation" id=17]
+animation = "Idle_Anim"
+
+[sub_resource type="AnimationNodeAnimation" id=18]
+animation = "Jump_Anim"
+
+[sub_resource type="AnimationNodeAnimation" id=19]
+animation = "RunAnim"
+
+[sub_resource type="AnimationNodeAnimation" id=20]
+animation = "UpToDown_Anim"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+auto_advance = true
+advance_condition = "toUpToDown"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+auto_advance = true
+advance_condition = "doubleJump"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+switch_mode = 2
+auto_advance = true
+advance_condition = "toUpToDown"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=25]
+advance_condition = "jump"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=26]
+auto_advance = true
+advance_condition = "onFloor"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=27]
+auto_advance = true
+advance_condition = "run"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=29]
+auto_advance = true
+advance_condition = "jump"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=30]
+auto_advance = true
+advance_condition = "jump"
+
+[sub_resource type="AnimationNodeStateMachine" id=31]
+states/DoubleJump_Anim/node = SubResource( 15 )
+states/DoubleJump_Anim/position = Vector2( 407, 191 )
+states/Fall_Anim/node = SubResource( 16 )
+states/Fall_Anim/position = Vector2( 688, 61 )
+states/Idle_Anim/node = SubResource( 17 )
+states/Idle_Anim/position = Vector2( 917, -42 )
+states/Jump_Anim/node = SubResource( 18 )
+states/Jump_Anim/position = Vector2( 101, 14 )
+states/RunAnim/node = SubResource( 19 )
+states/RunAnim/position = Vector2( 917, 174 )
+states/UpToDown_Anim/node = SubResource( 20 )
+states/UpToDown_Anim/position = Vector2( 477, 46 )
+transitions = [ "Jump_Anim", "UpToDown_Anim", SubResource( 21 ), "Jump_Anim", "DoubleJump_Anim", SubResource( 22 ), "DoubleJump_Anim", "UpToDown_Anim", SubResource( 23 ), "UpToDown_Anim", "Fall_Anim", SubResource( 24 ), "Fall_Anim", "DoubleJump_Anim", SubResource( 25 ), "Fall_Anim", "Idle_Anim", SubResource( 26 ), "Idle_Anim", "RunAnim", SubResource( 27 ), "RunAnim", "Idle_Anim", SubResource( 28 ), "Idle_Anim", "Jump_Anim", SubResource( 29 ), "RunAnim", "Jump_Anim", SubResource( 30 ) ]
+graph_offset = Vector2( 0, -102.326 )
+
+[sub_resource type="AnimationNodeTimeScale" id=13]
+
+[sub_resource type="AnimationNodeBlendTree" id=14]
+nodes/StateMachine/node = SubResource( 31 )
+nodes/StateMachine/position = Vector2( 220, 100 )
+nodes/TimeScale/node = SubResource( 13 )
+nodes/TimeScale/position = Vector2( 500, 100 )
+nodes/output/position = Vector2( 700, 100 )
+node_connections = [ "output", 0, "TimeScale", "TimeScale", 0, "StateMachine" ]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=32]
+
 [node name="Player" type="KinematicBody2D"]
 collision_mask = 3
 script = ExtResource( 2 )
@@ -112,7 +298,6 @@ zoom = Vector2( 0.2, 0.2 )
 visible = false
 texture = ExtResource( 22 )
 hframes = 7
-frame = 4
 
 [node name="Particles2D" type="Particles2D" parent="."]
 position = Vector2( -4, 12 )
@@ -123,14 +308,8 @@ local_coords = false
 draw_order = 1
 process_material = SubResource( 4 )
 
-[node name="AnimSpriteSheet" type="Sprite" parent="."]
-visible = false
-texture = ExtResource( 31 )
-vframes = 5
-hframes = 7
-frame = 28
-
 [node name="Player_CollisionBox" type="CollisionShape2D" parent="."]
+position = Vector2( 0.0556831, 0 )
 shape = SubResource( 5 )
 
 [node name="Trigger" type="Area2D" parent="."]
@@ -139,4 +318,30 @@ collision_mask = 8
 
 [node name="TriggerBox" type="CollisionShape2D" parent="Trigger"]
 shape = SubResource( 6 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/DoubleJump_Anim = SubResource( 11 )
+anims/Fall_Anim = SubResource( 7 )
+anims/Idle_Anim = SubResource( 8 )
+anims/Jump_Anim = SubResource( 12 )
+anims/RunAnim = SubResource( 10 )
+anims/UpToDown_Anim = SubResource( 9 )
+
+[node name="AnimSpriteSheet" type="Sprite" parent="AnimationPlayer"]
+texture = ExtResource( 31 )
+vframes = 6
+hframes = 7
+frame = 5
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 14 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/StateMachine/playback = SubResource( 32 )
+parameters/StateMachine/conditions/doubleJump = false
+parameters/StateMachine/conditions/jump = false
+parameters/StateMachine/conditions/onFloor = false
+parameters/StateMachine/conditions/run = false
+parameters/StateMachine/conditions/toUpToDown = false
+parameters/TimeScale/scale = 1.0
 [connection signal="area_entered" from="Trigger" to="." method="_spring_area_entered"]
