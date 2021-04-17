@@ -1,9 +1,7 @@
 extends Actor
 
 var direction: = Vector2()
-var velocity: = Vector2()
 
-export var acceration: = 15.0
 export var max_speed: = 210.0
 export var jump_force := 225
 export var double_jump_foce := 225
@@ -19,6 +17,18 @@ var jump_cancel_mutiply: = 1.2
 
 var jump_count: = 0
 var on_ground : = false
+
+var action_playback: AnimationNodeStateMachinePlayback
+var direction_playback: AnimationNodeStateMachinePlayback
+
+func _ready():
+	action_playback = $AnimationTree["parameters/actions/playback"]
+	direction_playback = $AnimationTree["parameters/direction/playback"]
+	
+	action_playback.start("idle")
+	direction_playback.start("right")
+	$AnimSpriteSheet.set_visible(true);
+	
 
 func _physics_process(delta: float) -> void:
 	direction = get_direction()
@@ -42,25 +52,19 @@ func _physics_process(delta: float) -> void:
 	
 func animation_control():
 	if direction.x > 0 :
-		$AnimatedSprite.scale.x = 1
-		$JumpAnimSheet.scale.x = 1
+		direction_playback.travel("right")
 		$Particles2D.scale.x = 1
 		$Particles2D.set_position(Vector2(-4,12))
 	elif direction.x < 0 :
-		$AnimatedSprite.scale.x = -1
-		$JumpAnimSheet.scale.x = -1
+		direction_playback.travel("left")
 		$Particles2D.scale.x = -1
 		$Particles2D.set_position(Vector2(4,12))
 		
 	if on_ground and velocity.x !=0:
-		$JumpAnimSheet.set_visible(false)
-		$AnimatedSprite.set_visible(true)
-		$AnimatedSprite.play("run")
+		action_playback.travel("run")
 		
 	elif on_ground and velocity.x == 0:
-		$JumpAnimSheet.set_visible(false)
-		$AnimatedSprite.set_visible(true)
-		$AnimatedSprite.play("idle")
+		action_playback.travel("idle")
 		
 	elif !on_ground:
 		var jump_anim_count = jump_force * 0.8 * 2/7
@@ -69,33 +73,33 @@ func animation_control():
 		
 		if velocity.y <= -jump_force +jump_anim_count:
 			if jump_count == 1:
-				$JumpAnimSheet.set_frame(0)
-				
-				$JumpAnimSheet.set_visible(true)
-				$AnimatedSprite.set_visible(false)
-				
+				print_debug("Jump")
+				action_playback.travel("jump")
 			else :
-				$JumpAnimSheet.set_visible(false)
-				$AnimatedSprite.set_visible(true)
-				$AnimatedSprite.play("doublejump")
-				
-		elif velocity.y <= -jump_force +jump_anim_count*2 and velocity.y >= -jump_force +jump_anim_count:
-			$JumpAnimSheet.set_frame(0)
-		elif velocity.y <= -jump_force +jump_anim_count*3 and velocity.y >= -jump_force +jump_anim_count*2:
-			$JumpAnimSheet.set_frame(1)
-		elif velocity.y <= -jump_force +jump_anim_count*4 and velocity.y >= -jump_force +jump_anim_count*3:
-			$JumpAnimSheet.set_frame(2)
-		elif velocity.y <= -jump_force +jump_anim_count*5 and velocity.y >= -jump_force +jump_anim_count*4 :
-			$JumpAnimSheet.set_frame(3)
-		elif velocity.y <= -jump_force +jump_anim_count*6 and velocity.y >= -jump_force +jump_anim_count*5:
-			$JumpAnimSheet.set_frame(4)
-		elif velocity.y <= -jump_force +jump_anim_count*7 and velocity.y >= -jump_force +jump_anim_count*6:
-			$JumpAnimSheet.set_frame(5)
-		elif velocity.y >= -jump_force +jump_anim_count*7:
-			$JumpAnimSheet.set_visible(false)
-			$AnimatedSprite.set_visible(true)
-			$AnimatedSprite.play("fall")
-		
+				print_debug("Double Jump")
+				action_playback.travel("double_jump")
+		else :
+			print_debug("Not Jump")
+			if velocity.y <= -jump_force +jump_anim_count*2 and velocity.y >= -jump_force +jump_anim_count:
+				$AnimSpriteSheet.set_frame(0)
+				action_playback.travel("up_to_down")
+			elif velocity.y <= -jump_force +jump_anim_count*3 and velocity.y >= -jump_force +jump_anim_count*2:
+				$AnimSpriteSheet.set_frame(1)
+				action_playback.travel("up_to_down")
+			elif velocity.y <= -jump_force +jump_anim_count*4 and velocity.y >= -jump_force +jump_anim_count*3:
+				$AnimSpriteSheet.set_frame(2)
+				action_playback.travel("up_to_down")
+			elif velocity.y <= -jump_force +jump_anim_count*5 and velocity.y >= -jump_force +jump_anim_count*4 :
+				$AnimSpriteSheet.set_frame(3)
+				action_playback.travel("up_to_down")
+			elif velocity.y <= -jump_force +jump_anim_count*6 and velocity.y >= -jump_force +jump_anim_count*5:
+				$AnimSpriteSheet.set_frame(4)
+				action_playback.travel("up_to_down")
+			elif velocity.y <= -jump_force +jump_anim_count*7 and velocity.y >= -jump_force +jump_anim_count*6:
+				$AnimSpriteSheet.set_frame(5)
+				action_playback.travel("up_to_down")
+			elif velocity.y >= -jump_force +jump_anim_count*7:
+				action_playback.travel("fall")
 
 
 func get_direction() -> Vector2:
@@ -107,17 +111,14 @@ func get_direction() -> Vector2:
 	
 func move():
 	if direction.x == 0:
-		velocity.x = 0
-	elif Input.is_action_pressed("move_right"):
-		velocity.x = min(velocity.x + acceration,max_speed)
-	elif Input.is_action_pressed("move_left"):
-		velocity.x = max(velocity.x - acceration,-max_speed)
-	else:
 		if velocity.x > 0:
 			velocity.x = max(velocity.x - acceration,0)
 		elif velocity.x < 0:
 			velocity.x = min(velocity.x + acceration,0)
-			
+	elif Input.is_action_pressed("move_right"):
+		velocity.x = min(velocity.x + acceration,max_speed)
+	elif Input.is_action_pressed("move_left"):
+		velocity.x = max(velocity.x - acceration,-max_speed)
 	
 	
 func jump():
