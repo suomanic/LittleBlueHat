@@ -37,8 +37,9 @@ extents = Vector2( 7, 6 )
 
 [sub_resource type="Animation" id=6]
 resource_name = "DoubleJump_Anim"
-length = 0.8
+length = 0.23
 loop = true
+step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimSpriteSheet:frame")
 tracks/0/interp = 1
@@ -46,7 +47,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"times": PoolRealArray( 0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 27, 28, 29, 30, 31, 32, 33, 34 ]
@@ -157,9 +158,11 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_horizontal_guides_": [ -14.0 ]
 }
-gravity = 300.0
+gravity = 600.0
 acceration = 40.0
-max_speed = 150.0
+max_speed = 100.0
+jump_force = 230
+double_jump_foce = 200
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -197,7 +200,7 @@ anims/Up_Anim = SubResource( 12 )
 [node name="AnimSpriteSheet" type="Sprite" parent="."]
 scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
-vframes = 6
+vframes = 7
 hframes = 7
-frame = 27
+frame = 42
 [connection signal="area_entered" from="Trigger" to="." method="_spring_area_entered"]

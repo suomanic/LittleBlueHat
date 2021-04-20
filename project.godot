@@ -22,7 +22,6 @@ _global_script_class_icons={
 
 config/name="My First Game Little Blue Hat"
 run/main_scene="res://Levels/TestLevel.tscn"
-config/icon="res://icon.png"
 
 [display]
 

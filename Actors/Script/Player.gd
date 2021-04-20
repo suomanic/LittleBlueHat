@@ -54,32 +54,54 @@ func animation_control():
 	elif on_ground and velocity.x == 0:
 		$AnimationPlayer.play("Idle_Anim")
 		
+		
+	# up to down animation bound to velocity.y
 	elif !on_ground:
 		var jump_anim_count = jump_force * 0.8 * 2/7
+		var double_anim_count = jump_anim_count * 0.7
 		
-		if velocity.y <= -jump_force +jump_anim_count:
-			if jump_count == 1:
+		if jump_count == 1:
+			if velocity.y <= -jump_force +jump_anim_count:
 				$AnimationPlayer.play("Up_Anim")
-			else :
+			else:
+				$AnimationPlayer.stop(false)
+				if velocity.y <= -jump_force +jump_anim_count*2 and velocity.y >= -jump_force +jump_anim_count:
+					$AnimSpriteSheet.set_frame(0)
+				elif velocity.y <= -jump_force +jump_anim_count*3 and velocity.y >= -jump_force +jump_anim_count*2:
+					$AnimSpriteSheet.set_frame(1)
+				elif velocity.y <= -jump_force +jump_anim_count*4 and velocity.y >= -jump_force +jump_anim_count*3:
+					$AnimSpriteSheet.set_frame(2)
+				elif velocity.y <= -jump_force +jump_anim_count*5 and velocity.y >= -jump_force +jump_anim_count*4 :
+					$AnimSpriteSheet.set_frame(3)
+				elif velocity.y <= -jump_force +jump_anim_count*6 and velocity.y >= -jump_force +jump_anim_count*5:
+					$AnimSpriteSheet.set_frame(4)
+				elif velocity.y <= -jump_force +jump_anim_count*7 and velocity.y >= -jump_force +jump_anim_count*6:
+					$AnimSpriteSheet.set_frame(5)
+				elif velocity.y <= -jump_force +jump_anim_count*8 and velocity.y >= -jump_force +jump_anim_count*7:
+					$AnimSpriteSheet.set_frame(6)
+				elif velocity.y >= -jump_force +jump_anim_count*8:
+					$AnimationPlayer.play("Fall_Anim")
+		elif jump_count == 2:
+			if velocity.y <= -jump_force +jump_anim_count:
 				$AnimationPlayer.play("DoubleJump_Anim")
-		else :
-			$AnimationPlayer.stop(false)
-			if velocity.y <= -jump_force +jump_anim_count*2 and velocity.y >= -jump_force +jump_anim_count:
-				$AnimSpriteSheet.set_frame(0)
-			elif velocity.y <= -jump_force +jump_anim_count*3 and velocity.y >= -jump_force +jump_anim_count*2:
-				$AnimSpriteSheet.set_frame(1)
-			elif velocity.y <= -jump_force +jump_anim_count*4 and velocity.y >= -jump_force +jump_anim_count*3:
-				$AnimSpriteSheet.set_frame(2)
-			elif velocity.y <= -jump_force +jump_anim_count*5 and velocity.y >= -jump_force +jump_anim_count*4 :
-				$AnimSpriteSheet.set_frame(3)
-			elif velocity.y <= -jump_force +jump_anim_count*6 and velocity.y >= -jump_force +jump_anim_count*5:
-				$AnimSpriteSheet.set_frame(4)
-			elif velocity.y <= -jump_force +jump_anim_count*7 and velocity.y >= -jump_force +jump_anim_count*6:
-				$AnimSpriteSheet.set_frame(5)
-			elif velocity.y <= -jump_force +jump_anim_count*8 and velocity.y >= -jump_force +jump_anim_count*7:
-				$AnimSpriteSheet.set_frame(6)
-			elif velocity.y >= -jump_force +jump_anim_count*8:
-				$AnimationPlayer.play("Fall_Anim")
+			else:
+				$AnimationPlayer.stop(false)
+				if velocity.y <= -jump_force +double_anim_count*2 and velocity.y >= -jump_force +double_anim_count:
+					$AnimSpriteSheet.set_frame(37)
+				elif velocity.y <= -jump_force +double_anim_count*3 and velocity.y >= -jump_force +double_anim_count*2:
+					$AnimSpriteSheet.set_frame(38)
+				elif velocity.y <= -jump_force +double_anim_count*4 and velocity.y >= -jump_force +double_anim_count*3:
+					$AnimSpriteSheet.set_frame(39)
+				elif velocity.y <= -jump_force +double_anim_count*5 and velocity.y >= -jump_force +double_anim_count*4 :
+					$AnimSpriteSheet.set_frame(40)
+				elif velocity.y <= -jump_force +double_anim_count*6 and velocity.y >= -jump_force +double_anim_count*5:
+					$AnimSpriteSheet.set_frame(41)
+				elif velocity.y <= -jump_force +double_anim_count*7 and velocity.y >= -jump_force +double_anim_count*6:
+					$AnimSpriteSheet.set_frame(42)
+				elif velocity.y <= -jump_force +double_anim_count*8 and velocity.y >= -jump_force +double_anim_count*7:
+					$AnimSpriteSheet.set_frame(43)
+				elif velocity.y >= -jump_force +double_anim_count*8:
+					$AnimationPlayer.play("Fall_Anim")
 
 
 func get_direction() -> Vector2:
@@ -143,5 +165,5 @@ func jump():
 		
 
 func _spring_area_entered(area: Area2D) -> void:
-	velocity.y = -400
+	velocity.y = -350
 	jump_count = 1
