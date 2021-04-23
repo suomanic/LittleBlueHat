@@ -16,13 +16,18 @@ var fall_mutiply: = 1.5
 var jump_cancel_mutiply: = 1.2
 
 var jump_count: = 0
+
 var on_ground : = false
+var is_crouch : = false
+
+onready var state_machine = $AnimationTree.get("parameters/playback")
 
 func _physics_process(delta: float) -> void:
 	direction = get_direction()
 	animation_control()
 	move()
 	jump()
+	crouch()
 	velocity = move_and_slide(velocity,Vector2.UP)
 	
 	if is_on_floor():
@@ -47,18 +52,27 @@ func animation_control():
 		$AnimSpriteSheet.scale.x = -1
 		$Particles2D.scale.x = -1
 		$Particles2D.set_position(Vector2(4,12))
+	
+	if	on_ground:
+		$AnimationTree.active = true;
+		$AnimationPlayer.stop(false)
 		
-	if on_ground and velocity.x !=0:
-		$AnimationPlayer.play("Run_Anim")
-		
-	elif on_ground and velocity.x == 0:
-		$AnimationPlayer.play("Idle_Anim")
+		if velocity.x !=0 and !is_crouch:
+			state_machine.travel("Run_Anim")
+			
+		elif velocity.x == 0 and !is_crouch:
+			state_machine.travel("Idle_Anim")
+			
+		elif is_crouch:
+			state_machine.travel("CrouchIdle_Anim")
 		
 		
 	# up to down animation bound to velocity.y
 	elif !on_ground:
 		var jump_anim_count = jump_force * 0.8 * 2/7
 		var double_anim_count = jump_anim_count * 0.7
+		
+		$AnimationTree.active = false;
 		
 		if jump_count == 1:
 			if velocity.y <= -jump_force +jump_anim_count:
@@ -82,26 +96,23 @@ func animation_control():
 				elif velocity.y >= -jump_force +jump_anim_count*8:
 					$AnimationPlayer.play("Fall_Anim")
 		elif jump_count == 2:
-			if velocity.y <= -jump_force +jump_anim_count:
-				$AnimationPlayer.play("DoubleJump_Anim")
-			else:
-				$AnimationPlayer.stop(false)
-				if velocity.y <= -jump_force +double_anim_count*2 and velocity.y >= -jump_force +double_anim_count:
-					$AnimSpriteSheet.set_frame(37)
-				elif velocity.y <= -jump_force +double_anim_count*3 and velocity.y >= -jump_force +double_anim_count*2:
-					$AnimSpriteSheet.set_frame(38)
-				elif velocity.y <= -jump_force +double_anim_count*4 and velocity.y >= -jump_force +double_anim_count*3:
-					$AnimSpriteSheet.set_frame(39)
-				elif velocity.y <= -jump_force +double_anim_count*5 and velocity.y >= -jump_force +double_anim_count*4 :
-					$AnimSpriteSheet.set_frame(40)
-				elif velocity.y <= -jump_force +double_anim_count*6 and velocity.y >= -jump_force +double_anim_count*5:
-					$AnimSpriteSheet.set_frame(41)
-				elif velocity.y <= -jump_force +double_anim_count*7 and velocity.y >= -jump_force +double_anim_count*6:
-					$AnimSpriteSheet.set_frame(42)
-				elif velocity.y <= -jump_force +double_anim_count*8 and velocity.y >= -jump_force +double_anim_count*7:
-					$AnimSpriteSheet.set_frame(43)
-				elif velocity.y >= -jump_force +double_anim_count*8:
-					$AnimationPlayer.play("Fall_Anim")
+			$AnimationPlayer.stop(false)
+			if velocity.y <= -jump_force +double_anim_count*2 and velocity.y >= -jump_force +double_anim_count:
+				$AnimSpriteSheet.set_frame(37)
+			elif velocity.y <= -jump_force +double_anim_count*3 and velocity.y >= -jump_force +double_anim_count*2:
+				$AnimSpriteSheet.set_frame(38)
+			elif velocity.y <= -jump_force +double_anim_count*4 and velocity.y >= -jump_force +double_anim_count*3:
+				$AnimSpriteSheet.set_frame(39)
+			elif velocity.y <= -jump_force +double_anim_count*5 and velocity.y >= -jump_force +double_anim_count*4 :
+				$AnimSpriteSheet.set_frame(40)
+			elif velocity.y <= -jump_force +double_anim_count*6 and velocity.y >= -jump_force +double_anim_count*5:
+				$AnimSpriteSheet.set_frame(41)
+			elif velocity.y <= -jump_force +double_anim_count*7 and velocity.y >= -jump_force +double_anim_count*6:
+				$AnimSpriteSheet.set_frame(42)
+			elif velocity.y <= -jump_force +double_anim_count*8 and velocity.y >= -jump_force +double_anim_count*7:
+				$AnimSpriteSheet.set_frame(43)
+			elif velocity.y >= -jump_force +double_anim_count*8:
+				$AnimationPlayer.play("Fall_Anim")
 
 
 func get_direction() -> Vector2:
@@ -109,7 +120,6 @@ func get_direction() -> Vector2:
 		Input.get_action_strength("move_right")-Input.get_action_strength("move_left"),
 		-1.0 if Input.is_action_pressed("jump") else 1.0
 		)
-	  
 	
 func move():
 	if direction.x == 0:
@@ -121,7 +131,6 @@ func move():
 		velocity.x = min(velocity.x + acceration,max_speed)
 	elif Input.is_action_pressed("move_left"):
 		velocity.x = max(velocity.x - acceration,-max_speed)
-	
 	
 func jump():
 	# coyote time
@@ -162,6 +171,14 @@ func jump():
 		
 	else :
 		velocity.y += gravity * get_physics_process_delta_time()
+		
+
+func crouch():
+	if Input.is_action_pressed("Crouch") and on_ground:
+		is_crouch = true
+		
+	else :
+		is_crouch = false
 		
 
 func _spring_area_entered(area: Area2D) -> void:
