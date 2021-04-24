@@ -21,6 +21,8 @@ var on_ground : = false
 var is_crouch : = false
 
 onready var state_machine = $AnimationTree.get("parameters/playback")
+onready var standing_collision = $Standing_Shape
+onready var crouching_collision = $Crouching_Shape
 
 func _physics_process(delta: float) -> void:
 	direction = get_direction()
