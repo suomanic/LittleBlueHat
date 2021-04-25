@@ -12,10 +12,16 @@ _global_script_classes=[ {
 "base": "KinematicBody2D",
 "class": "Actor",
 "language": "GDScript",
-"path": "res://Actor.gd"
+"path": "res://Actors/Script/Actor.gd"
+}, {
+"base": "Node",
+"class": "StatMachine",
+"language": "GDScript",
+"path": "res://StateMachine.gd"
 } ]
 _global_script_class_icons={
-"Actor": ""
+"Actor": "",
+"StatMachine": ""
 }
 
 [application]
