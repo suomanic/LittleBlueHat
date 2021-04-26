@@ -1,7 +1,7 @@
 [gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://Assets/animation/animation package-Sheet.png" type="Texture" id=1]
-[ext_resource path="res://Actors/Script/Player.gd" type="Script" id=2]
+[ext_resource path="res://Actors/Player/Player.gd" type="Script" id=2]
 
 [sub_resource type="Curve" id=1]
 min_value = -360.0
@@ -29,16 +29,16 @@ scale = 0.5
 color = Color( 0.152941, 0.184314, 0.243137, 1 )
 hue_variation = -1.0
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 7, 6 )
 
-[sub_resource type="RectangleShape2D" id=27]
+[sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 3, 16 )
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 3, 12 )
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=7]
 resource_name = "CrouchIdle_Anim"
 length = 0.1
 loop = true
@@ -55,8 +55,7 @@ tracks/0/keys = {
 "values": [ 47 ]
 }
 
-[sub_resource type="Animation" id=6]
-resource_name = "DoubleJump_Anim"
+[sub_resource type="Animation" id=8]
 length = 0.23
 loop = true
 step = 0.01
@@ -73,7 +72,7 @@ tracks/0/keys = {
 "values": [ 27, 28, 29, 30, 31, 32, 33, 34 ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=9]
 length = 0.4
 loop = true
 tracks/0/type = "value"
@@ -89,7 +88,7 @@ tracks/0/keys = {
 "values": [ 7, 8, 9, 10 ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=10]
 length = 0.8
 loop = true
 tracks/0/type = "value"
@@ -105,8 +104,7 @@ tracks/0/keys = {
 "values": [ 11, 12, 13, 14, 15, 16, 17, 18 ]
 }
 
-[sub_resource type="Animation" id=9]
-resource_name = "Jump_Anim"
+[sub_resource type="Animation" id=11]
 length = 0.6
 loop = true
 tracks/0/type = "value"
@@ -122,8 +120,7 @@ tracks/0/keys = {
 "values": [ 35, 36 ]
 }
 
-[sub_resource type="Animation" id=10]
-resource_name = "Run_Anim"
+[sub_resource type="Animation" id=12]
 length = 0.8
 loop = true
 step = 0.05
@@ -140,7 +137,7 @@ tracks/0/keys = {
 "values": [ 19, 20, 21, 22, 23, 24, 25, 26 ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=13]
 length = 0.7
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimSpriteSheet:frame")
@@ -155,8 +152,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 4, 5, 6 ]
 }
 
-[sub_resource type="Animation" id=12]
-resource_name = "Up_Anim"
+[sub_resource type="Animation" id=14]
 length = 0.2
 loop = true
 tracks/0/type = "value"
@@ -172,8 +168,7 @@ tracks/0/keys = {
 "values": [ 35, 36 ]
 }
 
-[sub_resource type="Animation" id=13]
-resource_name = "toCrouch_Anim"
+[sub_resource type="Animation" id=15]
 length = 0.2
 step = 0.05
 tracks/0/type = "value"
@@ -189,20 +184,22 @@ tracks/0/keys = {
 "values": [ 44, 45, 46, 47 ]
 }
 
-[sub_resource type="AnimationNodeAnimation" id=15]
+[sub_resource type="AnimationNodeAnimation" id=16]
 animation = "CrouchIdle_Anim"
 
-[sub_resource type="AnimationNodeAnimation" id=20]
+[sub_resource type="AnimationNodeAnimation" id=17]
 animation = "Idle_Anim"
 
-[sub_resource type="AnimationNodeAnimation" id=21]
+[sub_resource type="AnimationNodeAnimation" id=18]
 animation = "Run_Anim"
 
-[sub_resource type="AnimationNodeAnimation" id=16]
+[sub_resource type="AnimationNodeAnimation" id=19]
 animation = "toCrouch_Anim"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
 switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=22]
 
@@ -212,21 +209,19 @@ switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=25]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=26]
-
-[sub_resource type="AnimationNodeStateMachine" id=18]
-states/CrouchIdle_Anim/node = SubResource( 15 )
+[sub_resource type="AnimationNodeStateMachine" id=26]
+states/CrouchIdle_Anim/node = SubResource( 16 )
 states/CrouchIdle_Anim/position = Vector2( 179, 272 )
-states/Idle_Anim/node = SubResource( 20 )
+states/Idle_Anim/node = SubResource( 17 )
 states/Idle_Anim/position = Vector2( 179, 75 )
-states/Run_Anim/node = SubResource( 21 )
+states/Run_Anim/node = SubResource( 18 )
 states/Run_Anim/position = Vector2( 522, 75 )
-states/toCrouch_Anim/node = SubResource( 16 )
+states/toCrouch_Anim/node = SubResource( 19 )
 states/toCrouch_Anim/position = Vector2( 543, 272 )
-transitions = [ "toCrouch_Anim", "CrouchIdle_Anim", SubResource( 17 ), "Run_Anim", "toCrouch_Anim", SubResource( 22 ), "Idle_Anim", "toCrouch_Anim", SubResource( 23 ), "CrouchIdle_Anim", "Idle_Anim", SubResource( 24 ), "Run_Anim", "Idle_Anim", SubResource( 25 ), "Idle_Anim", "Run_Anim", SubResource( 26 ) ]
+transitions = [ "toCrouch_Anim", "CrouchIdle_Anim", SubResource( 20 ), "Run_Anim", "toCrouch_Anim", SubResource( 21 ), "Idle_Anim", "toCrouch_Anim", SubResource( 22 ), "CrouchIdle_Anim", "Idle_Anim", SubResource( 23 ), "Run_Anim", "Idle_Anim", SubResource( 24 ), "Idle_Anim", "Run_Anim", SubResource( 25 ) ]
 start_node = "Idle_Anim"
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=19]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=27]
 
 [node name="Player" type="KinematicBody2D"]
 collision_mask = 3
@@ -235,7 +230,6 @@ __meta__ = {
 "_edit_horizontal_guides_": [ -14.0 ]
 }
 gravity = 600.0
-acceration = 40.0
 max_speed = 100.0
 jump_force = 230
 double_jump_foce = 200
@@ -256,48 +250,48 @@ position = Vector2( 0, 6 )
 collision_mask = 8
 
 [node name="TriggerBox" type="CollisionShape2D" parent="Trigger"]
-shape = SubResource( 5 )
+shape = SubResource( 4 )
 
 [node name="Crouching_Shape" type="CollisionShape2D" parent="Trigger"]
 position = Vector2( 0, -2 )
 scale = Vector2( 1, 0.5 )
-shape = SubResource( 27 )
+shape = SubResource( 5 )
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="Trigger"]
 position = Vector2( 0, -6 )
-shape = SubResource( 4 )
+shape = SubResource( 6 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/CrouchIdle_Anim = SubResource( 14 )
-anims/DoubleJump_Anim = SubResource( 6 )
-anims/Fall_Anim = SubResource( 7 )
-anims/Idle_Anim = SubResource( 8 )
-anims/Jump_Anim = SubResource( 9 )
-anims/Run_Anim = SubResource( 10 )
-anims/UpToDown_Anim = SubResource( 11 )
-anims/Up_Anim = SubResource( 12 )
-anims/toCrouch_Anim = SubResource( 13 )
+anims/CrouchIdle_Anim = SubResource( 7 )
+anims/DoubleJump_Anim = SubResource( 8 )
+anims/Fall_Anim = SubResource( 9 )
+anims/Idle_Anim = SubResource( 10 )
+anims/Jump_Anim = SubResource( 11 )
+anims/Run_Anim = SubResource( 12 )
+anims/UpToDown_Anim = SubResource( 13 )
+anims/Up_Anim = SubResource( 14 )
+anims/toCrouch_Anim = SubResource( 15 )
 
 [node name="AnimSpriteSheet" type="Sprite" parent="."]
 scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 7
-frame = 47
+frame = 17
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 18 )
+tree_root = SubResource( 26 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/playback = SubResource( 19 )
+parameters/playback = SubResource( 27 )
 
 [node name="Crouching_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 4 )
 scale = Vector2( 1, 0.5 )
-shape = SubResource( 27 )
+shape = SubResource( 5 )
 disabled = true
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="."]
-shape = SubResource( 4 )
+shape = SubResource( 6 )
 
 [connection signal="area_entered" from="Trigger" to="." method="_spring_area_entered"]
