@@ -10,6 +10,7 @@ const FallState = preload("res://Actors/Player/state/Fall.gd")
 const JumpState = preload("res://Actors/Player/state/Jump.gd")
 const DoubleJumpState = preload("res://Actors/Player/state/DoubleJump.gd")
 const CrouchState = preload("res://Actors/Player/state/Crouch.gd")
+const UpState = preload("res://Actors/Player/state/Up.gd")
 
 export var max_speed: = 210.0
 export var jump_force := 225
@@ -29,22 +30,38 @@ var jump_count: = 0
 var on_ground : = false
 var is_crouch : = false
 
-func _ready():
-	state_machine = StateMachine.new(IdleState.new(self))
+var jump_anim_count = jump_force * 0.8 * 2/7
+var double_anim_count = jump_anim_count * 0.7
 
 onready var anim_state_machine = $AnimationTree.get("parameters/playback")
 onready var standing_collision = $Standing_Shape
 onready var crouching_collision = $Crouching_Shape
 
+onready var animation_tree = $AnimationTree
+onready var animation_player = $AnimationPlayer
+onready var animation_sprite_sheet = $AnimSpriteSheet
+
+func _ready():
+	state_machine = StateMachine.new(IdleState.new(self))
+
 func _physics_process(delta) -> void:
 	state_machine.update()
 	
 	direction = get_direction()
+	apply_gravity()
 	animation_control()
-	move()
-	jump()
 	crouch()
 	velocity = move_and_slide(velocity,Vector2.UP)
+	
+	if is_on_floor():
+		_coyote_counter = coyote_time
+	else :
+		_coyote_counter -= delta
+		
+	if Input.is_action_just_pressed("jump"):
+		_jump_buffer_counter = jump_buffer_time
+	else:
+		_jump_buffer_counter -= delta
 	
 	if is_on_floor():
 		on_ground = true
@@ -57,8 +74,11 @@ func _physics_process(delta) -> void:
 	else :
 		$Particles2D.set_emitting(false)
 	
-func apply_movement():
-	pass
+func get_direction() -> Vector2:
+	return Vector2(
+		Input.get_action_strength("move_right")-Input.get_action_strength("move_left"),
+		-1.0 if Input.is_action_pressed("jump") else 1.0
+		)
 	
 func animation_control():
 	if direction.x > 0 :
@@ -70,74 +90,8 @@ func animation_control():
 		$Particles2D.scale.x = -1
 		$Particles2D.set_position(Vector2(4,12))
 	
-	if	on_ground:
-		$AnimationTree.active = true;
-		$AnimationPlayer.stop(false)
-		
-		if velocity.x !=0 and !is_crouch:
-			anim_state_machine.travel("Run_Anim")
 			
-		elif velocity.x == 0 and !is_crouch:
-			anim_state_machine.travel("Idle_Anim")
-			
-		elif is_crouch:
-			anim_state_machine.travel("CrouchIdle_Anim")
-		
-		
-	# up to down animation bound to velocity.y
-	elif !on_ground:
-		var jump_anim_count = jump_force * 0.8 * 2/7
-		var double_anim_count = jump_anim_count * 0.7
-		
-		$AnimationTree.active = false;
-		
-		if jump_count == 1:
-			if velocity.y <= -jump_force +jump_anim_count:
-				$AnimationPlayer.play("Up_Anim")
-			else:
-				$AnimationPlayer.stop(false)
-				if velocity.y <= -jump_force +jump_anim_count*2 and velocity.y >= -jump_force +jump_anim_count:
-					$AnimSpriteSheet.set_frame(0)
-				elif velocity.y <= -jump_force +jump_anim_count*3 and velocity.y >= -jump_force +jump_anim_count*2:
-					$AnimSpriteSheet.set_frame(1)
-				elif velocity.y <= -jump_force +jump_anim_count*4 and velocity.y >= -jump_force +jump_anim_count*3:
-					$AnimSpriteSheet.set_frame(2)
-				elif velocity.y <= -jump_force +jump_anim_count*5 and velocity.y >= -jump_force +jump_anim_count*4 :
-					$AnimSpriteSheet.set_frame(3)
-				elif velocity.y <= -jump_force +jump_anim_count*6 and velocity.y >= -jump_force +jump_anim_count*5:
-					$AnimSpriteSheet.set_frame(4)
-				elif velocity.y <= -jump_force +jump_anim_count*7 and velocity.y >= -jump_force +jump_anim_count*6:
-					$AnimSpriteSheet.set_frame(5)
-				elif velocity.y <= -jump_force +jump_anim_count*8 and velocity.y >= -jump_force +jump_anim_count*7:
-					$AnimSpriteSheet.set_frame(6)
-				elif velocity.y >= -jump_force +jump_anim_count*8:
-					$AnimationPlayer.play("Fall_Anim")
-		elif jump_count == 2:
-			$AnimationPlayer.stop(false)
-			if velocity.y <= -jump_force +double_anim_count*2 and velocity.y >= -jump_force +double_anim_count:
-				$AnimSpriteSheet.set_frame(37)
-			elif velocity.y <= -jump_force +double_anim_count*3 and velocity.y >= -jump_force +double_anim_count*2:
-				$AnimSpriteSheet.set_frame(38)
-			elif velocity.y <= -jump_force +double_anim_count*4 and velocity.y >= -jump_force +double_anim_count*3:
-				$AnimSpriteSheet.set_frame(39)
-			elif velocity.y <= -jump_force +double_anim_count*5 and velocity.y >= -jump_force +double_anim_count*4 :
-				$AnimSpriteSheet.set_frame(40)
-			elif velocity.y <= -jump_force +double_anim_count*6 and velocity.y >= -jump_force +double_anim_count*5:
-				$AnimSpriteSheet.set_frame(41)
-			elif velocity.y <= -jump_force +double_anim_count*7 and velocity.y >= -jump_force +double_anim_count*6:
-				$AnimSpriteSheet.set_frame(42)
-			elif velocity.y <= -jump_force +double_anim_count*8 and velocity.y >= -jump_force +double_anim_count*7:
-				$AnimSpriteSheet.set_frame(43)
-			elif velocity.y >= -jump_force +double_anim_count*8:
-				$AnimationPlayer.play("Fall_Anim")
 
-
-func get_direction() -> Vector2:
-	return Vector2(
-		Input.get_action_strength("move_right")-Input.get_action_strength("move_left"),
-		-1.0 if Input.is_action_pressed("jump") else 1.0
-		)
-		
 func _apply_gravity():
 	if velocity.y < 0 and Input.is_action_just_released("jump"):
 		velocity.y = velocity.y * 0.5
@@ -160,18 +114,6 @@ func move():
 		velocity.x = max(velocity.x - acceleration,-max_speed)
 	
 func jump():
-	# coyote time
-	if on_ground:
-		_coyote_counter = coyote_time
-	else :
-		_coyote_counter -= get_physics_process_delta_time()
-		
-	# jump buffer
-	if Input.is_action_just_pressed("jump") :
-		_jump_buffer_counter = jump_buffer_time
-	else :
-		_jump_buffer_counter -=	get_physics_process_delta_time()
-	
 	# single jump
 	if _coyote_counter > 0 and _jump_buffer_counter > 0 and jump_count == 0:
 		velocity.y = -jump_force;
@@ -188,6 +130,7 @@ func jump():
 		_jump_buffer_counter = 0
 		jump_count += 1
 	
+func apply_gravity():
 	if velocity.y < 0 and Input.is_action_just_released("jump"):
 		velocity.y = velocity.y * 0.5
 		velocity.y += gravity * jump_cancel_mutiply * get_physics_process_delta_time()

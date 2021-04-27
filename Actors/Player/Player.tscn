@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Assets/animation/animation package-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Actors/Player/Player.gd" type="Script" id=2]
@@ -184,8 +184,28 @@ tracks/0/keys = {
 "values": [ 44, 45, 46, 47 ]
 }
 
+[sub_resource type="Animation" id=28]
+resource_name = "toFall_Anim"
+length = 0.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 3, 4, 5, 6 ]
+}
+
 [sub_resource type="AnimationNodeAnimation" id=16]
 animation = "CrouchIdle_Anim"
+
+[sub_resource type="AnimationNodeAnimation" id=32]
+animation = "Fall_Anim"
 
 [sub_resource type="AnimationNodeAnimation" id=17]
 animation = "Idle_Anim"
@@ -196,8 +216,12 @@ animation = "Run_Anim"
 [sub_resource type="AnimationNodeAnimation" id=19]
 animation = "toCrouch_Anim"
 
+[sub_resource type="AnimationNodeAnimation" id=29]
+animation = "toFall_Anim"
+
 [sub_resource type="AnimationNodeStateMachineTransition" id=20]
 switch_mode = 2
+auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=21]
 
@@ -209,17 +233,28 @@ switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=25]
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=30]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=31]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=33]
+
 [sub_resource type="AnimationNodeStateMachine" id=26]
 states/CrouchIdle_Anim/node = SubResource( 16 )
-states/CrouchIdle_Anim/position = Vector2( 179, 272 )
+states/CrouchIdle_Anim/position = Vector2( 162, 206 )
+states/Fall_Anim/node = SubResource( 32 )
+states/Fall_Anim/position = Vector2( 1039, 180.484 )
 states/Idle_Anim/node = SubResource( 17 )
-states/Idle_Anim/position = Vector2( 179, 75 )
+states/Idle_Anim/position = Vector2( 390, 106.484 )
 states/Run_Anim/node = SubResource( 18 )
-states/Run_Anim/position = Vector2( 522, 75 )
+states/Run_Anim/position = Vector2( 708, 333.484 )
 states/toCrouch_Anim/node = SubResource( 19 )
-states/toCrouch_Anim/position = Vector2( 543, 272 )
-transitions = [ "toCrouch_Anim", "CrouchIdle_Anim", SubResource( 20 ), "Run_Anim", "toCrouch_Anim", SubResource( 21 ), "Idle_Anim", "toCrouch_Anim", SubResource( 22 ), "CrouchIdle_Anim", "Idle_Anim", SubResource( 23 ), "Run_Anim", "Idle_Anim", SubResource( 24 ), "Idle_Anim", "Run_Anim", SubResource( 25 ) ]
+states/toCrouch_Anim/position = Vector2( 341, 325 )
+states/toFall_Anim/node = SubResource( 29 )
+states/toFall_Anim/position = Vector2( 730, 127.484 )
+transitions = [ "toCrouch_Anim", "CrouchIdle_Anim", SubResource( 20 ), "Run_Anim", "toCrouch_Anim", SubResource( 21 ), "Idle_Anim", "toCrouch_Anim", SubResource( 22 ), "CrouchIdle_Anim", "Idle_Anim", SubResource( 23 ), "Run_Anim", "Idle_Anim", SubResource( 24 ), "Idle_Anim", "Run_Anim", SubResource( 25 ), "Idle_Anim", "toFall_Anim", SubResource( 30 ), "Run_Anim", "toFall_Anim", SubResource( 31 ), "toFall_Anim", "Fall_Anim", SubResource( 33 ) ]
 start_node = "Idle_Anim"
+graph_offset = Vector2( 0, 29.484 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=27]
 
@@ -271,13 +306,14 @@ anims/Run_Anim = SubResource( 12 )
 anims/UpToDown_Anim = SubResource( 13 )
 anims/Up_Anim = SubResource( 14 )
 anims/toCrouch_Anim = SubResource( 15 )
+anims/toFall_Anim = SubResource( 28 )
 
 [node name="AnimSpriteSheet" type="Sprite" parent="."]
 scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 7
-frame = 17
+frame = 13
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 26 )

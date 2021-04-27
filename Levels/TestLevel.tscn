@@ -240,3 +240,5 @@ zoom = Vector2( 0.2, 0.2 )
 
 [node name="Spring" parent="." instance=ExtResource( 3 )]
 position = Vector2( 210, 219 )
+
+[node name="JumpBufferTimer" type="Timer" parent="."]
