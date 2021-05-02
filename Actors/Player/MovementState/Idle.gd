@@ -4,11 +4,8 @@ func _init(o).(o):
 	pass
 
 func enter():
-	owner.animation_tree.active = true
-	owner.anim_state_machine.travel("Idle_Anim")
-	owner.animation_player.stop(false)
+	owner.animation_player.play("Idle_Anim")
 	print_debug("Idle")
-	pass
 	
 func execute():
 	owner.move()
@@ -17,13 +14,12 @@ func execute():
 		owner.state_machine.change_state(owner.RunState.new(owner)) 
 		
 	elif owner._coyote_counter > 0 and owner._jump_buffer_counter > 0:
-		owner.state_machine.change_state(owner.JumpState.new(owner))
+		owner.state_machine.change_state(owner.UpState.new(owner))
 		
 	elif owner.velocity.y < 0 :
 		owner.state_machine.change_state(owner.UpState.new(owner))
 	
 func exit():
-	owner.animation_player.stop(false)
 	pass
 
 func get_name():

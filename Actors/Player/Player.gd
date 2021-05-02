@@ -7,7 +7,6 @@ var state_machine : StateMachine
 const IdleState = preload("res://Actors/Player/state/Idle.gd")
 const RunState = preload("res://Actors/Player/state/Run.gd")
 const FallState = preload("res://Actors/Player/state/Fall.gd")
-const JumpState = preload("res://Actors/Player/state/Jump.gd")
 const DoubleJumpState = preload("res://Actors/Player/state/DoubleJump.gd")
 const CrouchState = preload("res://Actors/Player/state/Crouch.gd")
 const UpState = preload("res://Actors/Player/state/Up.gd")
@@ -33,7 +32,6 @@ var is_crouch : = false
 var jump_anim_count = jump_force * 0.8 * 2/7
 var double_anim_count = jump_anim_count * 0.7
 
-onready var anim_state_machine = $AnimationTree.get("parameters/playback")
 onready var standing_collision = $Standing_Shape
 onready var crouching_collision = $Crouching_Shape
 

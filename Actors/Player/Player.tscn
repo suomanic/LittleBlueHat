@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Assets/animation/animation package-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Actors/Player/Player.gd" type="Script" id=2]
@@ -56,20 +56,19 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id=8]
-length = 0.23
-loop = true
-step = 0.01
+length = 0.45
+step = 0.075
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimSpriteSheet:frame")
-tracks/0/interp = 1
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.21 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 27, 28, 29, 30, 31, 32, 33, 34 ]
+"times": PoolRealArray( 0, 0.075, 0.15, 0.225, 0.3, 0.375 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 38, 39, 40, 41, 42, 43 ]
 }
 
 [sub_resource type="Animation" id=9]
@@ -102,22 +101,6 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 11, 12, 13, 14, 15, 16, 17, 18 ]
-}
-
-[sub_resource type="Animation" id=11]
-length = 0.6
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("AnimSpriteSheet:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ 35, 36 ]
 }
 
 [sub_resource type="Animation" id=12]
@@ -169,6 +152,23 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id=15]
+resource_name = "UptoZero_Anim"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.15 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[sub_resource type="Animation" id=16]
 length = 0.2
 step = 0.05
 tracks/0/type = "value"
@@ -184,10 +184,10 @@ tracks/0/keys = {
 "values": [ 44, 45, 46, 47 ]
 }
 
-[sub_resource type="Animation" id=28]
+[sub_resource type="Animation" id=17]
 resource_name = "toFall_Anim"
-length = 0.4
-loop = true
+length = 0.3
+step = 0.075
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimSpriteSheet:frame")
 tracks/0/interp = 1
@@ -195,68 +195,11 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"times": PoolRealArray( 0, 0.075, 0.15, 0.225 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 3, 4, 5, 6 ]
 }
-
-[sub_resource type="AnimationNodeAnimation" id=16]
-animation = "CrouchIdle_Anim"
-
-[sub_resource type="AnimationNodeAnimation" id=32]
-animation = "Fall_Anim"
-
-[sub_resource type="AnimationNodeAnimation" id=17]
-animation = "Idle_Anim"
-
-[sub_resource type="AnimationNodeAnimation" id=18]
-animation = "Run_Anim"
-
-[sub_resource type="AnimationNodeAnimation" id=19]
-animation = "toCrouch_Anim"
-
-[sub_resource type="AnimationNodeAnimation" id=29]
-animation = "toFall_Anim"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=20]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=21]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=22]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=23]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=24]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=25]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=30]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=31]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=33]
-
-[sub_resource type="AnimationNodeStateMachine" id=26]
-states/CrouchIdle_Anim/node = SubResource( 16 )
-states/CrouchIdle_Anim/position = Vector2( 162, 206 )
-states/Fall_Anim/node = SubResource( 32 )
-states/Fall_Anim/position = Vector2( 1039, 180.484 )
-states/Idle_Anim/node = SubResource( 17 )
-states/Idle_Anim/position = Vector2( 390, 106.484 )
-states/Run_Anim/node = SubResource( 18 )
-states/Run_Anim/position = Vector2( 708, 333.484 )
-states/toCrouch_Anim/node = SubResource( 19 )
-states/toCrouch_Anim/position = Vector2( 341, 325 )
-states/toFall_Anim/node = SubResource( 29 )
-states/toFall_Anim/position = Vector2( 730, 127.484 )
-transitions = [ "toCrouch_Anim", "CrouchIdle_Anim", SubResource( 20 ), "Run_Anim", "toCrouch_Anim", SubResource( 21 ), "Idle_Anim", "toCrouch_Anim", SubResource( 22 ), "CrouchIdle_Anim", "Idle_Anim", SubResource( 23 ), "Run_Anim", "Idle_Anim", SubResource( 24 ), "Idle_Anim", "Run_Anim", SubResource( 25 ), "Idle_Anim", "toFall_Anim", SubResource( 30 ), "Run_Anim", "toFall_Anim", SubResource( 31 ), "toFall_Anim", "Fall_Anim", SubResource( 33 ) ]
-start_node = "Idle_Anim"
-graph_offset = Vector2( 0, 29.484 )
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id=27]
 
 [node name="Player" type="KinematicBody2D"]
 collision_mask = 3
@@ -301,25 +244,19 @@ anims/CrouchIdle_Anim = SubResource( 7 )
 anims/DoubleJump_Anim = SubResource( 8 )
 anims/Fall_Anim = SubResource( 9 )
 anims/Idle_Anim = SubResource( 10 )
-anims/Jump_Anim = SubResource( 11 )
 anims/Run_Anim = SubResource( 12 )
 anims/UpToDown_Anim = SubResource( 13 )
 anims/Up_Anim = SubResource( 14 )
-anims/toCrouch_Anim = SubResource( 15 )
-anims/toFall_Anim = SubResource( 28 )
+anims/UptoZero_Anim = SubResource( 15 )
+anims/toCrouch_Anim = SubResource( 16 )
+anims/toFall_Anim = SubResource( 17 )
 
 [node name="AnimSpriteSheet" type="Sprite" parent="."]
 scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 7
-frame = 13
-
-[node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 26 )
-anim_player = NodePath("../AnimationPlayer")
-active = true
-parameters/playback = SubResource( 27 )
+frame = 39
 
 [node name="Crouching_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 4 )
