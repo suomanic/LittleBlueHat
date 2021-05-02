@@ -15,19 +15,18 @@ func enter():
 		owner.animation_player.play("Fall_Anim")
 	else:
 		owner.animation_player.play("toFall_Anim")
-	pass
 	
 func execute():
 	owner.move()
 	owner.jump()
 	
 	if owner.is_on_floor():
-		owner.state_machine.change_state(owner.IdleState.new(owner))
+		owner.state_machine.change_state(owner.MS_IdleState.new(owner))
 	elif owner.velocity.y < 0 :
-		owner.state_machine.change_state(owner.UpState.new(owner))
+		owner.state_machine.change_state(owner.MS_UpState.new(owner))
 		
 	if Input.is_action_just_pressed("jump"):
-		owner.state_machine.change_state(owner.DoubleJumpState.new(owner))
+		owner.state_machine.change_state(owner.MS_DoubleJumpState.new(owner))
 		
 	
 

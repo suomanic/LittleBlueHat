@@ -56,7 +56,7 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id=8]
-length = 0.45
+length = 0.525
 step = 0.075
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimSpriteSheet:frame")
@@ -65,10 +65,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.075, 0.15, 0.225, 0.3, 0.375 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
-"update": 0,
-"values": [ 38, 39, 40, 41, 42, 43 ]
+"times": PoolRealArray( 0, 0.075, 0.15, 0.225, 0.3, 0.375, 0.45 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 38, 39, 40, 41, 42, 43, 6 ]
 }
 
 [sub_resource type="Animation" id=9]
@@ -103,7 +103,7 @@ tracks/0/keys = {
 "values": [ 11, 12, 13, 14, 15, 16, 17, 18 ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=11]
 length = 0.8
 loop = true
 step = 0.05
@@ -120,7 +120,7 @@ tracks/0/keys = {
 "values": [ 19, 20, 21, 22, 23, 24, 25, 26 ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=12]
 length = 0.7
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimSpriteSheet:frame")
@@ -135,7 +135,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 4, 5, 6 ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=13]
 length = 0.2
 loop = true
 tracks/0/type = "value"
@@ -151,7 +151,7 @@ tracks/0/keys = {
 "values": [ 35, 36 ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=14]
 resource_name = "UptoZero_Anim"
 length = 0.2
 step = 0.05
@@ -168,7 +168,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3 ]
 }
 
-[sub_resource type="Animation" id=16]
+[sub_resource type="Animation" id=15]
 length = 0.2
 step = 0.05
 tracks/0/type = "value"
@@ -184,7 +184,7 @@ tracks/0/keys = {
 "values": [ 44, 45, 46, 47 ]
 }
 
-[sub_resource type="Animation" id=17]
+[sub_resource type="Animation" id=16]
 resource_name = "toFall_Anim"
 length = 0.3
 step = 0.075
@@ -244,19 +244,19 @@ anims/CrouchIdle_Anim = SubResource( 7 )
 anims/DoubleJump_Anim = SubResource( 8 )
 anims/Fall_Anim = SubResource( 9 )
 anims/Idle_Anim = SubResource( 10 )
-anims/Run_Anim = SubResource( 12 )
-anims/UpToDown_Anim = SubResource( 13 )
-anims/Up_Anim = SubResource( 14 )
-anims/UptoZero_Anim = SubResource( 15 )
-anims/toCrouch_Anim = SubResource( 16 )
-anims/toFall_Anim = SubResource( 17 )
+anims/Run_Anim = SubResource( 11 )
+anims/UpToDown_Anim = SubResource( 12 )
+anims/Up_Anim = SubResource( 13 )
+anims/UptoZero_Anim = SubResource( 14 )
+anims/toCrouch_Anim = SubResource( 15 )
+anims/toFall_Anim = SubResource( 16 )
 
 [node name="AnimSpriteSheet" type="Sprite" parent="."]
 scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 7
-frame = 39
+frame = 40
 
 [node name="Crouching_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 4 )

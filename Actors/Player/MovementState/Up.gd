@@ -21,10 +21,10 @@ func execute():
 	owner.jump()
 	
 	if owner.velocity.y > 0:
-		owner.state_machine.change_state(owner.FallState.new(owner))
+		owner.state_machine.change_state(owner.MS_FallState.new(owner))
 		
 	if Input.is_action_just_pressed("jump"):
-		owner.state_machine.change_state(owner.DoubleJumpState.new(owner))
+		owner.state_machine.change_state(owner.MS_DoubleJumpState.new(owner))
 	
 	
 	pass

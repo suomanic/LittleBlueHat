@@ -12,13 +12,13 @@ func execute():
 	owner.move()
 	
 	if (owner._coyote_counter > 0 and owner._jump_buffer_counter > 0)|| owner.velocity.y < 0:
-		owner.state_machine.change_state(owner.UpState.new(owner))
+		owner.state_machine.change_state(owner.MS_UpState.new(owner))
 	
 	if owner.velocity.x == 0:
-		owner.state_machine.change_state(owner.IdleState.new(owner))
+		owner.state_machine.change_state(owner.MS_IdleState.new(owner))
 		
 	elif !owner.is_on_floor() and owner.velocity.y > 0:
-		owner.state_machine.change_state(owner.FallState.new(owner))
+		owner.state_machine.change_state(owner.MS_FallState.new(owner))
 	pass
 
 func exit():

@@ -4,12 +4,15 @@ var direction: = Vector2()
 
 var state_machine : StateMachine
 
-const IdleState = preload("res://Actors/Player/state/Idle.gd")
-const RunState = preload("res://Actors/Player/state/Run.gd")
-const FallState = preload("res://Actors/Player/state/Fall.gd")
-const DoubleJumpState = preload("res://Actors/Player/state/DoubleJump.gd")
-const CrouchState = preload("res://Actors/Player/state/Crouch.gd")
-const UpState = preload("res://Actors/Player/state/Up.gd")
+const MS_IdleState = preload("res://Actors/Player/Movementstate/Idle.gd")
+const MS_RunState = preload("res://Actors/Player/Movementstate/Run.gd")
+const MS_FallState = preload("res://Actors/Player/Movementstate/Fall.gd")
+const MS_DoubleJumpState = preload("res://Actors/Player/Movementstate/DoubleJump.gd")
+const MS_CrouchState = preload("res://Actors/Player/Movementstate/Crouch.gd")
+const MS_UpState = preload("res://Actors/Player/Movementstate/Up.gd")
+
+const AS_AirState = preload("res://Actors/Player/Animstate/Air.gd")
+const AS_Ground = preload("res://Actors/Player/Animstate/Ground.gd")
 
 export var max_speed: = 210.0
 export var jump_force := 225
@@ -35,12 +38,11 @@ var double_anim_count = jump_anim_count * 0.7
 onready var standing_collision = $Standing_Shape
 onready var crouching_collision = $Crouching_Shape
 
-onready var animation_tree = $AnimationTree
 onready var animation_player = $AnimationPlayer
 onready var animation_sprite_sheet = $AnimSpriteSheet
 
 func _ready():
-	state_machine = StateMachine.new(IdleState.new(self))
+	state_machine = StateMachine.new(MS_IdleState.new(self))
 
 func _physics_process(delta) -> void:
 	state_machine.update()
@@ -88,8 +90,6 @@ func animation_control():
 		$Particles2D.scale.x = -1
 		$Particles2D.set_position(Vector2(4,12))
 	
-			
-
 func _apply_gravity():
 	if velocity.y < 0 and Input.is_action_just_released("jump"):
 		velocity.y = velocity.y * 0.5
