@@ -20,7 +20,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Little Blue Hat"
+config/name="BRΩ"
 run/main_scene="res://Levels/TestLevel.tscn"
 
 [display]
