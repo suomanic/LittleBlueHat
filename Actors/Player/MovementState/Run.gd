@@ -9,15 +9,15 @@ func enter():
 	pass
 	
 func execute():
-	owner.move()
+	owner.movement_module.move()
 	
-	if (owner._coyote_counter > 0 and owner._jump_buffer_counter > 0)|| owner.velocity.y < 0:
+	if (owner.movement_module._coyote_counter > 0 and owner.movement_module._jump_buffer_counter > 0)|| owner.velocity.y < 0:
 		owner.state_machine.change_state(owner.MS_UpState.new(owner))
 	
-	if owner.velocity.x == 0:
+	if owner.velocity.x == 0 and owner.is_on_floor():
 		owner.state_machine.change_state(owner.MS_IdleState.new(owner))
 		
-	elif !owner.is_on_floor() and owner.velocity.y > 0:
+	elif owner.movement_module._coyote_counter < 0  and owner.velocity.y > 0:
 		owner.state_machine.change_state(owner.MS_FallState.new(owner))
 	pass
 

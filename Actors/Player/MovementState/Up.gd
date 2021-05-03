@@ -8,7 +8,7 @@ func _init(o).(o):
 
 func enter():
 	print_debug("Up")
-	jump_force = owner.jump_force
+	jump_force = owner.movement_module.jump_force
 	jump_anim_count = jump_force * 0.8 * 2/7
 	
 	if owner.velocity.y <= jump_force:
@@ -17,8 +17,8 @@ func enter():
 		owner.animation_player.play("UptoZero_Anim")
 	
 func execute():
-	owner.move()
-	owner.jump()
+	owner.movement_module.move()
+	owner.movement_module.jump()
 	
 	if owner.velocity.y > 0:
 		owner.state_machine.change_state(owner.MS_FallState.new(owner))

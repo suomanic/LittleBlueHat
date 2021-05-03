@@ -1,7 +1,9 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Assets/animation/animation package-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Actors/Player/Player.gd" type="Script" id=2]
+[ext_resource path="res://Actors/Player/PlayerInput.gd" type="Script" id=3]
+[ext_resource path="res://Actors/Player/PlayerMovement.gd" type="Script" id=4]
 
 [sub_resource type="Curve" id=1]
 min_value = -360.0
@@ -207,10 +209,6 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_horizontal_guides_": [ -14.0 ]
 }
-gravity = 600.0
-max_speed = 100.0
-jump_force = 230
-double_jump_foce = 200
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -266,5 +264,14 @@ disabled = true
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="."]
 shape = SubResource( 6 )
+
+[node name="PlayerInput" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="PlayerMovement" type="Node" parent="."]
+script = ExtResource( 4 )
+max_speed = 100.0
+jump_force = 200
+double_jump_foce = 180
 
 [connection signal="area_entered" from="Trigger" to="." method="_spring_area_entered"]
