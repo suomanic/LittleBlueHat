@@ -18,6 +18,9 @@ func execute():
 		
 	elif owner.velocity.y < 0 :
 		owner.state_machine.change_state(owner.MS_UpState.new(owner))
+		
+	if owner.input_module.is_crouch_pressed:
+		owner.state_machine.change_state(owner.MS_CrouchState.new(owner))
 	
 func exit():
 	pass

@@ -33,9 +33,7 @@ func _physics_process(delta) -> void:
 	direction = input_module.get_direction()
 	
 	animation_control()
-	velocity = move_and_slide(velocity,Vector2.UP)
 	
-		
 	if is_on_floor() and velocity.x != 0:
 		$Particles2D.set_emitting(true)
 	else :
@@ -51,9 +49,9 @@ func animation_control():
 		$Particles2D.scale.x = -1
 		$Particles2D.set_position(Vector2(4,12))
 	
-
-
-
 func _spring_area_entered(area: Area2D) -> void:
 	velocity.y = -350
 	movement_module.jump_count = 1
+	
+func tocourch_anim_end():
+	animation_player.play("CrouchIdle_Anim")

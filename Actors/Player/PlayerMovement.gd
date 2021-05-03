@@ -19,11 +19,9 @@ var jump_anim_count = jump_force * 0.8 * 2/7
 var double_anim_count = jump_anim_count * 0.7
 
 
-func _init():
-	pass
-
 func _physics_process(delta):
 	apply_gravity(delta)
+	owner.velocity = owner.move_and_slide(owner.velocity,Vector2.UP)
 	
 	if owner.is_on_floor():
 		jump_count = 0
@@ -38,13 +36,13 @@ func _physics_process(delta):
 		
 func jump():
 	# single jump
-	if _coyote_counter > 0 and  _jump_buffer_counter > 0 and  jump_count == 0:
+	if _coyote_counter > 0 and _jump_buffer_counter > 0 and  jump_count == 0:
 		 owner.velocity.y = -jump_force;
 		 _jump_buffer_counter = 0
 		 jump_count += 1
 	
 	# fall to double jump
-	elif  jump_count == 0 and  _coyote_counter < 0 and ! owner.is_on_floor() :
+	elif  jump_count == 0 and _coyote_counter < 0 and ! owner.is_on_floor() :
 		 jump_count = 1
 		
 	# double jump

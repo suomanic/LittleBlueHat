@@ -13,3 +13,4 @@ func exit():
 	pass
 
 func get_name():
+	return ""

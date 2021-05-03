@@ -3,7 +3,6 @@ extends State
 var jump_force
 var double_anim_count
 
-
 func _init(o).(o):
 	pass
 

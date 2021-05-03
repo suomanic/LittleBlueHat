@@ -185,6 +185,20 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 44, 45, 46, 47 ]
 }
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "tocourch_anim_end"
+} ]
+}
 
 [sub_resource type="Animation" id=16]
 resource_name = "toFall_Anim"
@@ -209,6 +223,15 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_horizontal_guides_": [ -14.0 ]
 }
+
+[node name="PlayerInput" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="PlayerMovement" type="Node" parent="."]
+script = ExtResource( 4 )
+max_speed = 100.0
+jump_force = 200
+double_jump_foce = 180
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -254,7 +277,7 @@ scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 7
-frame = 40
+frame = 47
 
 [node name="Crouching_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 4 )
@@ -264,14 +287,5 @@ disabled = true
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="."]
 shape = SubResource( 6 )
-
-[node name="PlayerInput" type="Node" parent="."]
-script = ExtResource( 3 )
-
-[node name="PlayerMovement" type="Node" parent="."]
-script = ExtResource( 4 )
-max_speed = 100.0
-jump_force = 200
-double_jump_foce = 180
 
 [connection signal="area_entered" from="Trigger" to="." method="_spring_area_entered"]
