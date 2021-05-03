@@ -1,6 +1,6 @@
 [gd_scene load_steps=25 format=2]
 
-[ext_resource path="res://Actors/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Actors/Player/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/castle_tilemap.png" type="Texture" id=2]
 [ext_resource path="res://Actors/Spring.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/castle_bg_tilemap.png" type="Texture" id=4]
@@ -230,6 +230,8 @@ tile_data = PoolIntArray( 196605, 0, 0, 196606, 0, 2, 131092, 0, 0, 131093, 0, 2
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 144, 144 )
+acceleration = 40.0
+deceleration = 40.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 144, 144 )
@@ -238,3 +240,5 @@ zoom = Vector2( 0.2, 0.2 )
 
 [node name="Spring" parent="." instance=ExtResource( 3 )]
 position = Vector2( 210, 219 )
+
+[node name="JumpBufferTimer" type="Timer" parent="."]
