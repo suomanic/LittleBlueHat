@@ -74,8 +74,9 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id=9]
-length = 0.4
+length = 0.3
 loop = true
+step = 0.075
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimSpriteSheet:frame")
 tracks/0/interp = 1
@@ -83,7 +84,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"times": PoolRealArray( 0, 0.075, 0.15, 0.225 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 7, 8, 9, 10 ]
@@ -181,8 +182,6 @@ script = ExtResource( 3 )
 [node name="PlayerMovement" type="Node" parent="."]
 script = ExtResource( 4 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
-
 [node name="Particles2D" type="Particles2D" parent="."]
 position = Vector2( -4, 12 )
 amount = 50
@@ -222,7 +221,7 @@ scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 7
-frame = 36
+frame = 7
 
 [node name="Crouching_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 4 )

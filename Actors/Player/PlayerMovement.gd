@@ -60,7 +60,17 @@ func move():
 	elif owner.input_module.is_left_pressed:
 		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-max_speed)
 	
-
+func crouch_move():
+	if owner.direction.x == 0:
+		if owner.velocity.x > 0:
+			owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
+		elif owner.velocity.x < 0:
+			owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
+	elif owner.input_module.is_right_pressed:
+		owner.velocity.x = min(owner.velocity.x + owner.acceleration,20)
+	elif owner.input_module.is_left_pressed:
+		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
+	
 	
 func apply_gravity(delta):
 	if owner.velocity.y < 0 and Input.is_action_just_released("jump"):

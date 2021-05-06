@@ -7,7 +7,7 @@ func enter():
 	pass
 	
 func execute():
-	owner.movement_module.move()
+	owner.movement_module.crouch_move()
 	
 	if !owner.is_on_wall() and !owner.input_module.is_crouch_pressed:
 		if owner.velocity.x == 0:
