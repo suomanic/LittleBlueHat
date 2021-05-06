@@ -2,8 +2,13 @@ extends Actor
 
 var direction: = Vector2()
 
-var state_machine : StateMachine
+# movement state machine
+var movement_state_machine : StateMachine
 
+# animation state machine
+var anim_state_machine : StateMachine
+
+# preload movement states
 const MS_IdleState = preload("res://Actors/Player/Movementstate/Idle.gd")
 const MS_RunState = preload("res://Actors/Player/Movementstate/Run.gd")
 const MS_FallState = preload("res://Actors/Player/Movementstate/Fall.gd")
@@ -11,8 +16,9 @@ const MS_DoubleJumpState = preload("res://Actors/Player/Movementstate/DoubleJump
 const MS_CrouchState = preload("res://Actors/Player/Movementstate/Crouch.gd")
 const MS_UpState = preload("res://Actors/Player/Movementstate/Up.gd")
 
+# preload aniamtion states
 const AS_AirState = preload("res://Actors/Player/Animstate/Air.gd")
-const AS_Ground = preload("res://Actors/Player/Animstate/Ground.gd")
+const AS_GroundState = preload("res://Actors/Player/Animstate/Ground.gd")
 
 onready var input_module = get_node("PlayerInput")
 onready var movement_module = get_node("PlayerMovement")
@@ -23,12 +29,15 @@ onready var crouching_collision = $Crouching_Shape
 onready var animation_player = $AnimationPlayer
 onready var animation_sprite_sheet = $AnimSpriteSheet
 
-
 func _ready():
-	state_machine = StateMachine.new(MS_IdleState.new(self))
+	
+	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
+	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
 
 func _physics_process(delta) -> void:
-	state_machine.update()
+	
+	anim_state_machine.update()
+	movement_state_machine.update()
 		
 	direction = input_module.get_direction()
 	

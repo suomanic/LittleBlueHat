@@ -11,12 +11,9 @@ var jump_cancel_mutiply: = 1.2
 
 var jump_count: = 0
 
-export var max_speed: = 210.0
-export var jump_force := 225
-export var double_jump_foce := 225
-
-var jump_anim_count = jump_force * 0.8 * 2/7
-var double_anim_count = jump_anim_count * 0.7
+export var max_speed: = 100.0
+export var jump_force := 200
+export var double_jump_force := 180
 
 
 func _physics_process(delta):
@@ -47,7 +44,7 @@ func jump():
 		
 	# double jump
 	elif jump_count == 1 and jump_count < 2 and  owner.input_module.is_jump_pressed:
-		 owner.velocity.y = -double_jump_foce;
+		 owner.velocity.y = -double_jump_force;
 		 _jump_buffer_counter = 0
 		 jump_count += 1
 	

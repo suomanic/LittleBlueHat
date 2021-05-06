@@ -4,7 +4,6 @@ func _init(o).(o):
 	pass
 
 func enter():
-	owner.animation_player.play("toCrouch_Anim")
 	pass
 	
 func execute():
@@ -12,15 +11,15 @@ func execute():
 	
 	if !owner.is_on_wall() and !owner.input_module.is_crouch_pressed:
 		if owner.velocity.x == 0:
-			owner.state_machine.change_state(owner.MS_IdleState.new(owner)) 
+			owner.movement_state_machine.change_state(owner.MS_IdleState.new(owner)) 
 		elif owner.velocity.x != 0:
-			owner.state_machine.change_state(owner.MS_RunState.new(owner)) 
+			owner.movement_state_machine.change_state(owner.MS_RunState.new(owner)) 
 		
 	elif owner.movement_module._coyote_counter > 0 and owner.movement_module._jump_buffer_counter > 0:
-		owner.state_machine.change_state(owner.MS_UpState.new(owner))
+		owner.movement_state_machine.change_state(owner.MS_UpState.new(owner))
 		
 	elif owner.velocity.y < 0 :
-		owner.state_machine.change_state(owner.MS_UpState.new(owner))
+		owner.movement_state_machine.change_state(owner.MS_UpState.new(owner))
 	pass
 
 func exit():
