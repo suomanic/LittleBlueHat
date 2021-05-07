@@ -235,7 +235,7 @@ disabled = true
 shape = SubResource( 6 )
 
 [node name="Sword" parent="." instance=ExtResource( 5 )]
-position = Vector2( 22, 0 )
+position = Vector2( 15, -15 )
 script = ExtResource( 6 )
 
 [connection signal="area_entered" from="Trigger" to="." method="_spring_area_entered"]

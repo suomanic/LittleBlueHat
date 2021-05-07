@@ -22,6 +22,7 @@ tracks/0/keys = {
 [node name="Sword" type="Node2D"]
 
 [node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 5.5, 8 )
 texture = ExtResource( 1 )
 hframes = 9
 
