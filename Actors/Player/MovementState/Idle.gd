@@ -8,6 +8,7 @@ func enter():
 	
 func execute():
 	owner.movement_module.move()
+	owner.movement_module.jump()
 	
 	if owner.velocity.x !=0 and !owner.is_on_wall():
 		owner.movement_state_machine.change_state(owner.MS_RunState.new(owner)) 

@@ -8,6 +8,7 @@ func enter():
 	
 func execute():
 	owner.movement_module.move()
+	owner.movement_module.jump()
 	
 	if (owner.movement_module._coyote_counter > 0 and owner.movement_module._jump_buffer_counter > 0)|| owner.velocity.y < 0:
 		owner.movement_state_machine.change_state(owner.MS_UpState.new(owner))

@@ -4,6 +4,7 @@ func _init(o).(o):
 	pass
 
 func enter():
+	owner.movement_module.move()
 	pass
 	
 func execute():

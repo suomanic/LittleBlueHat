@@ -1,17 +1,22 @@
-extends Node
+extends Node2D
 
-var is_right_pressed = null
-var is_left_pressed = null
-var is_jump_pressed = null
-var is_crouch_pressed = null
+var is_right_pressed :bool
+var is_left_pressed :bool
+var is_jump_pressed :bool
+var is_crouch_pressed :bool
+var is_attack_just_pressed :bool
+var mouse_global_position : Vector2
 
 func _init():
 	is_right_pressed = false
 	is_left_pressed = false
 	is_jump_pressed = false
 	is_crouch_pressed = false
+	is_attack_just_pressed = false
 	
 func _physics_process(delta) -> void:
+	mouse_global_position = get_global_mouse_position()
+	
 	if Input.is_action_pressed("move_right"):
 		is_right_pressed = true
 	else:
@@ -31,8 +36,13 @@ func _physics_process(delta) -> void:
 		is_crouch_pressed = true
 	else:
 		is_crouch_pressed = false
+	
+	if Input.is_action_just_pressed("attack"):
+		is_attack_just_pressed = true
+	else:
+		is_attack_just_pressed = false
 		
-			
+		
 func get_direction() -> Vector2:
 	return Vector2(
 		Input.get_action_strength("move_right")-Input.get_action_strength("move_left"),
