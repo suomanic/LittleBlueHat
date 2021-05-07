@@ -4,8 +4,8 @@
 [ext_resource path="res://Actors/Player/Player.gd" type="Script" id=2]
 [ext_resource path="res://Actors/Player/PlayerInput.gd" type="Script" id=3]
 [ext_resource path="res://Actors/Player/PlayerMovement.gd" type="Script" id=4]
-[ext_resource path="res://Sword.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Sword.gd" type="Script" id=6]
+[ext_resource path="res://Actors/Weapon/Sword/Sword.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Actors/Weapon/Sword/Sword.gd" type="Script" id=6]
 
 [sub_resource type="Curve" id=1]
 min_value = -360.0
@@ -223,7 +223,7 @@ scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 7
-frame = 7
+frame = 47
 
 [node name="Crouching_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 4 )
