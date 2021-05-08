@@ -54,7 +54,7 @@ func _move() :
 		
 		# 追随角色的该武器(self)正在左右换边时，如果鼠标和角色运动方向同向，
 		# 为了防止追不上角色，把linear_interpolate_scale_rate.x调大
-		if owner.direction.x * mouse_offset_from_chara.x > 0 :
+		if (owner.direction.x > 0 && mouse_offset_from_chara.x > 0) || (owner.direction.x < 0 && mouse_offset_from_chara.x < 0) :
 			linear_interpolate_scale_rate.x = 0.5
 		
 	# 如果追随角色的该武器(self)没有在左右换边的过程中，为了防止追不上角色，
