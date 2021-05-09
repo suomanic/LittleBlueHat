@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Assets/grass_tilemap.png" type="Texture" id=1]
 [ext_resource path="res://Actors/Spring.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Actors/Player/Player.tscn" type="PackedScene" id=3]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )

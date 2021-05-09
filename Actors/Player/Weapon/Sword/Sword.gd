@@ -5,7 +5,6 @@ func _ready():
 
 func _physics_process(delta):
 	_move()
-	print_debug(owner.owner.character.global_position)
 	
 	if owner.owner.input_module.is_attack_just_pressed:
 		$AnimationPlayer.play("attack")
@@ -24,7 +23,7 @@ func _move() :
 
 	if(mouse_offset_from_chara.x > 0) :
 		scale.x = 1
-		target_offset = Vector2(15, -15)
+		target_offset = Vector2(15, 0)
 		
 		# 如果鼠标、该武器(self)并不在角色所在位置的左右两边，但是该武器(self)并没有到达它应该到的位置，
 		# 则认为该武器(self)仍在左右换边过程中，不去动on_changing_side.x
@@ -36,7 +35,7 @@ func _move() :
 			on_changing_side.x = true
 	else :
 		scale.x = -1
-		target_offset = Vector2(-15, -15)
+		target_offset = Vector2(-15, 0)
 		
 		# 同上
 		if weapon_offset_from_chara.x < (target_offset.x + 0.11) :
@@ -50,7 +49,7 @@ func _move() :
 	
 	# 如果追随角色的该武器(self)正在左右换边，设置一下非线性动画平滑
 	if on_changing_side.x :
-		linear_interpolate_scale_rate.x = 0.2
+		linear_interpolate_scale_rate.x = 0.3
 		
 		# 追随角色的该武器(self)正在左右换边时，如果鼠标和角色运动方向同向，
 		# 为了防止追不上角色，把linear_interpolate_scale_rate.x调大
@@ -65,4 +64,4 @@ func _move() :
 	# 水平方向非线性动画
 	global_position = global_position.linear_interpolate(Vector2(owner.owner.character.global_position.x + target_offset.x, self.global_position.y), linear_interpolate_scale_rate.x)
 	# 垂直方向非线性动画
-	global_position = global_position.linear_interpolate(Vector2(global_position.x, owner.owner.character.global_position.y + target_offset.y + mouse_offset_from_chara.y / 50), linear_interpolate_scale_rate.y)
+	global_position = global_position.linear_interpolate(Vector2(global_position.x, owner.owner.character.global_position.y + target_offset.y + mouse_offset_from_chara.y/5), linear_interpolate_scale_rate.y)

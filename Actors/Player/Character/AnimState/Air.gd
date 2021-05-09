@@ -1,9 +1,9 @@
 extends State
 var Air_State_Machine: StateMachine
 
-const AS_FallState = preload("res://Actors/Player/AnimState/Fall.gd") 
-const AS_UpState = preload("res://Actors/Player/AnimState/Up.gd")
-const AS_UptoFallState = preload("res://Actors/Player/AnimState/UptoFall.gd")
+const AS_FallState = preload("res://Actors/Player/Character/AnimState/Fall.gd") 
+const AS_UpState = preload("res://Actors/Player/Character/AnimState/Up.gd")
+const AS_UptoFallState = preload("res://Actors/Player/Character/AnimState/UptoFall.gd")
 
 
 func _init(o).(o):

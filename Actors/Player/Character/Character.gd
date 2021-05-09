@@ -7,16 +7,16 @@ var movement_state_machine : StateMachine
 var anim_state_machine : StateMachine
 
 # preload movement states
-const MS_IdleState = preload("res://Actors/Player/Movementstate/Idle.gd")
-const MS_RunState = preload("res://Actors/Player/Movementstate/Run.gd")
-const MS_FallState = preload("res://Actors/Player/Movementstate/Fall.gd")
-const MS_DoubleJumpState = preload("res://Actors/Player/Movementstate/DoubleJump.gd")
-const MS_CrouchState = preload("res://Actors/Player/Movementstate/Crouch.gd")
-const MS_UpState = preload("res://Actors/Player/Movementstate/Up.gd")
+const MS_IdleState = preload("res://Actors/Player/Character/MovementState/Idle.gd")
+const MS_RunState = preload("res://Actors/Player/Character/Movementstate/Run.gd")
+const MS_FallState = preload("res://Actors/Player/Character/Movementstate/Fall.gd")
+const MS_DoubleJumpState = preload("res://Actors/Player/Character/Movementstate/DoubleJump.gd")
+const MS_CrouchState = preload("res://Actors/Player/Character/Movementstate/Crouch.gd")
+const MS_UpState = preload("res://Actors/Player/Character/Movementstate/Up.gd")
 
 # preload aniamtion states
-const AS_AirState = preload("res://Actors/Player/Animstate/Air.gd")
-const AS_GroundState = preload("res://Actors/Player/Animstate/Ground.gd")
+const AS_AirState = preload("res://Actors/Player/Character/Animstate/Air.gd")
+const AS_GroundState = preload("res://Actors/Player/Character/Animstate/Ground.gd")
 
 onready var movement_module = get_node("CharacterMovement")
 
