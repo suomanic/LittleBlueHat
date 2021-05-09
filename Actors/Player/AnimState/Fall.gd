@@ -9,9 +9,9 @@ func enter():
 	pass
 	
 func execute():
-	if owner.owner.velocity.y < - owner.owner.movement_module.jump_force:
+	if owner.owner.owner.velocity.y < - owner.owner.movement_module.jump_force:
 		owner.Air_State_Machine.change_state(owner.AS_UpState.new(owner))
-	elif owner.owner.velocity.y > - owner.owner.movement_module.jump_force && owner.owner.velocity.y < owner.owner.movement_module.jump_force :
+	elif owner.owner.owner.velocity.y > - owner.owner.movement_module.jump_force && owner.owner.owner.velocity.y < owner.owner.movement_module.jump_force :
 		owner.Air_State_Machine.change_state(owner.AS_UptoFallState.new(owner))
 
 func exit():

@@ -9,10 +9,10 @@ func enter():
 	pass
 	
 func execute():
-	if owner.owner.velocity.x == 0:
+	if owner.owner.owner.velocity.x == 0:
 		owner.Ground_State_Machine.change_state(owner.AS_IdleState.new(owner))
 		
-	if owner.owner.input_module.is_crouch_pressed:
+	if owner.owner.owner.input_module.is_crouch_pressed:
 		owner.Ground_State_Machine.change_state(owner.AS_CrouchState.new(owner))
 	pass
 

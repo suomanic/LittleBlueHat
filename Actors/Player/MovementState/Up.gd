@@ -10,10 +10,10 @@ func execute():
 	owner.movement_module.move()
 	owner.movement_module.jump()
 	
-	if owner.velocity.y > 0:
+	if owner.owner.velocity.y > 0:
 		owner.movement_state_machine.change_state(owner.MS_FallState.new(owner))
 		
-	if owner.input_module.is_jump_pressed:
+	if owner.owner.input_module.is_jump_pressed:
 		owner.movement_state_machine.change_state(owner.MS_DoubleJumpState.new(owner))
 	
 	

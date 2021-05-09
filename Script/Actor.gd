@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends Node2D
 class_name Actor
 
 export var gravity: = 600.0

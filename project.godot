@@ -9,7 +9,7 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "KinematicBody2D",
+"base": "Node2D",
 "class": "Actor",
 "language": "GDScript",
 "path": "res://Script/Actor.gd"
@@ -24,7 +24,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://State_Machine/StateMachine.gd"
 }, {
-"base": "Node",
+"base": "Node2D",
 "class": "Weapon",
 "language": "GDScript",
 "path": "res://Actors/Weapon/Weapon.gd"

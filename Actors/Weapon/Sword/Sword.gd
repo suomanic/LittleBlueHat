@@ -4,10 +4,10 @@ func _ready():
 	pass
 
 func _physics_process(delta):
-	set_as_toplevel(true)
 	_move()
+	print_debug(owner.owner.character.global_position)
 	
-	if Input.is_action_just_pressed("attack"):
+	if owner.owner.input_module.is_attack_just_pressed:
 		$AnimationPlayer.play("attack")
 	pass
 
@@ -18,9 +18,9 @@ func _move() :
 	# 该武器(self)位置和角色位置的目标偏移量
 	var target_offset : Vector2
 	# 当前鼠标位置和角色位置的偏移量
-	var mouse_offset_from_chara : = Vector2(owner.input_module.mouse_global_position - owner.global_position)
+	var mouse_offset_from_chara : = Vector2(owner.owner.input_module.mouse_global_position -  owner.owner.character.global_position)
 	# 当前该武器(self)位置和角色位置的偏移量
-	var weapon_offset_from_chara : = Vector2(self.global_position - owner.global_position)
+	var weapon_offset_from_chara : = Vector2(global_position - owner.owner.character.global_position)
 
 	if(mouse_offset_from_chara.x > 0) :
 		scale.x = 1
@@ -54,7 +54,7 @@ func _move() :
 		
 		# 追随角色的该武器(self)正在左右换边时，如果鼠标和角色运动方向同向，
 		# 为了防止追不上角色，把linear_interpolate_scale_rate.x调大
-		if (owner.direction.x > 0 && mouse_offset_from_chara.x > 0) || (owner.direction.x < 0 && mouse_offset_from_chara.x < 0) :
+		if (owner.owner.input_module.get_direction().x > 0 && mouse_offset_from_chara.x > 0) || (owner.owner.input_module.get_direction().x < 0 && mouse_offset_from_chara.x < 0) :
 			linear_interpolate_scale_rate.x = 0.5
 		
 	# 如果追随角色的该武器(self)没有在左右换边的过程中，为了防止追不上角色，
@@ -63,6 +63,6 @@ func _move() :
 		linear_interpolate_scale_rate.x = 0.5
 	
 	# 水平方向非线性动画
-	self.global_position = self.global_position.linear_interpolate(Vector2(owner.global_position.x + target_offset.x, self.global_position.y), linear_interpolate_scale_rate.x)
+	global_position = global_position.linear_interpolate(Vector2(owner.owner.character.global_position.x + target_offset.x, self.global_position.y), linear_interpolate_scale_rate.x)
 	# 垂直方向非线性动画
-	self.global_position = self.global_position.linear_interpolate(Vector2(self.global_position.x, owner.global_position.y + target_offset.y + mouse_offset_from_chara.y / 20), linear_interpolate_scale_rate.y)
+	global_position = global_position.linear_interpolate(Vector2(global_position.x, owner.owner.character.global_position.y + target_offset.y + mouse_offset_from_chara.y / 50), linear_interpolate_scale_rate.y)

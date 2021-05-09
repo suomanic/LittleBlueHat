@@ -13,10 +13,10 @@ func execute():
 	
 	if owner.is_on_floor():
 		owner.movement_state_machine.change_state(owner.MS_IdleState.new(owner))
-	elif owner.velocity.y < 0 :
+	elif owner.owner.velocity.y < 0 :
 		owner.movement_state_machine.change_state(owner.MS_UpState.new(owner))
 		
-	if owner.input_module.is_jump_pressed:
+	if owner.owner.input_module.is_jump_pressed:
 		owner.movement_state_machine.change_state(owner.MS_DoubleJumpState.new(owner))
 		
 	

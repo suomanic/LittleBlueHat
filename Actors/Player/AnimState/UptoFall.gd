@@ -19,7 +19,7 @@ func enter():
 	double_anim_count = 2 * djf / 7 
 	
 func execute():
-	velocity_y = owner.owner.velocity.y
+	velocity_y = owner.owner.owner.velocity.y
 	
 	if owner.owner.movement_module.jump_count == 2:
 		if velocity_y > -djf && velocity_y < -djf + double_anim_count:

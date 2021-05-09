@@ -1,6 +1,6 @@
 [gd_scene load_steps=25 format=2]
 
-[ext_resource path="res://Actors/Player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Actors/Player/Character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/castle_tilemap.png" type="Texture" id=2]
 [ext_resource path="res://Actors/Spring.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/castle_bg_tilemap.png" type="Texture" id=4]

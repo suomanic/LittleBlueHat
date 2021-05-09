@@ -1,11 +1,8 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Assets/animation/animation package-Sheet.png" type="Texture" id=1]
-[ext_resource path="res://Actors/Player/Player.gd" type="Script" id=2]
-[ext_resource path="res://Actors/Player/PlayerInput.gd" type="Script" id=3]
+[ext_resource path="res://Actors/Player/Character.gd" type="Script" id=2]
 [ext_resource path="res://Actors/Player/PlayerMovement.gd" type="Script" id=4]
-[ext_resource path="res://Actors/Weapon/Sword/Sword.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Actors/Weapon/Sword/Sword.gd" type="Script" id=6]
 
 [sub_resource type="Curve" id=1]
 min_value = -360.0
@@ -171,17 +168,14 @@ tracks/1/keys = {
 } ]
 }
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Character" type="KinematicBody2D"]
 collision_mask = 3
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_horizontal_guides_": [ -14.0 ]
 }
 
-[node name="PlayerInput" type="Node2D" parent="."]
-script = ExtResource( 3 )
-
-[node name="PlayerMovement" type="Node" parent="."]
+[node name="CharacterMovement" type="Node" parent="."]
 script = ExtResource( 4 )
 
 [node name="Particles2D" type="Particles2D" parent="."]
@@ -233,9 +227,5 @@ disabled = true
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="."]
 shape = SubResource( 6 )
-
-[node name="Sword" parent="." instance=ExtResource( 5 )]
-position = Vector2( 15, -15 )
-script = ExtResource( 6 )
 
 [connection signal="area_entered" from="Trigger" to="." method="_spring_area_entered"]
