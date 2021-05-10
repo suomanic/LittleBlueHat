@@ -86,7 +86,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.075, 0.15, 0.225 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 7, 8, 9, 10 ]
+"values": [ 6, 6, 7, 8 ]
 }
 
 [sub_resource type="Animation" id=10]
@@ -219,7 +219,7 @@ scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 7
-frame = 41
+frame = 9
 
 [node name="Crouching_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 4 )
