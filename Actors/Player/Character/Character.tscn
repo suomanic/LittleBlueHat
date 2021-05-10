@@ -177,6 +177,8 @@ __meta__ = {
 
 [node name="CharacterMovement" type="Node" parent="."]
 script = ExtResource( 4 )
+jump_force = 225
+double_jump_force = 200
 
 [node name="Particles2D" type="Particles2D" parent="."]
 position = Vector2( -4, 12 )
@@ -227,5 +229,10 @@ disabled = true
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="."]
 shape = SubResource( 6 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 4, 0 )
+current = true
+zoom = Vector2( 0.2, 0.2 )
 
 [connection signal="area_entered" from="Trigger" to="." method="_spring_area_entered"]
