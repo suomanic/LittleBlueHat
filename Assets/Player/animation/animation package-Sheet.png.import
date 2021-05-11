@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/animation package-Sheet.png-acbec2f64bf90f755b418607be64b878.stex"
+path="res://.import/animation package-Sheet.png-b876c8f593e5e5d3ef5401081775fe38.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/animation/animation package-Sheet.png"
-dest_files=[ "res://.import/animation package-Sheet.png-acbec2f64bf90f755b418607be64b878.stex" ]
+source_file="res://Assets/Player/animation/animation package-Sheet.png"
+dest_files=[ "res://.import/animation package-Sheet.png-b876c8f593e5e5d3ef5401081775fe38.stex" ]
 
 [params]
 
