@@ -1,4 +1,4 @@
-extends Actor
+extends Node2D
 
 onready var input_module = get_node("PlayerInput")
 onready var character = get_node("Character")

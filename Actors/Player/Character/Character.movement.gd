@@ -21,7 +21,7 @@ export var double_jump_force := 180
 func _physics_process(delta):
 	
 	apply_gravity(delta)
-	owner.owner.velocity = owner.move_and_slide(owner.owner.velocity,Vector2.UP)
+	owner.velocity = owner.move_and_slide(owner.velocity,Vector2.UP)
 	
 	if owner.is_on_floor():
 		jump_count = 0
@@ -37,7 +37,7 @@ func _physics_process(delta):
 func jump():
 	# single jump
 	if _coyote_counter > 0 and _jump_buffer_counter > 0 and  jump_count == 0:
-		 owner.owner.velocity.y = -jump_force;
+		 owner.velocity.y = -jump_force;
 		 _jump_buffer_counter = 0
 		 jump_count += 1
 	
@@ -47,41 +47,41 @@ func jump():
 		
 	# double jump
 	elif jump_count == 1 and jump_count < 2 and  owner.owner.input_module.is_jump_pressed:
-		 owner.owner.velocity.y = -double_jump_force;
+		 owner.velocity.y = -double_jump_force;
 		 _jump_buffer_counter = 0
 		 jump_count += 1
 	
 
 func move():
 	if owner.owner.input_module.get_direction().x == 0:
-		if owner.owner.velocity.x > 0:
-			owner.owner.velocity.x = max(owner.owner.velocity.x - owner.owner.deceleration,0)
-		elif owner.owner.velocity.x < 0:
-			owner.owner.velocity.x = min(owner.owner.velocity.x + owner.owner.deceleration,0)
+		if owner.velocity.x > 0:
+			owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
+		elif owner.velocity.x < 0:
+			owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
 	elif owner.owner.input_module.is_right_pressed:
-		owner.owner.velocity.x = min(owner.owner.velocity.x + owner.owner.acceleration,max_speed)
+		owner.velocity.x = min(owner.velocity.x + owner.acceleration,max_speed)
 	elif owner.owner.input_module.is_left_pressed:
-		owner.owner.velocity.x = max(owner.owner.velocity.x - owner.owner.acceleration,-max_speed)
+		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-max_speed)
 	
 func crouch_move():
 	if owner.owner.input_module.get_direction().x == 0:
-		if owner.owner.velocity.x > 0:
-			owner.owner.velocity.x = max(owner.owner.velocity.x - owner.owner.deceleration,0)
-		elif owner.owner.velocity.x < 0:
-			owner.owner.velocity.x = min(owner.owner.velocity.x + owner.owner.deceleration,0)
+		if owner.velocity.x > 0:
+			owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
+		elif owner.velocity.x < 0:
+			owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
 	elif owner.owner.input_module.is_right_pressed:
-		owner.owner.velocity.x = min(owner.owner.velocity.x + owner.owner.acceleration,20)
+		owner.velocity.x = min(owner.velocity.x + owner.acceleration,20)
 	elif owner.owner.input_module.is_left_pressed:
-		owner.owner.velocity.x = max(owner.owner.velocity.x - owner.owner.acceleration,-20)
+		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
 	
 	
 func apply_gravity(delta):
-	if owner.owner.velocity.y < 0 and Input.is_action_just_released("jump"):
-		owner.owner.velocity.y = owner.owner.velocity.y * 0.5
-		owner.owner.velocity.y += owner.owner.gravity * jump_cancel_mutiply * delta
+	if owner.velocity.y < 0 and Input.is_action_just_released("jump"):
+		owner.velocity.y = owner.velocity.y * 0.5
+		owner.velocity.y += owner.gravity * jump_cancel_mutiply * delta
 			
-	elif owner.owner.velocity.y > 0 and jump_count != 0:
-		owner.owner.velocity.y += owner.owner.gravity * fall_mutiply * delta
+	elif owner.velocity.y > 0 and jump_count != 0:
+		owner.velocity.y += owner.gravity * fall_mutiply * delta
 		
 	else :
-		owner.owner.velocity.y +=owner.owner.gravity * delta
+		owner.velocity.y +=owner.gravity * delta

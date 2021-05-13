@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends Actor
 
 # movement state machine
 var movement_state_machine : StateMachine
@@ -38,7 +38,7 @@ func _physics_process(delta) -> void:
 		
 	animation_control()
 	
-	if is_on_floor() and owner.velocity.x != 0:
+	if is_on_floor() and velocity.x != 0:
 		$Particles2D.set_emitting(true)
 	else :
 		$Particles2D.set_emitting(false)
@@ -54,7 +54,7 @@ func animation_control():
 		$Particles2D.set_position(Vector2(4,12))
 	
 func _spring_area_entered(area: Area2D) -> void:
-	owner.velocity.y = -350
+	velocity.y = -300
 	movement_module.jump_count = 1
 	
 func tocourch_anim_end():

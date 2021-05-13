@@ -19,7 +19,7 @@ func enter():
 	double_anim_count = 2 * djf / 7 
 	
 func execute():
-	velocity_y = owner.owner.owner.velocity.y
+	velocity_y = owner.owner.velocity.y
 	
 	if owner.owner.movement_module.jump_count == 2:
 		if velocity_y > -djf && velocity_y < -djf + double_anim_count:
@@ -35,7 +35,7 @@ func execute():
 		elif velocity_y > -djf + double_anim_count*5 && velocity_y < -djf + double_anim_count*6:
 			owner.owner.animation_sprite_sheet.set_frame(42)
 		elif velocity_y > -djf + double_anim_count*6 && velocity_y < -djf + double_anim_count*7:
-			owner.owner.animation_sprite_sheet.set_frame(6)
+			owner.owner.animation_sprite_sheet.set_frame(7)
 		elif velocity_y > -djf + double_anim_count*7:
 			owner.Air_State_Machine.change_state(owner.AS_FallState.new(owner))
 	else:
@@ -52,7 +52,7 @@ func execute():
 		elif velocity_y > -jf + up_anim_count*5 && velocity_y < -jf + up_anim_count*6:
 			owner.owner.animation_sprite_sheet.set_frame(5)
 		elif velocity_y > -jf + up_anim_count*6 && velocity_y < -jf + up_anim_count*7:
-			owner.owner.animation_sprite_sheet.set_frame(6)
+			owner.owner.animation_sprite_sheet.set_frame(7)
 		elif velocity_y > - jf + up_anim_count*7:
 			owner.Air_State_Machine.change_state(owner.AS_FallState.new(owner))
 		
