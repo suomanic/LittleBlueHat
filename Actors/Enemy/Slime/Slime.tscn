@@ -5,10 +5,11 @@
 [ext_resource path="res://Actors/Enemy/Slime/Slime.gd" type="Script" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 9, 8 )
+extents = Vector2( 7, 8 )
 
 [sub_resource type="Animation" id=2]
 resource_name = "Move_Anim"
+length = 0.8
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimationSheet:frame")
 tracks/0/interp = 1
@@ -19,7 +20,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+"values": [ 0, 1, 2, 3, 4, 5, 6, 0 ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath(".")
@@ -43,18 +44,18 @@ tracks/1/keys = {
 
 [node name="Slime" type="KinematicBody2D"]
 collision_layer = 4
-collision_mask = 3
+collision_mask = 6
 script = ExtResource( 3 )
 
 [node name="AnimationSheet" type="Sprite" parent="."]
 material = ExtResource( 2 )
-position = Vector2( -1, 0 )
 texture = ExtResource( 1 )
-hframes = 8
-frame = 5
+hframes = 7
+frame = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, 1 )
+visible = false
+position = Vector2( -1, 1 )
 shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -63,4 +64,6 @@ anims/Move_Anim = SubResource( 2 )
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
+position = Vector2( -2, 0 )
 shape = SubResource( 3 )

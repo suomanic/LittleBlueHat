@@ -2,8 +2,8 @@ extends Actor
 
 var state_machine : StateMachine
 
-const IdleState = preload("res://Actors/Enemy/Slime/State/Idle.gd")
-const MoveState = preload("res://Actors/Enemy/Slime/State/Move.gd")
+const IdleState = preload("res://Actors/Enemy/Slime/State/1_Idle.gd")
+const MoveState = preload("res://Actors/Enemy/Slime/State/1_Move.gd")
 
 onready var anim_player = $AnimationPlayer
 
@@ -18,7 +18,7 @@ func _physics_process(delta):
 
 	
 func _move():
-	velocity.x = -50
+	velocity.x = -100
 	velocity.y = -50
 	
 func _stop():

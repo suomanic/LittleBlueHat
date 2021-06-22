@@ -250,10 +250,10 @@ disabled = true
 shape = SubResource( 6 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
+material = ExtResource( 3 )
 current = true
 zoom = Vector2( 0.2, 0.2 )
 process_mode = 0
 smoothing_enabled = true
-smoothing_speed = 10.0
 
 [connection signal="area_entered" from="Trigger" to="." method="_spring_area_entered"]
