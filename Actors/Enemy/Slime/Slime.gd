@@ -6,6 +6,7 @@ const IdleState = preload("res://Actors/Enemy/Slime/State/1_Idle.gd")
 const MoveState = preload("res://Actors/Enemy/Slime/State/1_Move.gd")
 
 onready var anim_player = $AnimationPlayer
+onready var timer = get_node("Timer")
 
 func _ready():
 	state_machine = StateMachine.new(MoveState.new(self))
@@ -18,9 +19,10 @@ func _physics_process(delta):
 
 	
 func _move():
-	velocity.x = -100
+	velocity.x = -120
 	velocity.y = -50
 	
 func _stop():
 	velocity.x = 0
 	
+
