@@ -1,12 +1,12 @@
 extends State
 
-var counter = 3 
+var counter
 
 func _init(o).(o):
 	pass
 
 func enter():
-	counter = 3
+	counter = rand_range(2,3)
 	owner.anim_player.play("N_Idle_Anim")
 	pass
 	

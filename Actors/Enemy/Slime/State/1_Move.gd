@@ -6,7 +6,8 @@ func _init(o).(o):
 	pass
 
 func enter():
-	counter = 0.6
+	owner.moving_finished = false
+	counter = 0.55
 	owner.anim_player.play("N_Move_Anim")
 	pass
 	
@@ -18,6 +19,7 @@ func execute():
 	pass
 
 func exit():
+	owner.moving_finished = true
 	pass
 
 func get_name():
