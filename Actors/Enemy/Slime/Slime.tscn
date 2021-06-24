@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/Enemy/Slime/slime-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Shader/smooth_pixel.tres" type="Material" id=2]
@@ -7,10 +7,9 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 7, 8 )
 
-[sub_resource type="Animation" id=4]
-resource_name = "N_Idle_Anim"
-length = 0.8
-loop = true
+[sub_resource type="Animation" id=5]
+resource_name = "Hurt_Anim"
+length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimationSheet:frame")
 tracks/0/interp = 1
@@ -18,14 +17,57 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 7, 8 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationSheet:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0.701961, 0.415686, 0.415686, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_hurt_end"
+} ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "N_Idle_Anim"
+length = 1.2
+loop = true
+step = 0.15
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 7, 8, 9, 10, 11, 12, 13, 14 ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "N_Move_Anim"
+[sub_resource type="Animation" id=3]
 length = 0.6
 step = 0.075
 tracks/0/type = "value"
@@ -58,7 +100,8 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 10, 9 )
 
 [node name="Slime" type="KinematicBody2D"]
 collision_layer = 4
@@ -77,24 +120,28 @@ position = Vector2( -1, 1 )
 shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/N_Idle_Anim = SubResource( 4 )
-anims/N_Move_Anim = SubResource( 2 )
+anims/Hurt_Anim = SubResource( 5 )
+anims/N_Idle_Anim = SubResource( 2 )
+anims/N_Move_Anim = SubResource( 3 )
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="HitBox" type="Area2D" parent="." groups=[
+"HurtBox",
+]]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 visible = false
-position = Vector2( -2, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="FrontRayCast" type="RayCast2D" parent="."]
-position = Vector2( -22, -16 )
+position = Vector2( -18, -16 )
 enabled = true
 cast_to = Vector2( 0, 25 )
 collision_mask = 6
 
 [node name="BackRayCast" type="RayCast2D" parent="."]
-position = Vector2( 20, -16 )
+position = Vector2( 17, -16 )
 enabled = true
 cast_to = Vector2( 0, 25 )
 collision_mask = 6
+
+[connection signal="area_entered" from="HitBox" to="." method="_on_HitBox_area_entered"]
