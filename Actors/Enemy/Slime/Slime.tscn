@@ -5,8 +5,8 @@
 [ext_resource path="res://Actors/Enemy/Slime/Slime.gd" type="Script" id=3]
 [ext_resource path="res://Actors/Enemy/Slime/SlimeCollision.gd" type="Script" id=4]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 7.5, 8.5 )
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 7.5, 7 )
 
 [sub_resource type="Animation" id=6]
 resource_name = "B_Idle_Anim"
@@ -106,7 +106,7 @@ tracks/1/keys = {
 }
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 11, 9 )
+extents = Vector2( 9, 6 )
 
 [node name="Slime" type="KinematicBody2D"]
 collision_layer = 4
@@ -117,11 +117,11 @@ script = ExtResource( 3 )
 material = ExtResource( 2 )
 texture = ExtResource( 1 )
 hframes = 20
-frame = 15
+frame = 19
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
-position = Vector2( 1, -1 )
-shape = SubResource( 1 )
+position = Vector2( 1, 1 )
+shape = SubResource( 7 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/B_Idle_Anim = SubResource( 6 )
@@ -134,8 +134,7 @@ anims/NtoI = SubResource( 2 )
 ]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-visible = false
-position = Vector2( 0, -1 )
+position = Vector2( 1, -2 )
 shape = SubResource( 5 )
 
 [node name="FrontRayCast" type="RayCast2D" parent="."]

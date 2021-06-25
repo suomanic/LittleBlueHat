@@ -17,10 +17,15 @@ onready var b_ray_cast = $BackRayCast
 
 onready var collision_module = $SlimeCollision
 
-onready var physic_collsion = $PhysicCollision
+var physic_collsion_shape 
+
 onready var hit_collision = $HitBox/CollisionShape2D
 
 func _ready():
+	#将每个对象的物理碰撞独立出来
+	get_node("PhysicCollision").shape = get_node("PhysicCollision").shape.duplicate()
+	physic_collsion_shape = get_node("PhysicCollision").shape
+	
 	state_machine = StateMachine.new(N_MoveState.new(self))
 	element_state = "Normal"
 
@@ -62,3 +67,4 @@ func _on_HitBox_area_entered(area):
 			is_hurt_move_left = false
 		state_machine.change_state(NtoIState.new(self))
 	pass # Replace with function body.
+
