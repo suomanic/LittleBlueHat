@@ -5,11 +5,11 @@
 [ext_resource path="res://Actors/Enemy/Slime/Slime.gd" type="Script" id=3]
 [ext_resource path="res://Actors/Enemy/Slime/SlimeCollision.gd" type="Script" id=4]
 
-[sub_resource type="RectangleShape2D" id=7]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 7.5, 7 )
 
-[sub_resource type="Animation" id=6]
-resource_name = "B_Idle_Anim"
+[sub_resource type="Animation" id=2]
+resource_name = "I_Idle_Anim"
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimationSheet:frame")
@@ -74,8 +74,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "NtoI"
+[sub_resource type="Animation" id=5]
 length = 0.25
 step = 0.05
 tracks/0/type = "value"
@@ -105,7 +104,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 9, 6 )
 
 [node name="Slime" type="KinematicBody2D"]
@@ -117,34 +116,35 @@ script = ExtResource( 3 )
 material = ExtResource( 2 )
 texture = ExtResource( 1 )
 hframes = 20
-frame = 19
+frame = 7
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
 position = Vector2( 1, 1 )
-shape = SubResource( 7 )
+shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/B_Idle_Anim = SubResource( 6 )
+anims/I_Idle_Anim = SubResource( 2 )
 anims/N_Idle_Anim = SubResource( 3 )
 anims/N_Move_Anim = SubResource( 4 )
-anims/NtoI = SubResource( 2 )
+anims/NtoI = SubResource( 5 )
 
 [node name="HitBox" type="Area2D" parent="." groups=[
 "HurtBox",
 ]]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 position = Vector2( 1, -2 )
-shape = SubResource( 5 )
+shape = SubResource( 6 )
 
 [node name="FrontRayCast" type="RayCast2D" parent="."]
-position = Vector2( -18, -16 )
+position = Vector2( -20, -25 )
 enabled = true
 cast_to = Vector2( 0, 25 )
 collision_mask = 6
 
 [node name="BackRayCast" type="RayCast2D" parent="."]
-position = Vector2( 18, -16 )
+position = Vector2( 20, -25 )
 enabled = true
 cast_to = Vector2( 0, 25 )
 collision_mask = 6

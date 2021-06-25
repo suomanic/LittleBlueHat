@@ -17,7 +17,7 @@ onready var b_ray_cast = $BackRayCast
 
 onready var collision_module = $SlimeCollision
 
-var physic_collsion_shape 
+var physic_collsion_shape
 
 onready var hit_collision = $HitBox/CollisionShape2D
 
@@ -34,9 +34,9 @@ func _physics_process(delta):
 	state_machine.update()
 	_turn_around()
 	
-	
 	velocity = move_and_slide(velocity,Vector2.UP)
 	velocity.y += gravity * get_physics_process_delta_time()
+	
 
 #Animation call function	
 func _move():

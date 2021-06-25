@@ -22,7 +22,7 @@ onready var movement_module = $CharacterMovement
 onready var collision_module = $CharacterCollision
 
 onready var standing_collision = $Standing_Shape
-onready var crouching_collision = $Crouching_Shape
+#onready var crouching_collision = $Crouching_Shape
 
 onready var animation_player = $AnimationPlayer
 onready var animation_sprite_sheet = $AnimSpriteSheet
