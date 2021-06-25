@@ -23,6 +23,7 @@ func _physics_process(delta):
 	apply_gravity(delta)
 	owner.velocity = owner.move_and_slide(owner.velocity,Vector2.UP)
 	
+	
 	if owner.is_on_floor():
 		jump_count = 0
 		_coyote_counter = coyote_time
@@ -50,7 +51,7 @@ func jump():
 		 owner.velocity.y = -double_jump_force;
 		 _jump_buffer_counter = 0
 		 jump_count += 1
-	
+		
 
 func move():
 	if owner.owner.input_module.get_direction().x == 0:

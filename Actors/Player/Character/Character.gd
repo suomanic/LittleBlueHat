@@ -18,7 +18,8 @@ const MS_UpState = preload("res://Actors/Player/Character/Movementstate/Up.gd")
 const AS_AirState = preload("res://Actors/Player/Character/Animstate/Air.gd")
 const AS_GroundState = preload("res://Actors/Player/Character/Animstate/Ground.gd")
 
-onready var movement_module = get_node("CharacterMovement")
+onready var movement_module = $CharacterMovement
+onready var collision_module = $CharacterCollision
 
 onready var standing_collision = $Standing_Shape
 onready var crouching_collision = $Crouching_Shape
@@ -52,10 +53,6 @@ func animation_control():
 		$AnimSpriteSheet.scale.x = -1
 		$Particles2D.scale.x = -1
 		$Particles2D.set_position(Vector2(4,12))
-	
-func _spring_area_entered(area: Area2D) -> void:
-	velocity.y = -300
-	movement_module.jump_count = 1
 	
 func tocourch_anim_end():
 	animation_player.play("CrouchIdle_Anim")

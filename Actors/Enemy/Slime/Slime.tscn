@@ -1,15 +1,16 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Assets/Enemy/Slime/slime-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Shader/smooth_pixel.tres" type="Material" id=2]
 [ext_resource path="res://Actors/Enemy/Slime/Slime.gd" type="Script" id=3]
+[ext_resource path="res://Actors/Enemy/Slime/SlimeCollision.gd" type="Script" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 7, 8 )
+extents = Vector2( 7.5, 8.5 )
 
-[sub_resource type="Animation" id=5]
-resource_name = "Hurt_Anim"
-length = 0.2
+[sub_resource type="Animation" id=6]
+resource_name = "B_Idle_Anim"
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimationSheet:frame")
 tracks/0/interp = 1
@@ -17,40 +18,13 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ 7, 8 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("AnimationSheet:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 0.701961, 0.415686, 0.415686, 1 ), Color( 1, 1, 1, 1 ) ]
-}
-tracks/2/type = "method"
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0.2 ),
+"times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "_hurt_end"
-} ]
+"update": 1,
+"values": [ 19 ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "N_Idle_Anim"
+[sub_resource type="Animation" id=3]
 length = 1.2
 loop = true
 step = 0.15
@@ -67,7 +41,7 @@ tracks/0/keys = {
 "values": [ 7, 8, 9, 10, 11, 12, 13, 14 ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=4]
 length = 0.6
 step = 0.075
 tracks/0/type = "value"
@@ -100,29 +74,60 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 10, 9 )
+[sub_resource type="Animation" id=2]
+resource_name = "NtoI"
+length = 0.25
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.15, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 15, 16, 17, 18, 19 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.25 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_hurt_end"
+} ]
+}
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 11, 9 )
 
 [node name="Slime" type="KinematicBody2D"]
 collision_layer = 4
-collision_mask = 6
+collision_mask = 7
 script = ExtResource( 3 )
 
 [node name="AnimationSheet" type="Sprite" parent="."]
 material = ExtResource( 2 )
 texture = ExtResource( 1 )
-hframes = 15
-frame = 7
+hframes = 20
+frame = 15
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2( -1, 1 )
+[node name="PhysicCollision" type="CollisionShape2D" parent="."]
+position = Vector2( 1, -1 )
 shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Hurt_Anim = SubResource( 5 )
-anims/N_Idle_Anim = SubResource( 2 )
-anims/N_Move_Anim = SubResource( 3 )
+anims/B_Idle_Anim = SubResource( 6 )
+anims/N_Idle_Anim = SubResource( 3 )
+anims/N_Move_Anim = SubResource( 4 )
+anims/NtoI = SubResource( 2 )
 
 [node name="HitBox" type="Area2D" parent="." groups=[
 "HurtBox",
@@ -130,7 +135,8 @@ anims/N_Move_Anim = SubResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 visible = false
-shape = SubResource( 4 )
+position = Vector2( 0, -1 )
+shape = SubResource( 5 )
 
 [node name="FrontRayCast" type="RayCast2D" parent="."]
 position = Vector2( -18, -16 )
@@ -139,9 +145,12 @@ cast_to = Vector2( 0, 25 )
 collision_mask = 6
 
 [node name="BackRayCast" type="RayCast2D" parent="."]
-position = Vector2( 17, -16 )
+position = Vector2( 18, -16 )
 enabled = true
 cast_to = Vector2( 0, 25 )
 collision_mask = 6
+
+[node name="SlimeCollision" type="Node" parent="."]
+script = ExtResource( 4 )
 
 [connection signal="area_entered" from="HitBox" to="." method="_on_HitBox_area_entered"]

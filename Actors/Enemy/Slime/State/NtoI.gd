@@ -1,10 +1,15 @@
 extends State
 
+signal change_to_ice()
+
 func _init(o).(o):
 	pass
 
 func enter():
-	owner.anim_player.play("Hurt_Anim")
+	owner.anim_player.play("NtoI")
+	owner.element_state = "Ice"
+	connect("change_to_ice",owner.collision_module,"ice_physic_collision")
+	emit_signal("change_to_ice")
 	
 	if owner.is_hurt_move_left:
 		owner.velocity.x = 50

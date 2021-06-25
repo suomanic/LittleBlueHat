@@ -3,23 +3,32 @@ extends Actor
 var state_machine : StateMachine
 var is_moving_left := true
 var is_hurt_move_left := true
-var moving_finished = false
+var moving_finished := false
+var element_state : String
 
-const IdleState = preload("res://Actors/Enemy/Slime/State/1_Idle.gd")
-const MoveState = preload("res://Actors/Enemy/Slime/State/1_Move.gd")
-const HurtState = preload("res://Actors/Enemy/Slime/State/1_Hurt.gd")
+const N_IdleState = preload("res://Actors/Enemy/Slime/State/1_Idle.gd")
+const N_MoveState = preload("res://Actors/Enemy/Slime/State/1_Move.gd")
+const NtoIState = preload("res://Actors/Enemy/Slime/State/NtoI.gd")
+const I_IdleState = preload("res://Actors/Enemy/Slime/State/Ice_Idle.gd")
 
 onready var anim_player = $AnimationPlayer
 onready var f_ray_cast = $FrontRayCast
 onready var b_ray_cast = $BackRayCast
 
+onready var collision_module = $SlimeCollision
+
+onready var physic_collsion = $PhysicCollision
+onready var hit_collision = $HitBox/CollisionShape2D
+
 func _ready():
-	state_machine = StateMachine.new(MoveState.new(self))
+	state_machine = StateMachine.new(N_MoveState.new(self))
+	element_state = "Normal"
 
 func _physics_process(delta):
 	
 	state_machine.update()
 	_turn_around()
+	
 	
 	velocity = move_and_slide(velocity,Vector2.UP)
 	velocity.y += gravity * get_physics_process_delta_time()
@@ -43,7 +52,7 @@ func _turn_around():
 	pass
 
 func _hurt_end():
-	state_machine.change_state(IdleState.new(self))
+	state_machine.change_state(I_IdleState.new(self))
 
 func _on_HitBox_area_entered(area):
 	if area.is_in_group("Ice"):
@@ -51,5 +60,5 @@ func _on_HitBox_area_entered(area):
 			is_hurt_move_left = true
 		elif global_position.x - area.owner.global_position.x < 0:
 			is_hurt_move_left = false
-		state_machine.change_state(HurtState.new(self))
+		state_machine.change_state(NtoIState.new(self))
 	pass # Replace with function body.
