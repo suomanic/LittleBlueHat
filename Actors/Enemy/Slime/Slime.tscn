@@ -5,8 +5,9 @@
 [ext_resource path="res://Actors/Enemy/Slime/Slime.gd" type="Script" id=3]
 [ext_resource path="res://Actors/Enemy/Slime/SlimeCollision.gd" type="Script" id=4]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 7.5, 7 )
+[sub_resource type="CapsuleShape2D" id=7]
+radius = 9.0
+height = 0.0
 
 [sub_resource type="Animation" id=2]
 resource_name = "I_Idle_Anim"
@@ -63,14 +64,11 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.15, 0.375 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0.15 ),
+"transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
 "method": "_move"
-}, {
-"args": [  ],
-"method": "_stop"
 } ]
 }
 
@@ -107,20 +105,23 @@ tracks/1/keys = {
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 9, 6 )
 
-[node name="Slime" type="KinematicBody2D"]
+[node name="Slime" type="RigidBody2D"]
 collision_layer = 4
-collision_mask = 7
+collision_mask = 6
+mode = 2
+gravity_scale = 6.0
+contacts_reported = 1
+contact_monitor = true
+angular_damp = 0.0
 script = ExtResource( 3 )
 
 [node name="AnimationSheet" type="Sprite" parent="."]
 material = ExtResource( 2 )
 texture = ExtResource( 1 )
 hframes = 20
-frame = 7
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
-position = Vector2( 1, 1 )
-shape = SubResource( 1 )
+shape = SubResource( 7 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/I_Idle_Anim = SubResource( 2 )
@@ -138,13 +139,13 @@ position = Vector2( 1, -2 )
 shape = SubResource( 6 )
 
 [node name="FrontRayCast" type="RayCast2D" parent="."]
-position = Vector2( -20, -25 )
+position = Vector2( -19, -26 )
 enabled = true
 cast_to = Vector2( 0, 25 )
 collision_mask = 6
 
 [node name="BackRayCast" type="RayCast2D" parent="."]
-position = Vector2( 20, -25 )
+position = Vector2( 21, -26 )
 enabled = true
 cast_to = Vector2( 0, 25 )
 collision_mask = 6

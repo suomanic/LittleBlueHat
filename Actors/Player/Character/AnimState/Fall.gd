@@ -4,7 +4,6 @@ func _init(o).(o):
 	pass
 
 func enter():
-	print_debug("Fall")
 	owner.owner.animation_player.play("Fall_Anim")
 	pass
 	

@@ -1,4 +1,4 @@
-extends Actor
+extends RigidBody2D
 
 var state_machine : StateMachine
 var is_moving_left := true
@@ -14,46 +14,44 @@ const I_IdleState = preload("res://Actors/Enemy/Slime/State/Ice_Idle.gd")
 onready var anim_player = $AnimationPlayer
 onready var f_ray_cast = $FrontRayCast
 onready var b_ray_cast = $BackRayCast
+onready var sprite_sheet = $AnimationSheet
 
 onready var collision_module = $SlimeCollision
-
-var physic_collsion_shape
-
+onready var physic_collsion = $PhysicCollision
 onready var hit_collision = $HitBox/CollisionShape2D
 
 func _ready():
 	#将每个对象的物理碰撞独立出来
 	get_node("PhysicCollision").shape = get_node("PhysicCollision").shape.duplicate()
-	physic_collsion_shape = get_node("PhysicCollision").shape
-	
+
 	state_machine = StateMachine.new(N_MoveState.new(self))
 	element_state = "Normal"
 
-func _physics_process(delta):
-	
+func _physics_process(delta) -> void:
 	state_machine.update()
 	_turn_around()
-	
-	velocity = move_and_slide(velocity,Vector2.UP)
-	velocity.y += gravity * get_physics_process_delta_time()
+
+#备用
+#func _integrate_forces(state) -> void:
+#	var is_on_ground = state.get_contact_count() > 0 and int(state.get_contact_collider_position(0).y) >= int(global_position.y)	
 	
 
 #Animation call function	
 func _move():
 	if is_moving_left:
-		velocity.x = -120
+		apply_central_impulse(Vector2(-100,-50))
 	else:
-		velocity.x = 120
-	velocity.y = -50
-
-#Animation call function
-func _stop():
-	velocity.x = 0
+		apply_central_impulse(Vector2(100,-50))
+	
 	
 func _turn_around():
 	if f_ray_cast.is_colliding() and moving_finished and !b_ray_cast.is_colliding():
 		is_moving_left = !is_moving_left
-		scale.x = -scale.x
+		sprite_sheet.scale.x = -sprite_sheet.scale.x
+		f_ray_cast.position.x = -f_ray_cast.position.x
+		b_ray_cast.position.x = -b_ray_cast.position.x
+		hit_collision.scale.x = -hit_collision.scale.x
+		get_node("PhysicCollision").scale.x = -get_node("PhysicCollision").scale.x
 	pass
 
 func _hurt_end():

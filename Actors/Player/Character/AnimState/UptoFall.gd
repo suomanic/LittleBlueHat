@@ -10,7 +10,6 @@ func _init(o).(o):
 	pass
 
 func enter():
-	print_debug("UptoFall")
 	owner.owner.animation_player.stop(false)
 	
 	jf =  owner.owner.movement_module.jump_force

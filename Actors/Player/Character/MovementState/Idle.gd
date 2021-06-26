@@ -16,7 +16,7 @@ func execute():
 	elif owner.movement_module._coyote_counter > 0 and owner.movement_module._jump_buffer_counter > 0:
 		owner.movement_state_machine.change_state(owner.MS_UpState.new(owner))
 		
-	elif owner.velocity.y < 0 :
+	elif owner.velocity.y < 0 and owner.collision_module.is_bounced:
 		owner.movement_state_machine.change_state(owner.MS_UpState.new(owner))
 		
 	if owner.owner.input_module.is_crouch_pressed:

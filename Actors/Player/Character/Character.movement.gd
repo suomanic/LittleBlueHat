@@ -19,10 +19,11 @@ export var jump_force := 200
 export var double_jump_force := 180
 
 func _physics_process(delta):
-	
 	apply_gravity(delta)
-	owner.velocity = owner.move_and_slide(owner.velocity,Vector2.UP)
+	owner.velocity = owner.move_and_slide(owner.velocity,Vector2.UP,false,4,PI/4,false)
 	
+	
+	print_debug(owner.is_on_floor())
 	
 	if owner.is_on_floor():
 		jump_count = 0
@@ -84,5 +85,8 @@ func apply_gravity(delta):
 	elif owner.velocity.y > 0 and jump_count != 0:
 		owner.velocity.y += owner.gravity * fall_mutiply * delta
 		
-	else :
-		owner.velocity.y +=owner.gravity * delta
+	elif !owner.is_on_floor():
+		owner.velocity.y += owner.gravity * delta
+	
+	elif owner.is_on_floor():
+		owner.velocity.y += owner.gravity / 4 * delta

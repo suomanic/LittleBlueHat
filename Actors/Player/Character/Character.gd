@@ -39,6 +39,7 @@ func _physics_process(delta) -> void:
 		
 	animation_control()
 	
+	
 	if is_on_floor() and velocity.x != 0:
 		$Particles2D.set_emitting(true)
 	else :
