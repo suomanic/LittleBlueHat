@@ -31,15 +31,34 @@ func _ready():
 	
 	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
 	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
+	
+	owner.get_node("Weapon").get_node("FireSword").set_physics_process(false)
+	owner.get_node("Weapon").get_node("FireSword").set_process(false)
+	owner.get_node("Weapon").get_node("FireSword").set_visible(false)
+
+var change_count = 0
 
 func _physics_process(delta) -> void:
 	
 	anim_state_machine.update()
 	movement_state_machine.update()
-		
 	animation_control()
 	
-	
+	if owner.input_module.is_change_element_just_pressed:
+		if change_count % 2 == 0:
+			print_debug("change to fire sword")
+			owner.get_node("Weapon").get_node("FireSword").set_physics_process(true)
+			owner.get_node("Weapon").get_node("FireSword").set_visible(true)
+			owner.get_node("Weapon").get_node("IceSword").set_physics_process(false)
+			owner.get_node("Weapon").get_node("IceSword").set_visible(false)
+		else:
+			print_debug("change to ice sword")
+			owner.get_node("Weapon").get_node("FireSword").set_physics_process(false)
+			owner.get_node("Weapon").get_node("FireSword").set_visible(false)
+			owner.get_node("Weapon").get_node("IceSword").set_physics_process(true)
+			owner.get_node("Weapon").get_node("IceSword").set_visible(true)
+		change_count += 1
+		
 	if is_on_floor() and velocity.x != 0:
 		$Particles2D.set_emitting(true)
 	else :

@@ -9,6 +9,7 @@ var element_state : String
 const N_IdleState = preload("res://Actors/Enemy/Slime/State/1_Idle.gd")
 const N_MoveState = preload("res://Actors/Enemy/Slime/State/1_Move.gd")
 const NtoIState = preload("res://Actors/Enemy/Slime/State/NtoI.gd")
+const ItoNState = preload("res://Actors/Enemy/Slime/State/ItoN.gd")
 const I_IdleState = preload("res://Actors/Enemy/Slime/State/Ice_Idle.gd")
 
 onready var anim_player = $AnimationPlayer
@@ -51,12 +52,12 @@ func _hurt_end():
 	state_machine.change_state(I_IdleState.new(self))
 
 func _on_HitBox_area_entered(area):
-	if area.is_in_group("Ice"):
+	if area.owner.is_in_group("Ice"):
+		print_debug("ice damage")
 		if global_position.x - area.owner.owner.get_node("Character").global_position.x > 0:
 			is_hurt_move_left = true
 		elif global_position.x - area.owner.owner.get_node("Character").global_position.x < 0:
 			is_hurt_move_left = false
-		
 		match element_state:
 			"Normal":
 				state_machine.change_state(NtoIState.new(self))
@@ -64,7 +65,18 @@ func _on_HitBox_area_entered(area):
 				anim_player.play("I_Shake_Anim")
 			"Fire":
 				pass
-				
-			
+	elif area.owner.is_in_group("Fire"):
+		print_debug("fire damage")
+		match element_state:
+			"Normal":
+				pass
+			"Ice":
+				state_machine.change_state(ItoNState.new(self))
+			"Fire":
+				pass
+		
 	pass # Replace with function body.
 
+
+func ice_to_normal_end():
+	state_machine.change_state(N_IdleState.new(self))

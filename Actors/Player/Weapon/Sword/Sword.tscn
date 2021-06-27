@@ -44,9 +44,7 @@ position = Vector2( 5.5, 8 )
 texture = ExtResource( 2 )
 hframes = 9
 
-[node name="SwordAttackArea" type="Area2D" parent="Sprite" groups=[
-"Ice",
-]]
+[node name="SwordAttackArea" type="Area2D" parent="Sprite"]
 position = Vector2( -5.5, -8 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/SwordAttackArea"]
