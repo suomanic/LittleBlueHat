@@ -4,6 +4,7 @@ func _init(o).(o):
 	pass
 
 func enter():
+	print_debug("Run")
 	pass
 	
 func execute():

@@ -3,7 +3,7 @@ extends Node
 func _ready():
 	pass
 
-func ice_physic_collision():
+func change_ice_collision():
 	owner.physic_collsion.set_shape(RectangleShape2D.new())
 	owner.physic_collsion.shape.extents = Vector2(11,10.5)
 	

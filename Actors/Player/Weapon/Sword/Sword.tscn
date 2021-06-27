@@ -5,7 +5,7 @@
 [ext_resource path="res://Shader/smooth_pixel.tres" type="Material" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 13, 18 )
+extents = Vector2( 15, 18 )
 
 [sub_resource type="Animation" id=2]
 length = 0.4
@@ -50,7 +50,7 @@ hframes = 9
 position = Vector2( -5.5, -8 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/SwordAttackArea"]
-position = Vector2( 17, 6 )
+position = Vector2( 15, 6 )
 shape = SubResource( 1 )
 disabled = true
 

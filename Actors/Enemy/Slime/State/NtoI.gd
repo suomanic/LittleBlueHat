@@ -8,7 +8,7 @@ func _init(o).(o):
 func enter():
 	owner.anim_player.play("NtoI")
 	owner.element_state = "Ice"
-	connect("change_to_ice",owner.collision_module,"ice_physic_collision")
+	connect("change_to_ice",owner.collision_module,"change_ice_collision")
 	emit_signal("change_to_ice")
 	pass
 	

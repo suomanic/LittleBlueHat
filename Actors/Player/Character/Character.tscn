@@ -181,7 +181,7 @@ tracks/1/keys = {
 }
 
 [sub_resource type="RectangleShape2D" id=13]
-extents = Vector2( 3, 11 )
+extents = Vector2( 4, 11 )
 
 [node name="Character" type="KinematicBody2D"]
 collision_mask = 3
@@ -232,7 +232,7 @@ scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 7
-frame = 11
+frame = 47
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 1 )

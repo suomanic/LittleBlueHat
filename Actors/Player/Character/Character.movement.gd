@@ -22,9 +22,6 @@ func _physics_process(delta):
 	apply_gravity(delta)
 	owner.velocity = owner.move_and_slide(owner.velocity,Vector2.UP,false,4,PI/4,false)
 	
-	
-	print_debug(owner.is_on_floor())
-	
 	if owner.is_on_floor():
 		jump_count = 0
 		_coyote_counter = coyote_time
@@ -38,7 +35,7 @@ func _physics_process(delta):
 		
 func jump():
 	# single jump
-	if _coyote_counter > 0 and _jump_buffer_counter > 0 and  jump_count == 0:
+	if _coyote_counter > 0 and _jump_buffer_counter > 0 and jump_count == 0:
 		 owner.velocity.y = -jump_force;
 		 _jump_buffer_counter = 0
 		 jump_count += 1
@@ -53,7 +50,6 @@ func jump():
 		 _jump_buffer_counter = 0
 		 jump_count += 1
 		
-
 func move():
 	if owner.owner.input_module.get_direction().x == 0:
 		if owner.velocity.x > 0:
@@ -65,6 +61,7 @@ func move():
 	elif owner.owner.input_module.is_left_pressed:
 		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-max_speed)
 	
+#简单复制，需要修改
 func crouch_move():
 	if owner.owner.input_module.get_direction().x == 0:
 		if owner.velocity.x > 0:
@@ -75,7 +72,6 @@ func crouch_move():
 		owner.velocity.x = min(owner.velocity.x + owner.acceleration,20)
 	elif owner.owner.input_module.is_left_pressed:
 		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
-	
 	
 func apply_gravity(delta):
 	if owner.velocity.y < 0 and Input.is_action_just_released("jump"):

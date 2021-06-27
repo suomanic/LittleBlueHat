@@ -17,6 +17,8 @@ onready var b_ray_cast = $BackRayCast
 onready var sprite_sheet = $AnimationSheet
 
 onready var collision_module = $SlimeCollision
+onready var movement_module = $SlimeMovement
+
 onready var physic_collsion = $PhysicCollision
 onready var hit_collision = $HitBox/CollisionShape2D
 
@@ -35,20 +37,11 @@ func _physics_process(delta) -> void:
 #func _integrate_forces(state) -> void:
 #	var is_on_ground = state.get_contact_count() > 0 and int(state.get_contact_collider_position(0).y) >= int(global_position.y)	
 	
-
-#Animation call function	
-func _move():
-	if is_moving_left:
-		apply_central_impulse(Vector2(-100,-50))
-	else:
-		apply_central_impulse(Vector2(100,-50))
-	
-	
 func _turn_around():
 	if f_ray_cast.is_colliding() and moving_finished and !b_ray_cast.is_colliding():
 		is_moving_left = !is_moving_left
 		sprite_sheet.scale.x = -sprite_sheet.scale.x
-		f_ray_cast.position.x = -f_ray_cast.position.x
+		f_ray_cast.rotation= -f_ray_cast.rotation
 		b_ray_cast.position.x = -b_ray_cast.position.x
 		hit_collision.scale.x = -hit_collision.scale.x
 		get_node("PhysicCollision").scale.x = -get_node("PhysicCollision").scale.x
@@ -59,10 +52,19 @@ func _hurt_end():
 
 func _on_HitBox_area_entered(area):
 	if area.is_in_group("Ice"):
-		if global_position.x - area.owner.global_position.x > 0:
+		if global_position.x - area.owner.owner.get_node("Character").global_position.x > 0:
 			is_hurt_move_left = true
-		elif global_position.x - area.owner.global_position.x < 0:
+		elif global_position.x - area.owner.owner.get_node("Character").global_position.x < 0:
 			is_hurt_move_left = false
-		state_machine.change_state(NtoIState.new(self))
+		
+		match element_state:
+			"Normal":
+				state_machine.change_state(NtoIState.new(self))
+			"Ice":
+				anim_player.play("I_Shake_Anim")
+			"Fire":
+				pass
+				
+			
 	pass # Replace with function body.
 

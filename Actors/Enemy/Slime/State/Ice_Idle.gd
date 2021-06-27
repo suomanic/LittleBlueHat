@@ -1,5 +1,7 @@
 extends State
 
+var counter = randi() % 5 + 5
+
 func _init(o).(o):
 	pass
 
@@ -8,7 +10,10 @@ func enter():
 	pass
 	
 func execute():
-	pass
+	counter -= owner.get_physics_process_delta_time()
+	if counter < 0:
+		owner.anim_player.play("I_Wink_Anim")
+		counter = randi() % 5 + 5
 
 func exit():
 	pass
