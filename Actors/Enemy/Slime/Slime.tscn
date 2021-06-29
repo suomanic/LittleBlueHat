@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Assets/Enemy/Slime/slime-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Shader/smooth_pixel.tres" type="Material" id=2]
@@ -6,11 +6,27 @@
 [ext_resource path="res://Actors/Enemy/Slime/SlimeCollision.gd" type="Script" id=4]
 [ext_resource path="res://Actors/Enemy/Slime/SlimeMovement.gd" type="Script" id=5]
 
-[sub_resource type="CapsuleShape2D" id=7]
+[sub_resource type="CapsuleShape2D" id=1]
 radius = 8.0
 height = 0.0
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=10]
+resource_name = "F_Idle_Anim"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 42 ]
+}
+
+[sub_resource type="Animation" id=2]
 resource_name = "I_Idle_Anim"
 loop = true
 tracks/0/type = "value"
@@ -26,7 +42,7 @@ tracks/0/keys = {
 "values": [ 20 ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=3]
 resource_name = "I_Shake_Anim"
 length = 0.15
 step = 0.05
@@ -40,11 +56,10 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.05, 0.1, 0.15 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0.5, 0 ), Vector2( -0.5, 0 ), Vector2( 0, 0 ) ]
+"values": [ Vector2( 0, -8 ), Vector2( 0.5, -8 ), Vector2( -0.5, -8 ), Vector2( 0, -8 ) ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "I_Wink_Anim"
+[sub_resource type="Animation" id=4]
 length = 0.2
 step = 0.05
 tracks/0/type = "value"
@@ -60,9 +75,10 @@ tracks/0/keys = {
 "values": [ 19, 21, 22, 20 ]
 }
 
-[sub_resource type="Animation" id=10]
-resource_name = "ItoN"
-length = 0.8
+[sub_resource type="Animation" id=5]
+resource_name = "ItoN_Anim"
+length = 0.6
+step = 0.075
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimationSheet:frame")
 tracks/0/interp = 1
@@ -70,7 +86,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"times": PoolRealArray( 0, 0.075, 0.15, 0.225, 0.3, 0.375, 0.45, 0.525 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 23, 24, 25, 26, 27, 28, 29, 30 ]
@@ -82,7 +98,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.8 ),
+"times": PoolRealArray( 0.6 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
@@ -90,7 +106,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=6]
 length = 1.2
 loop = true
 step = 0.15
@@ -107,7 +123,7 @@ tracks/0/keys = {
 "values": [ 7, 8, 9, 10, 11, 12, 13, 14 ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=7]
 length = 0.6
 step = 0.075
 tracks/0/type = "value"
@@ -137,7 +153,39 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=11]
+resource_name = "NtoF_Anim"
+length = 0.825
+step = 0.075
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.075, 0.15, 0.225, 0.3, 0.375, 0.45, 0.525, 0.6, 0.675, 0.75 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.825 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "normal_to_fire_end"
+} ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "NtoI_Anim"
 length = 0.25
 step = 0.05
 tracks/0/type = "value"
@@ -167,7 +215,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="RectangleShape2D" id=6]
+[sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 9, 6 )
 
 [node name="Slime" type="RigidBody2D"]
@@ -182,24 +230,26 @@ script = ExtResource( 3 )
 
 [node name="AnimationSheet" type="Sprite" parent="."]
 material = ExtResource( 2 )
-position = Vector2( 0.5, 0 )
+position = Vector2( 0, -8 )
 texture = ExtResource( 1 )
 hframes = 8
-vframes = 4
-frame = 30
+vframes = 6
+frame = 41
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 2 )
-shape = SubResource( 7 )
+shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/I_Idle_Anim = SubResource( 8 )
-anims/I_Shake_Anim = SubResource( 9 )
-anims/I_Wink_Anim = SubResource( 2 )
-anims/ItoN = SubResource( 10 )
-anims/N_Idle_Anim = SubResource( 3 )
-anims/N_Move_Anim = SubResource( 4 )
-anims/NtoI = SubResource( 5 )
+anims/F_Idle_Anim = SubResource( 10 )
+anims/I_Idle_Anim = SubResource( 2 )
+anims/I_Shake_Anim = SubResource( 3 )
+anims/I_Wink_Anim = SubResource( 4 )
+anims/ItoN_Anim = SubResource( 5 )
+anims/N_Idle_Anim = SubResource( 6 )
+anims/N_Move_Anim = SubResource( 7 )
+anims/NtoF_Anim = SubResource( 11 )
+anims/NtoI_Anim = SubResource( 8 )
 script = ExtResource( 5 )
 
 [node name="HitBox" type="Area2D" parent="." groups=[
@@ -209,16 +259,16 @@ visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 position = Vector2( 1, -2 )
-shape = SubResource( 6 )
+shape = SubResource( 9 )
 
 [node name="FrontRayCast" type="RayCast2D" parent="."]
 rotation = 1.5708
 enabled = true
-cast_to = Vector2( 0, 15 )
+cast_to = Vector2( 0, 25 )
 collision_mask = 6
 
 [node name="BackRayCast" type="RayCast2D" parent="."]
-position = Vector2( 19, -26 )
+rotation = -1.5708
 enabled = true
 cast_to = Vector2( 0, 25 )
 collision_mask = 6

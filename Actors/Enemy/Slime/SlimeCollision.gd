@@ -25,7 +25,4 @@ func ItoN_collision_change():
 	owner.physic_collsion.position = Vector2(0,2)
 	owner.set_collision_mask_bit(0,false)
 	
-	#禁用转向
-	owner.f_ray_cast.set_enabled(true)
-	owner.b_ray_cast.set_enabled(true)
 	

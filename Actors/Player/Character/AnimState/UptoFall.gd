@@ -15,7 +15,7 @@ func enter():
 	jf =  owner.owner.movement_module.jump_force
 	djf = owner.owner.movement_module.double_jump_force
 	up_anim_count = 2 * jf / 7 
-	double_anim_count = 2 * djf / 6
+	double_anim_count = 2 * djf / 7
 	
 func execute():
 	velocity_y = owner.owner.velocity.y
