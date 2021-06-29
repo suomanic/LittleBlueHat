@@ -35,7 +35,7 @@ func _ready():
 	state_machine = StateMachine.new(N_MoveState.new(self))
 	element_state = "Normal"
 
-func _physics_process(delta) -> void:
+func _integrate_forces(state) -> void:
 	state_machine.update()
 	_turn_around()
 
@@ -46,11 +46,13 @@ func _physics_process(delta) -> void:
 func _turn_around():
 	if f_ray_cast.is_colliding() and moving_finished and !b_ray_cast.is_colliding():
 		is_moving_left = !is_moving_left
-		sprite_sheet.scale.x = -sprite_sheet.scale.x
-		f_ray_cast.rotation = -f_ray_cast.rotation
-		b_ray_cast.rotation = -b_ray_cast.rotation
-		hit_collision.scale.x = -hit_collision.scale.x
-		get_node("PhysicCollision").scale.x = -get_node("PhysicCollision").scale.x
+		
+		# 二维刚体在直接设置scale.x时会出现问题
+		# 详见https://github.com/godotengine/godot/issues/12335
+		# 这里暂时暴力将所有含有scale属性的子实例的scale.x置反，等待引擎解决问题
+		for child in get_children():
+			if child.get("scale") != null:
+				child.scale.x = -child.scale.x
 	pass
 
 func _hurt_end():
