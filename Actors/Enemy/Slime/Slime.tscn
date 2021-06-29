@@ -12,6 +12,7 @@ height = 0.0
 
 [sub_resource type="Animation" id=10]
 resource_name = "F_Idle_Anim"
+length = 0.8
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimationSheet:frame")
@@ -20,10 +21,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 42 ]
+"values": [ 42, 44, 45, 46, 47, 48, 49, 50 ]
 }
 
 [sub_resource type="Animation" id=2]
@@ -233,8 +234,8 @@ material = ExtResource( 2 )
 position = Vector2( 0, -8 )
 texture = ExtResource( 1 )
 hframes = 8
-vframes = 6
-frame = 41
+vframes = 7
+frame = 42
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 2 )

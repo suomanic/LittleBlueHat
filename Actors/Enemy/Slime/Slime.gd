@@ -70,6 +70,7 @@ func _on_HitBox_area_entered(area):
 				anim_player.play("I_Shake_Anim")
 			"Fire":
 				state_machine.change_state(N_IdleState.new(self))
+				emit_signal("change_to_normal")
 				element_state = "Normal"
 	elif area.owner.is_in_group("Fire"):
 		print_debug("fire damage")
