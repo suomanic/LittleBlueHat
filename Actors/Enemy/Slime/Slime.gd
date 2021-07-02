@@ -35,9 +35,12 @@ func _ready():
 	state_machine = StateMachine.new(N_MoveState.new(self))
 	element_state = "Normal"
 
+
+
 func _integrate_forces(state) -> void:
 	state_machine.update()
 	_turn_around()
+	
 
 #备用
 #func _integrate_forces(state) -> void:
