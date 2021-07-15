@@ -20,9 +20,17 @@ func change_to_ice_collision_box() :
 	
 
 func change_to_fire_collision_box() :
+	owner.f_ray_cast.position.y = -20
+	set_shape(CapsuleShape2D.new())
+	shape.radius = 8
+	shape.height = 0
+	
+	position = Vector2(0,2)
+	owner.set_collision_mask_bit(0,false)
 	pass
 
 func change_to_normal_collision_box():
+	owner.f_ray_cast.position.y = 0
 	set_shape(CapsuleShape2D.new())
 	shape.radius = 8
 	shape.height = 0

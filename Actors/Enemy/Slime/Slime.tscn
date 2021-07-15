@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Assets/Enemy/Slime/slime-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Shader/smooth_pixel.tres" type="Material" id=2]
@@ -26,6 +26,36 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 42, 44, 45, 46, 47, 48, 49, 50 ]
+}
+
+[sub_resource type="Animation" id=12]
+resource_name = "F_Move_Anim"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimationSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 51, 52, 53, 54, 55, 56, 57, 58, 51 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("SlimeMovement")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "fire_move"
+} ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -223,6 +253,7 @@ mode = 2
 gravity_scale = 6.0
 contacts_reported = 1
 contact_monitor = true
+sleeping = true
 script = ExtResource( 3 )
 
 [node name="AnimationSheet" type="Sprite" parent="."]
@@ -230,8 +261,8 @@ material = ExtResource( 2 )
 position = Vector2( 0, -8 )
 texture = ExtResource( 1 )
 hframes = 8
-vframes = 7
-frame = 42
+vframes = 8
+frame = 53
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 2 )
@@ -240,6 +271,7 @@ script = ExtResource( 6 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/F_Idle_Anim = SubResource( 2 )
+anims/F_Move_Anim = SubResource( 12 )
 anims/I_Idle_Anim = SubResource( 3 )
 anims/I_Shake_Anim = SubResource( 4 )
 anims/I_Wink_Anim = SubResource( 5 )
@@ -275,4 +307,5 @@ script = ExtResource( 4 )
 [node name="SlimeMovement" type="Node" parent="."]
 script = ExtResource( 5 )
 
+[connection signal="sleeping_state_changed" from="." to="." method="_on_Slime_sleeping_state_changed"]
 [connection signal="area_entered" from="HitBox" to="." method="_on_HitBox_area_entered"]

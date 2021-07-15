@@ -11,6 +11,7 @@ const I_IdleState = preload("res://Actors/Enemy/Slime/State/I_Idle.gd")
 const F_IdleState = preload("res://Actors/Enemy/Slime/State/F_Idle.gd")
 
 const N_MoveState = preload("res://Actors/Enemy/Slime/State/N_Move.gd")
+const F_MoveState = preload("res://Actors/Enemy/Slime/State/F_Move.gd")
 
 const NtoIState = preload("res://Actors/Enemy/Slime/State/NtoI.gd")
 const ItoNState = preload("res://Actors/Enemy/Slime/State/ItoN.gd")
@@ -34,14 +35,15 @@ func _ready():
 
 	state_machine = StateMachine.new(N_MoveState.new(self))
 	element_state = "Normal"
-
-
+	
+func _physics_process(delta):
+	pass
 
 func _integrate_forces(state) -> void:
 	state_machine.update()
 	_turn_around()
 	
-
+	
 #备用
 #func _integrate_forces(state) -> void:
 #	var is_on_ground = state.get_contact_count() > 0 and int(state.get_contact_collider_position(0).y) >= int(global_position.y)	
@@ -56,6 +58,7 @@ func _turn_around():
 		for child in get_children():
 			if child.get("scale") != null:
 				child.scale.x = -child.scale.x
+				child.position.x = -child.position.x
 	pass
 
 func _hurt_end():
@@ -97,3 +100,8 @@ func ice_to_normal_end():
 	
 	f_ray_cast.set_enabled(true)
 	b_ray_cast.set_enabled(true)
+
+
+func _on_Slime_sleeping_state_changed():
+	print_debug("sleep state changed")
+	print_debug(is_sleeping())
