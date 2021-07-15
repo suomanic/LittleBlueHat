@@ -98,9 +98,6 @@ func normal_to_fire_end():
 func ice_to_normal_end():
 	state_machine.change_state(N_IdleState.new(self))
 	
-	f_ray_cast.set_enabled(true)
-	b_ray_cast.set_enabled(true)
-
 
 func _on_Slime_sleeping_state_changed():
 	print_debug("sleep state changed")
