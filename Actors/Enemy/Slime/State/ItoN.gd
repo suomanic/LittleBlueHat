@@ -6,11 +6,11 @@ func _init(o).(o):
 	pass
 
 func enter():
+	owner.element_change_count = owner.element_change_time
+	
 	owner.anim_player.play("ItoN_Anim")
 	owner.element_state = "Normal"
 	owner.collision_module.ItoN_collision_change()
-#	connect("ice_to_normal",owner.collision_module,"ItoN_collision_change")
-	emit_signal("ice_to_normal")
 	pass
 	
 func execute():

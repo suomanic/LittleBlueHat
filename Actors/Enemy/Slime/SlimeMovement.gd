@@ -14,3 +14,4 @@ func fire_move():
 		owner.apply_central_impulse(Vector2(-100,-300))
 	else:       
 		owner.apply_central_impulse(Vector2(100,-300))
+		

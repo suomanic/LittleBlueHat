@@ -1,6 +1,6 @@
 extends State
 
-signal change_to_ice()
+signal ice_to_normal()
 
 func _init(o).(o):
 	pass
@@ -8,16 +8,17 @@ func _init(o).(o):
 func enter():
 	owner.element_change_count = owner.element_change_time
 	
-	owner.anim_player.play("NtoI_Anim")
-	owner.element_state = "Ice"
-	owner.collision_module.change_ice_collision()
+	owner.anim_player.play("FtoN_Anim")
+	owner.element_state = "Normal"
+	owner.collision_module.FtoN_collision_change()
 	pass
 	
 func execute():
 	pass
 
 func exit():
+	
 	pass
 
 func get_name():
-	return "move"
+	return ""
