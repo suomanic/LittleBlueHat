@@ -91,6 +91,10 @@ change_element={
 2d_physics/layer_3="Enemy"
 2d_physics/layer_4="Spring"
 
+[physics]
+
+2d/thread_model=2
+
 [rendering]
 
 2d/snapping/use_gpu_pixel_snap=true

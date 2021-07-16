@@ -41,7 +41,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 51, 52, 53, 54, 55, 56, 57, 58, 51 ]
+"values": [ 51, 52, 53, 54, 55, 56, 57, 58, 59 ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath("SlimeMovement")
@@ -261,7 +261,7 @@ position = Vector2( 0, -8 )
 texture = ExtResource( 1 )
 hframes = 8
 vframes = 8
-frame = 53
+frame = 60
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 2 )
