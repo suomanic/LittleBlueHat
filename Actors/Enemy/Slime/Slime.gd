@@ -3,7 +3,6 @@ extends RigidBody2D
 var state_machine : StateMachine
 var is_moving_left := true
 var is_hurt_move_left := true
-var moving_finished := false
 var element_state : String
 
 var element_change_time = 0.5
@@ -16,8 +15,8 @@ const I_IdleState = preload("res://Actors/Enemy/Slime/State/I_Idle.gd")
 const F_IdleState = preload("res://Actors/Enemy/Slime/State/F_Idle.gd")
 
 const N_MoveState = preload("res://Actors/Enemy/Slime/State/N_Move.gd")
-const F_MoveState = preload("res://Actors/Enemy/Slime/State/F_Move.gd")
-const ChaseState = preload("res://Actors/Enemy/Slime/State/Chase.gd")
+const F_WanderState = preload("res://Actors/Enemy/Slime/State/F_Wander.gd")
+const F_ChaseState = preload("res://Actors/Enemy/Slime/State/F_Chase.gd")
 
 const NtoIState = preload("res://Actors/Enemy/Slime/State/NtoI.gd")
 const ItoNState = preload("res://Actors/Enemy/Slime/State/ItoN.gd")
@@ -51,26 +50,20 @@ func _physics_process(delta):
 
 func _integrate_forces(state) -> void:
 	state_machine.update()
-	_turn_around()
-	
-	
 	
 #备用
 #func _integrate_forces(state) -> void:
 #	var is_on_ground = state.get_contact_count() > 0 and int(state.get_contact_collider_position(0).y) >= int(global_position.y)	
 	
 func _turn_around():
-	if f_ray_cast.is_colliding() and moving_finished and !b_ray_cast.is_colliding():
-		is_moving_left = !is_moving_left
-		
-		# 二维刚体在直接设置scale.x时会出现问题
-		# 详见https://github.com/godotengine/godot/issues/12335
-		# 这里暂时暴力将所有含有scale属性的子实例的scale.x置反，等待引擎解决问题
-		for child in get_children():
-			if child.get("scale") != null:
-				child.scale.x = -child.scale.x
-				child.position.x = -child.position.x
-	pass
+	is_moving_left = !is_moving_left
+	# 二维刚体在直接设置scale.x时会出现问题
+	# 详见https://github.com/godotengine/godot/issues/12335
+	# 这里暂时暴力将所有含有scale属性的子实例的scale.x置反，等待引擎解决问题	
+	for child in get_children():
+		if child.get("scale") != null:
+			child.scale.x = -child.scale.x
+			child.position.x = -child.position.x
 
 
 func _on_HitBox_area_entered(area):
@@ -113,9 +106,13 @@ func fire_to_normal_end():
 	state_machine.change_state(N_IdleState.new(self))
 	
 func _on_PlayerDetector_body_entered(body):
-	print_debug("detected player")
 	if body.is_in_group("Player") and element_state == "Fire":
-		print_debug("is chasing player")
 		player = body
-		state_machine.change_state(ChaseState.new(self))
+		state_machine.change_state(F_ChaseState.new(self))
 	pass # Replace with function body.
+
+func _on_PlayerDetector_body_exited(body):
+	if body.is_in_group("Player") and element_state == "Fire":
+		player = null
+		state_machine.change_state(F_IdleState.new(self))
+	pass

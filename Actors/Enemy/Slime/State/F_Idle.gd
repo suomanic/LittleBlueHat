@@ -14,7 +14,7 @@ func execute():
 	counter -= owner.get_physics_process_delta_time()
 	
 	if counter < 0:
-		owner.state_machine.change_state(owner.F_MoveState.new(owner))
+		owner.state_machine.change_state(owner.F_WanderState.new(owner))
 	pass
 
 func exit():
