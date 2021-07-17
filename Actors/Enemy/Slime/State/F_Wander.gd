@@ -6,6 +6,7 @@ func _init(o).(o):
 	pass
 
 func enter():
+	owner.is_moving_finished = false
 	counter = 0.9
 	owner.anim_player.play("F_Move_Anim")
 	pass
@@ -21,6 +22,7 @@ func execute():
 	pass
 
 func exit():
+	owner.is_moving_finished = true
 	pass
 
 func get_name():

@@ -4,6 +4,7 @@ var state_machine : StateMachine
 var is_moving_left := true
 var is_hurt_move_left := true
 var element_state : String
+var is_moving_finished := false
 
 var element_change_time = 0.5
 var element_change_count = -1
@@ -46,6 +47,9 @@ func _ready():
 	
 func _physics_process(delta):
 	element_change_count -= delta
+	
+	if is_moving_finished and (player != null) and element_change_count < 0 and (element_state == "Fire"):
+		state_machine.change_state(F_ChaseState.new(self))
 	pass
 
 func _integrate_forces(state) -> void:
@@ -108,7 +112,6 @@ func fire_to_normal_end():
 func _on_PlayerDetector_body_entered(body):
 	if body.is_in_group("Player") and element_state == "Fire":
 		player = body
-		state_machine.change_state(F_ChaseState.new(self))
 	pass # Replace with function body.
 
 func _on_PlayerDetector_body_exited(body):

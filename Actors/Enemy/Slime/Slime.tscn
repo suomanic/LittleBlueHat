@@ -307,7 +307,7 @@ tracks/1/keys = {
 extents = Vector2( 9, 8 )
 
 [sub_resource type="RectangleShape2D" id=14]
-extents = Vector2( 147, 55 )
+extents = Vector2( 95, 55 )
 
 [node name="Slime" type="RigidBody2D"]
 collision_layer = 4
@@ -325,7 +325,7 @@ position = Vector2( 0, -8 )
 texture = ExtResource( 1 )
 hframes = 8
 vframes = 9
-frame = 53
+frame = 48
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 2 )
