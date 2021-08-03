@@ -242,7 +242,6 @@ shape = SubResource( 13 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 material = ExtResource( 3 )
-current = true
 zoom = Vector2( 0.2, 0.2 )
 process_mode = 0
 drag_margin_left = 0.1

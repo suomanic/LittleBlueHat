@@ -15,3 +15,9 @@ func fire_move():
 	else:       
 		owner.apply_central_impulse(Vector2(100,-300))
 		
+
+func move_finish():
+	owner.is_moving_finished = true;
+	
+func move_start():
+	owner.is_moving_finished = false;

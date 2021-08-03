@@ -31,6 +31,8 @@ func change_to_fire_collision_box() :
 	#启用转向
 	owner.f_ray_cast.set_enabled(true)
 	owner.b_ray_cast.set_enabled(true)
+	
+	#owner.player_detector.set_enabled(true)
 
 func change_to_normal_collision_box():
 	owner.f_ray_cast.position.y = 0
@@ -44,3 +46,5 @@ func change_to_normal_collision_box():
 	#启用转向
 	owner.f_ray_cast.set_enabled(true)
 	owner.b_ray_cast.set_enabled(true)
+	
+	#owner.player_detector.set_enabled(false)

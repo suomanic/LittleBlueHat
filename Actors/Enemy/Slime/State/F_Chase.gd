@@ -8,8 +8,9 @@ func enter():
 	pass
 	
 func execute():
-	if owner.is_moving_left == (owner.global_position.x - owner.player.global_position.x < 0):
-		owner._turn_around()
+	if owner.player != null:
+		if owner.is_moving_left == (owner.global_position.x - owner.player.global_position.x < 0):
+			owner._turn_around()
 	pass
 
 func exit():
