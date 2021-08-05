@@ -2,10 +2,28 @@ extends Node2D
 
 class_name Weapon
 # Called when the node enters the scene tree for the first time.
+
+onready var weapon_data :={
+	F_sword = preload("res://Actors/Player/Weapon/Sword/FireSword.tscn"),
+	I_sword = preload("res://Actors/Player/Weapon/Sword/IceSword.tscn"),
+	F_orb = preload("res://Actors/Player/Weapon/MagicOrb/FireMagicOrb.tscn"),
+	I_orb = preload("res://Actors/Player/Weapon/MagicOrb/IceMagicOrb.tscn")
+}
+
 func _ready():
 	owner=get_parent()
 	pass # Replace with function body.
-
+	
+func _physics_process(delta):
+	if owner.input_module.is_weapon1_just_pressed:
+		change_weapon("F_sword")
+	elif owner.input_module.is_weapon2_just_pressed:
+		change_weapon("I_sword")
+	elif owner.input_module.is_weapon3_just_pressed:
+		change_weapon("F_orb")
+	elif owner.input_module.is_weapon4_just_pressed:
+		change_weapon("I_orb")
+	
 # 追随角色的该武器(self)是否正在换边过程中
 var on_changing_side : = Vector2(false, false)
 
@@ -99,3 +117,17 @@ func follow_player():
 	global_position = global_position.linear_interpolate(Vector2(owner.character.global_position.x + target_offset.x, self.global_position.y), linear_interpolate_scale_rate.x)
 	# 垂直方向非线性动画
 	global_position = global_position.linear_interpolate(Vector2(global_position.x, owner.character.global_position.y + target_offset.y), linear_interpolate_scale_rate.y)
+
+func change_weapon(weapon_type:String):
+	for i in self.get_children():
+		i.queue_free()
+		
+	match weapon_type:
+		"F_sword":
+			add_child(weapon_data.F_sword.instance())
+		"I_sword":
+			add_child(weapon_data.I_sword.instance())
+		"F_orb":
+			add_child(weapon_data.F_orb.instance())
+		"I_orb":
+			add_child(weapon_data.I_orb.instance())

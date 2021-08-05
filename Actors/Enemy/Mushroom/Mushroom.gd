@@ -25,7 +25,7 @@ func _on_Hitbox_area_entered(area):
 				"Fire":
 					state_machine.change_state(N_IdleState.new(self))
 					element_state = "Normal"
-		elif area.owner.is_in_group("Fire"):
+		elif area.owner.is_in_group("Fire") or (area.owner.is_in_group("Slime") and area.owner.element_state == "Fire"):
 			match element_state:
 				"Normal":
 					state_machine.change_state(F_IdleState.new(self))

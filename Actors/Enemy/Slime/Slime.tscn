@@ -323,7 +323,9 @@ extents = Vector2( 9, 8 )
 [sub_resource type="RectangleShape2D" id=15]
 extents = Vector2( 95, 55 )
 
-[node name="Slime" type="RigidBody2D"]
+[node name="Slime" type="RigidBody2D" groups=[
+"Slime",
+]]
 collision_layer = 4
 collision_mask = 6
 mode = 2

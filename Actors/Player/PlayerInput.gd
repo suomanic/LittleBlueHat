@@ -5,7 +5,10 @@ var is_left_pressed :bool
 var is_jump_pressed :bool
 var is_crouch_pressed :bool
 var is_attack_just_pressed :bool
-var is_change_element_just_pressed :bool
+var is_weapon1_just_pressed :bool
+var is_weapon2_just_pressed :bool
+var is_weapon3_just_pressed :bool
+var is_weapon4_just_pressed :bool
 var mouse_global_position : Vector2
 
 func _init():
@@ -14,7 +17,10 @@ func _init():
 	is_jump_pressed = false
 	is_crouch_pressed = false
 	is_attack_just_pressed = false
-	is_change_element_just_pressed = false
+	is_weapon1_just_pressed = false
+	is_weapon2_just_pressed = false
+	is_weapon3_just_pressed = false
+	is_weapon4_just_pressed = false
 	
 func _physics_process(delta) -> void:
 	mouse_global_position = get_global_mouse_position()
@@ -44,10 +50,25 @@ func _physics_process(delta) -> void:
 	else:
 		is_attack_just_pressed = false
 		
-	if Input.is_action_just_pressed("change_element"):
-		is_change_element_just_pressed = true
+	if Input.is_action_just_pressed("weapon1"):
+		is_weapon1_just_pressed = true
 	else:
-		is_change_element_just_pressed = false
+		is_weapon1_just_pressed = false
+	
+	if Input.is_action_just_pressed("weapon2"):
+		is_weapon2_just_pressed = true
+	else:
+		is_weapon2_just_pressed = false
+	
+	if Input.is_action_just_pressed("weapon3"):
+		is_weapon3_just_pressed = true
+	else:
+		is_weapon3_just_pressed = false
+		
+	if Input.is_action_just_pressed("weapon4"):
+		is_weapon4_just_pressed = true
+	else:
+		is_weapon4_just_pressed = false
 		
 func get_direction() -> Vector2:
 	return Vector2(
