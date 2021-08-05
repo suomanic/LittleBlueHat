@@ -42,19 +42,14 @@ func _ready():
 	#将每个对象的物理碰撞独立出来
 	get_node("PhysicCollision").shape = get_node("PhysicCollision").shape.duplicate()
 	
-
 	state_machine = StateMachine.new(N_MoveState.new(self))
 	element_state = "Normal"
 	
 func _physics_process(delta):
 	element_change_count -= delta
 	
-	if is_moving_finished and element_change_count < 0 and (element_state == "Fire"):
-		if player != null:
-			state_machine.change_state(F_ChaseState.new(self))
-		elif player == null:
-			print_debug("switch")
-			state_machine.change_state(F_WanderState.new(self))
+	if is_moving_finished and element_change_count < 0 and (element_state == "Fire") and player != null:
+		state_machine.change_state(F_ChaseState.new(self))
 
 func _integrate_forces(state) -> void:
 	state_machine.update()
@@ -119,6 +114,7 @@ func _on_PlayerDetector_body_entered(body):
 	pass # Replace with function body.
 
 func _on_PlayerDetector_body_exited(body):
+	print_debug("player gone")
 	if body.is_in_group("Player") :
 		player = null
 	pass

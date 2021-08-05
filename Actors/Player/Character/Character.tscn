@@ -249,4 +249,5 @@ drag_margin_top = 0.1
 drag_margin_right = 0.1
 drag_margin_bottom = 0.1
 
-[connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_spring_area_entered"]
+[connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_enemy_area_entered"]
+[connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_mushroom_area_entered"]

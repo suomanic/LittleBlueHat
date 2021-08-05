@@ -1,0 +1,65 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Actors/Enemy/Mushroom/Mushroom.gd" type="Script" id=1]
+[ext_resource path="res://Shader/smooth_pixel.tres" type="Material" id=2]
+[ext_resource path="res://Assets/Enemy/Mushroom/mushroom-Sheet.png" type="Texture" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 14, 6 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "F_Idle_Anim"
+length = 0.7
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Mushroom-Sheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 4, 5, 6, 7, 8, 9, 10 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "N_Idle_Anim"
+length = 0.5
+loop = true
+step = 0.125
+tracks/0/type = "value"
+tracks/0/path = NodePath("Mushroom-Sheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.125, 0.25, 0.375 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[node name="Mushroom" type="Area2D" groups=[
+"Mushroom",
+]]
+script = ExtResource( 1 )
+
+[node name="Mushroom-Sheet" type="Sprite" parent="."]
+material = ExtResource( 2 )
+texture = ExtResource( 3 )
+hframes = 7
+vframes = 2
+frame = 10
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 5 )
+shape = SubResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/F_Idle_Anim = SubResource( 3 )
+anims/N_Idle_Anim = SubResource( 2 )
+
+[connection signal="area_entered" from="." to="." method="_on_Hitbox_area_entered"]

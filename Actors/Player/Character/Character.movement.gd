@@ -86,3 +86,7 @@ func apply_gravity(delta):
 	
 	elif owner.is_on_floor():
 		owner.velocity.y += owner.gravity / 4 * delta
+
+func bounce():
+	jump_count = 1
+	owner.velocity.y = -300

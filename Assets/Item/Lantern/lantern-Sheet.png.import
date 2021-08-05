@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/mashroom-Sheet.png-46cfe3bdf307109f39a13734793dde1c.stex"
+path="res://.import/lantern-Sheet.png-d9709ac8c98492cfe5d9fe65e4978113.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemy/Mashroom/mashroom-Sheet.png"
-dest_files=[ "res://.import/mashroom-Sheet.png-46cfe3bdf307109f39a13734793dde1c.stex" ]
+source_file="res://Assets/Item/Lantern/lantern-Sheet.png"
+dest_files=[ "res://.import/lantern-Sheet.png-d9709ac8c98492cfe5d9fe65e4978113.stex" ]
 
 [params]
 

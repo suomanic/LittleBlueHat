@@ -17,7 +17,7 @@ func fire_move():
 		
 
 func move_finish():
-	owner.is_moving_finished = true;
+	owner.is_moving_finished = true
 	
 func move_start():
-	owner.is_moving_finished = false;
+	owner.is_moving_finished = false
