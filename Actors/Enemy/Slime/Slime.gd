@@ -36,7 +36,7 @@ onready var movement_module = $SlimeMovement
 
 onready var physic_collsion = $PhysicCollision
 onready var hit_collision = $HitBox/CollisionShape2D
-onready var player_detector = $PlayerDetector
+onready var player_detectshape = $PlayerDetector/PlayerDetectShape
 
 func _ready():
 	#将每个对象的物理碰撞独立出来
@@ -44,6 +44,8 @@ func _ready():
 	
 	state_machine = StateMachine.new(N_MoveState.new(self))
 	element_state = "Normal"
+	
+	player_detectshape.disabled = true
 	
 func _physics_process(delta):
 	element_change_count -= delta

@@ -364,7 +364,7 @@ anims/NtoI_Anim = SubResource( 13 )
 script = ExtResource( 5 )
 
 [node name="HitBox" type="Area2D" parent="." groups=[
-"HurtBox",
+"HitBox",
 ]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]

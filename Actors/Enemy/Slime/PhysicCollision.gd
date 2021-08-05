@@ -32,7 +32,7 @@ func change_to_fire_collision_box() :
 	owner.f_ray_cast.set_enabled(true)
 	owner.b_ray_cast.set_enabled(true)
 	
-	#owner.player_detector.set_enabled(true)
+	owner.player_detectshape.disabled = false
 
 func change_to_normal_collision_box():
 	owner.f_ray_cast.position.y = 0
@@ -47,4 +47,4 @@ func change_to_normal_collision_box():
 	owner.f_ray_cast.set_enabled(true)
 	owner.b_ray_cast.set_enabled(true)
 	
-	#owner.player_detector.set_enabled(false)
+	owner.player_detectshape.disabled = true

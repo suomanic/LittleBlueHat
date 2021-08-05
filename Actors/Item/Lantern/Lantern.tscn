@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Shader/smooth_pixel.tres" type="Material" id=1]
 [ext_resource path="res://Assets/Item/Lantern/lantern-Sheet.png" type="Texture" id=2]
-[ext_resource path="res://Actors/Item/Lantern.gd" type="Script" id=3]
+[ext_resource path="res://Actors/Item/Lantern/Lantern.gd" type="Script" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 5, 8 )

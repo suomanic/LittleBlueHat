@@ -4,7 +4,7 @@
 [ext_resource path="res://Shader/smooth_pixel.tres" type="Material" id=2]
 [ext_resource path="res://Actors/Player/Weapon/MagicOrb/MagicOrb.gd" type="Script" id=3]
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=1]
 resource_name = "Idle"
 length = 4.0
 loop = true
@@ -33,4 +33,4 @@ hframes = 5
 frame = 4
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Idle = SubResource( 2 )
+anims/Idle = SubResource( 1 )
