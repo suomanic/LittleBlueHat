@@ -73,12 +73,13 @@ func _turn_around():
 
 func _on_HitBox_area_entered(area):
 	if element_change_count < 0:
-		if area.owner.is_in_group("Ice"):
+		if area.get_owner().is_in_group("Ice"):
 			print_debug("ice damage")
-			if global_position.x - area.owner.owner.get_node("Character").global_position.x > 0:
-				is_hurt_move_left = true
-			elif global_position.x - area.owner.owner.get_node("Character").global_position.x < 0:
-				is_hurt_move_left = false
+			if area.get_owner().is_in_group("Player"):
+				if global_position.x - area.owner.owner.get_node("Character").global_position.x > 0:
+					is_hurt_move_left = true
+				elif global_position.x - area.owner.owner.get_node("Character").global_position.x < 0:
+					is_hurt_move_left = false
 			match element_state:
 				"Normal":
 					state_machine.change_state(NtoIState.new(self))

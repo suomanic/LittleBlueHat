@@ -8,7 +8,7 @@ func _ready():
 	anim_player.play("Spawn_Anim")
 	var direction = Vector2(cos(rotation),sin(rotation))
 	
-	velocity  =  200 * direction
+	velocity = 200 * direction
 	pass
 
 func _physics_process(delta):
@@ -24,4 +24,5 @@ func _on_Hitbox_area_entered(area):
 
 
 func _on_Hitbox_body_entered(body):
-	queue_free()
+	if body is TileMap:
+		queue_free()
