@@ -16,6 +16,9 @@ func fire_move():
 		owner.apply_central_impulse(Vector2(100,-300))
 		
 
+func gravity():
+	owner.apply_central_impulse(Vector2(0,15))
+
 func move_finish():
 	owner.is_moving_finished = true
 	

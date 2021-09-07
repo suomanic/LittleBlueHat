@@ -54,6 +54,7 @@ func _physics_process(delta):
 		state_machine.change_state(F_ChaseState.new(self))
 
 func _integrate_forces(state) -> void:
+	movement_module.gravity()
 	state_machine.update()
 	
 #备用
