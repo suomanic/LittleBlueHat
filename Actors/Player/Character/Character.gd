@@ -21,6 +21,8 @@ const AS_GroundState = preload("res://Actors/Player/Character/Animstate/Ground.g
 onready var movement_module = $CharacterMovement
 onready var collision_module = $CharacterCollision
 
+onready var ground_ray_cast_l = $RayCastL
+onready var ground_ray_cast_r = $RayCastR
 onready var standing_collision = $Standing_Shape
 #onready var crouching_collision = $Crouching_Shape
 
@@ -35,11 +37,16 @@ func _ready():
 	
 
 func _physics_process(delta) -> void:
-	
 	anim_state_machine.update()
 	movement_state_machine.update()
 	animation_control()
 	
+	for i in get_slide_count():
+		var collision = get_slide_collision(i)
+		var str1 :String 
+		str1 = collision.collider.name
+		if str1.begins_with("Slime"):
+			collision.get_collider().movement_module.velocity.x = 0
 		
 	if is_on_floor() and velocity.x != 0:
 		$Particles2D.set_emitting(true)
@@ -58,3 +65,5 @@ func animation_control():
 	
 func tocourch_anim_end():
 	animation_player.play("CrouchIdle_Anim")
+
+

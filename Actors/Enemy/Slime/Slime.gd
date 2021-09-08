@@ -1,4 +1,4 @@
-extends RigidBody2D
+extends Actor
 
 var state_machine : StateMachine
 var is_moving_left := true
@@ -10,6 +10,10 @@ var element_change_time = 0.5
 var element_change_count = -1
 
 var player
+
+#状态栏在编辑器中操作
+enum DROPOFF { fire,normal,ice }
+export(DROPOFF) var element
 
 const N_IdleState = preload("res://Actors/Enemy/Slime/State/N_Idle.gd")
 const I_IdleState = preload("res://Actors/Enemy/Slime/State/I_Idle.gd")
@@ -29,6 +33,11 @@ onready var anim_player = $AnimationPlayer
 
 onready var f_ray_cast = $FrontRayCast
 onready var b_ray_cast = $BackRayCast
+
+#着地检测
+onready var r_ground_ray_cast = $RightGroundRaycast
+onready var l_ground_ray_cast = $LeftGroundRaycast
+
 onready var sprite_sheet = $AnimationSheet
 
 onready var collision_module = $SlimeCollision
@@ -44,6 +53,21 @@ func _ready():
 	
 	state_machine = StateMachine.new(N_MoveState.new(self))
 	element_state = "Normal"
+	
+	#初始化元素状态
+	match element:
+		DROPOFF.fire:
+			physic_collsion.call_deferred("change_to_fire_collision_box")
+			state_machine.change_state(F_IdleState.new(self))
+			element_state = "Fire"
+		DROPOFF.normal:
+			physic_collsion.call_deferred("change_to_normal_collision_box")
+			state_machine.change_state(N_IdleState.new(self))
+			element_state = "Normal"
+		DROPOFF.ice:
+			physic_collsion.call_deferred("change_to_ice_collision_box")
+			state_machine.change_state(I_IdleState.new(self))
+			element_state = "Ice"
 	
 	player_detectshape.disabled = true
 	

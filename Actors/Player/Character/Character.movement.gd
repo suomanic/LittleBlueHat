@@ -14,15 +14,18 @@ var jump_cancel_mutiply: = 1.2
 
 var jump_count: = 0
 
+var is_on_object:bool
+
 export var max_speed: = 100.0
 export var jump_force := 200
 export var double_jump_force := 180
+
 
 func _physics_process(delta):
 	apply_gravity(delta)
 	owner.velocity = owner.move_and_slide(owner.velocity,Vector2.UP,false,4,PI/4,false)
 	
-	if owner.is_on_floor():
+	if owner.is_on_floor() or is_on_object:
 		jump_count = 0
 		_coyote_counter = coyote_time
 	else :
@@ -74,6 +77,13 @@ func crouch_move():
 		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
 	
 func apply_gravity(delta):
+	if owner.ground_ray_cast_l.is_colliding() or owner.ground_ray_cast_r.is_colliding():
+		owner.gravity = 600
+		is_on_object = true
+	else :
+		owner.gravity = 600
+		is_on_object = false
+	
 	if owner.velocity.y < 0 and Input.is_action_just_released("jump"):
 		owner.velocity.y = owner.velocity.y * 0.5
 		owner.velocity.y += owner.gravity * jump_cancel_mutiply * delta
@@ -90,3 +100,5 @@ func apply_gravity(delta):
 func bounce():
 	jump_count = 1
 	owner.velocity.y = -300
+
+
