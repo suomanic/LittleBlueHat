@@ -46,7 +46,7 @@ func _physics_process(delta) -> void:
 		var str1 :String 
 		str1 = collision.collider.name
 		if str1.begins_with("Slime"):
-			collision.get_collider().movement_module.velocity.x = 0
+			pass
 		
 	if is_on_floor() and velocity.x != 0:
 		$Particles2D.set_emitting(true)

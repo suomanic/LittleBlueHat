@@ -13,6 +13,8 @@ func enter():
 func execute():
 	counter -= owner.get_physics_process_delta_time()
 	
+	owner.movement_module.N_move()
+	
 	if owner.f_ray_cast.is_colliding() and !owner.b_ray_cast.is_colliding():
 		owner._turn_around()
 	

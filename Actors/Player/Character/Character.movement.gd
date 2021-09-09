@@ -78,8 +78,9 @@ func crouch_move():
 	
 func apply_gravity(delta):
 	if owner.ground_ray_cast_l.is_colliding() or owner.ground_ray_cast_r.is_colliding():
-		owner.gravity = 600
-		is_on_object = true
+			owner.gravity -= 100
+			owner.gravity = max(0,owner.gravity)
+			is_on_object = true
 	else :
 		owner.gravity = 600
 		is_on_object = false

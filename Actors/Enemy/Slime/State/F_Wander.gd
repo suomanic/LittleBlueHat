@@ -6,13 +6,15 @@ func _init(o).(o):
 	pass
 
 func enter():
-	owner.is_moving_finished = false
+	owner.movement_module.is_moving_finished = false
 	counter = 0.9
 	owner.anim_player.play("F_Move_Anim")
 	pass
 	
 func execute():
 	counter -= owner.get_physics_process_delta_time()
+	
+	owner.movement_module.F_move()
 	
 	if owner.f_ray_cast.is_colliding() and !owner.b_ray_cast.is_colliding():
 		owner._turn_around()
@@ -22,7 +24,7 @@ func execute():
 	pass
 
 func exit():
-	owner.is_moving_finished = true
+	owner.movement_module.is_moving_finished = true
 	pass
 
 func get_name():
