@@ -19,7 +19,7 @@ func _ready():
 
 func _physics_process(delta):
 	apply_gravity()
-	cal_velocity(delta)
+	calc_velocity(delta)
 	
 func apply_gravity():
 	if owner.r_ground_ray_cast.is_colliding() or owner.l_ground_ray_cast.is_colliding() :
@@ -31,8 +31,9 @@ func apply_gravity():
 		gravity = 600
 		is_on_object = false
 
-func cal_velocity(delta):
-	velocity = owner.move_and_slide(velocity,Vector2.UP)
+func calc_velocity(delta):
+	if ! (owner.element_state == "Ice" and gravity <= 0):
+		velocity = owner.move_and_slide(velocity,Vector2.UP)
 	velocity.y += gravity * delta
 	
 	if velocity.x > 0:
