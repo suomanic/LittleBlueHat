@@ -2,6 +2,10 @@ extends Node
 
 func _ready():
 	pass
+	
+func _physics_process(delta):
+	if owner.is_on_floor() and owner.element_state != "Ice":	
+		owner.squish_collsion.set_disabled(false)
 
 func change_ice_collision():
 	owner.physic_collsion.call_deferred("change_to_ice_collision_box")
@@ -21,7 +25,7 @@ func _on_SquishHitBox_body_entered(body):
 		
 		var will_go_left : bool
 		
-		if body.position.x - owner.position.x > 0 :
+		if body.global_position.x - owner.global_position.x > 0 :
 			will_go_left = false
 		else:
 			will_go_left = true

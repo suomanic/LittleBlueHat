@@ -102,4 +102,11 @@ func bounce():
 	jump_count = 1
 	owner.velocity.y = -300
 
+func squish_damage_move(will_go_left):
+	if will_go_left:
+		owner.velocity = Vector2(300 , -100) 
+	else :
+		owner.velocity = Vector2(-300 , -100) 
+	pass
+	
 

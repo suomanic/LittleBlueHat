@@ -25,9 +25,12 @@ onready var ground_ray_cast_l = $RayCastL
 onready var ground_ray_cast_r = $RayCastR
 onready var standing_collision = $Standing_Shape
 #onready var crouching_collision = $Crouching_Shape
+onready var squish_collision = $SquishHitBox/CollisionShape2D
 
 onready var animation_player = $AnimationPlayer
 onready var animation_sprite_sheet = $AnimSpriteSheet
+
+onready var SDM_Timer = $SquishDamageMoveTimer
 
 func _ready():
 	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
@@ -37,6 +40,7 @@ func _physics_process(delta) -> void:
 	anim_state_machine.update()
 	movement_state_machine.update()
 	animation_control()
+	
 	
 	for i in get_slide_count():
 		var collision = get_slide_collision(i)

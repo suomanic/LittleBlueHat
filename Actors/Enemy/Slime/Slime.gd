@@ -46,7 +46,7 @@ onready var squish_collsion = $SquishHitBox/CollisionShape2D
 onready var hit_collision = $HitBox/CollisionShape2D
 onready var player_detectshape = $PlayerDetector/PlayerDetectShape
 
-onready var switch_collision_timer = $Timer
+onready var SDM_Timer = $SquishDamageMoveTimer
 
 func _ready():
 	#将每个对象的物理碰撞独立出来

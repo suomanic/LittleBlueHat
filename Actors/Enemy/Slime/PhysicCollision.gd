@@ -58,13 +58,12 @@ func disable_squish_damage_collision():
 	owner.squish_collsion.set_disabled(true)
 	owner.set_collision_layer(00000000000000000000) 
 	owner.set_collision_mask(00000000000000000010) 
-	owner.switch_collision_timer.set_wait_time(0.1)
-	owner.switch_collision_timer.start()
+	owner.SDM_Timer.set_wait_time(0.1)
+	owner.SDM_Timer.start()
 	pass
 
 func enable_squish_damage_collision():
-	owner.switch_collision_timer.stop()
+	owner.SDM_Timer.stop()
 	owner.set_collision_layer(00000000000000000000) 
 	owner.set_collision_mask(00000000000000100010) 
-	owner.squish_collsion.set_disabled(false)
 	
