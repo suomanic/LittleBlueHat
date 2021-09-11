@@ -6,6 +6,7 @@ var element_state : String
 var element_change_time = 0.5
 var element_change_count = -1
 
+var can_cause_squish_damage
 var player
 
 #元素状态在编辑器中操作
@@ -41,8 +42,11 @@ onready var collision_module = $SlimeCollision
 onready var movement_module = $SlimeMovement
 
 onready var physic_collsion = $PhysicCollision
+onready var squish_collsion = $SquishHitBox/CollisionShape2D
 onready var hit_collision = $HitBox/CollisionShape2D
 onready var player_detectshape = $PlayerDetector/PlayerDetectShape
+
+onready var switch_collision_timer = $Timer
 
 func _ready():
 	#将每个对象的物理碰撞独立出来
@@ -72,6 +76,8 @@ func _physics_process(delta):
 	state_machine.update()
 	element_change_count -= delta
 	
+	switch_can_cause_squish_damage()
+	
 	if movement_module.is_moving_finished and element_change_count < 0 and (element_state == "Fire") and player != null:
 		state_machine.change_state(F_ChaseState.new(self))
 	
@@ -84,11 +90,11 @@ func _on_HitBox_area_entered(area):
 	if element_change_count < 0:
 		if area.get_owner().is_in_group("Ice"):
 			print_debug("ice damage")
-			if area.get_owner().get_owner().is_in_group("Player"):
-				if global_position.x - area.owner.owner.get_node("Character").global_position.x > 0:
-					movement_module.is_hurt_move_left = true
-				elif global_position.x - area.owner.owner.owner.get_node("Character").global_position.x < 0:
-					movement_module.is_hurt_move_left = false
+#			if area.get_owner().get_owner().is_in_group("Player"):
+#				if global_position.x - area.owner.owner.get_node("Character").global_position.x > 0:
+#					movement_module.is_hurt_move_left = true
+#				elif global_position.x - area.owner.owner.owner.get_node("Character").global_position.x < 0:
+#					movement_module.is_hurt_move_left = false
 			match element_state:
 				"Normal":
 					movement_module.hurt_move()
@@ -126,7 +132,6 @@ func fire_to_normal_end():
 	state_machine.change_state(N_IdleState.new(self))
 	
 	
-	
 func _on_PlayerDetector_body_entered(body):
 	if body.is_in_group("Player") :
 		player = body
@@ -137,3 +142,13 @@ func _on_PlayerDetector_body_exited(body):
 	if body.is_in_group("Player") :
 		player = null
 	pass
+
+
+func switch_can_cause_squish_damage():
+	if movement_module.gravity > 0 and element_state == "Ice":
+	#means can casue squish damage
+		can_cause_squish_damage = true
+		pass
+	else:
+		can_cause_squish_damage = false
+		pass

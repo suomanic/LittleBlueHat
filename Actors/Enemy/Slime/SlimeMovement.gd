@@ -4,7 +4,6 @@ var velocity
 var gravity
 var deceleration
 
-var is_on_object :bool
 var is_normal_move
 var is_fire_move
 
@@ -25,14 +24,11 @@ func apply_gravity():
 	if owner.r_ground_ray_cast.is_colliding() or owner.l_ground_ray_cast.is_colliding() :
 		gravity -= 50
 		gravity = max(0,gravity)
-		
-		is_on_object = true
 	else:
 		gravity = 600
-		is_on_object = false
 
 func calc_velocity(delta):
-	if ! (owner.element_state == "Ice" and gravity <= 0):
+	if ! (owner.element_state == "Ice" and gravity <= 10):
 		velocity = owner.move_and_slide(velocity,Vector2.UP)
 	velocity.y += gravity * delta
 	
@@ -40,13 +36,14 @@ func calc_velocity(delta):
 		velocity.x = max(velocity.x - owner.deceleration,0)
 	elif velocity.x < 0:
 		velocity.x = min(velocity.x + owner.deceleration,0)
-	
+
+
 func N_move():
 	if is_normal_move:
 		if is_moving_left:
-			velocity.x = -50
+			velocity.x = -75
 		else:
-			velocity.x = 50
+			velocity.x = 75
 	else:
 		velocity.x = 0 
 		
@@ -72,19 +69,18 @@ func hurt_move():
 func normal_move():
 	is_normal_move = true
 	is_moving_finished = false
-	if is_moving_left:
-		velocity = Vector2(-50 , -100) 
-	else :
-		velocity = Vector2(50 , -100) 
-	pass
+	velocity.y = -100
 	
 func fire_move():
 	is_fire_move = true
 	is_moving_finished = false
-	if is_moving_left:
-		velocity = Vector2(-100 , -220) 
+	velocity.y = -220
+
+func squish_damage_move(will_go_left):
+	if will_go_left:
+		velocity = Vector2(300 , -100) 
 	else :
-		velocity = Vector2(100 , -220) 
+		velocity = Vector2(-300 , -100) 
 	pass
 
 func move_finish():

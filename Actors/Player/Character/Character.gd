@@ -29,13 +29,10 @@ onready var standing_collision = $Standing_Shape
 onready var animation_player = $AnimationPlayer
 onready var animation_sprite_sheet = $AnimSpriteSheet
 
-
 func _ready():
-	
 	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
 	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
 	
-
 func _physics_process(delta) -> void:
 	anim_state_machine.update()
 	movement_state_machine.update()
