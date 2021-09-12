@@ -8,7 +8,7 @@
 [ext_resource path="res://Actors/Enemy/Slime/PhysicCollision.gd" type="Script" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 10, 8 )
+extents = Vector2( 10, 10.5 )
 
 [sub_resource type="Animation" id=2]
 resource_name = "F_Chase_Anim"
@@ -338,10 +338,10 @@ position = Vector2( 0, -8 )
 texture = ExtResource( 1 )
 hframes = 8
 vframes = 9
-frame = 51
+frame = 23
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
-position = Vector2( 1, 2 )
+position = Vector2( 1, -0.5 )
 shape = SubResource( 1 )
 script = ExtResource( 6 )
 
@@ -383,12 +383,12 @@ shape = SubResource( 15 )
 [node name="FrontRayCast" type="RayCast2D" parent="."]
 enabled = true
 cast_to = Vector2( -25, 0 )
-collision_mask = 38
+collision_mask = 34
 
 [node name="BackRayCast" type="RayCast2D" parent="."]
 enabled = true
 cast_to = Vector2( 25, 0 )
-collision_mask = 38
+collision_mask = 34
 
 [node name="PlayerDetector" type="Area2D" parent="."]
 visible = false

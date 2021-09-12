@@ -25,7 +25,7 @@ func _physics_process(delta):
 	apply_gravity(delta)
 	owner.velocity = owner.move_and_slide(owner.velocity,Vector2.UP,false,4,PI/4,false)
 	
-	if owner.is_on_floor() or is_on_object:
+	if is_on_object:
 		jump_count = 0
 		_coyote_counter = coyote_time
 	else :
@@ -104,9 +104,15 @@ func bounce():
 
 func squish_damage_move(will_go_left):
 	if will_go_left:
-		owner.velocity = Vector2(300 , -100) 
+		owner.velocity = Vector2(125 , -200) 
+	#	if !owner.is_facing_left:
+	#		owner.scale.x = -owner.scale.x
+	#		owner.is_facing_left = !owner.is_facing_left
 	else :
-		owner.velocity = Vector2(-300 , -100) 
+		owner.velocity = Vector2(-125 , -200) 
+	#	if owner.is_facing_left:
+	#		owner.scale.x = -owner.scale.x
+	#		owner.is_facing_left = !owner.is_facing_left
 	pass
 	
 

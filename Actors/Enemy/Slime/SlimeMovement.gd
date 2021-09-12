@@ -74,7 +74,7 @@ func normal_move():
 func fire_move():
 	is_fire_move = true
 	is_moving_finished = false
-	velocity.y = -220
+	velocity.y = -250
 
 func squish_damage_move(will_go_left):
 	if will_go_left:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Assets/Player/animation/animation package-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Actors/Player/Character/Character.gd" type="Script" id=2]
@@ -33,7 +33,7 @@ color = Color( 0.152941, 0.184314, 0.243137, 1 )
 hue_variation = -1.0
 
 [sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 7, 13 )
+extents = Vector2( 5, 13 )
 
 [sub_resource type="Animation" id=5]
 resource_name = "CrouchIdle_Anim"
@@ -85,6 +85,36 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id=8]
+resource_name = "Hurt_Anim"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 48, 49 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "hurt_anim_end"
+} ]
+}
+
+[sub_resource type="Animation" id=9]
 length = 0.8
 loop = true
 tracks/0/type = "value"
@@ -100,7 +130,7 @@ tracks/0/keys = {
 "values": [ 11, 12, 13, 14, 15, 16, 17, 18 ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=10]
 length = 0.8
 loop = true
 step = 0.05
@@ -117,8 +147,7 @@ tracks/0/keys = {
 "values": [ 19, 20, 21, 22, 23, 24, 25, 26 ]
 }
 
-[sub_resource type="Animation" id=10]
-resource_name = "SpinUp_Anim"
+[sub_resource type="Animation" id=11]
 length = 0.35
 loop = true
 tracks/0/type = "value"
@@ -134,7 +163,7 @@ tracks/0/keys = {
 "values": [ 28, 29, 31, 32, 33, 34 ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=12]
 length = 0.2
 loop = true
 tracks/0/type = "value"
@@ -150,7 +179,7 @@ tracks/0/keys = {
 "values": [ 35, 36 ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=13]
 length = 0.2
 step = 0.05
 tracks/0/type = "value"
@@ -180,10 +209,10 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="RectangleShape2D" id=13]
+[sub_resource type="RectangleShape2D" id=14]
 extents = Vector2( 4, 11 )
 
-[sub_resource type="RectangleShape2D" id=14]
+[sub_resource type="RectangleShape2D" id=15]
 extents = Vector2( 5, 1 )
 
 [node name="Character" type="KinematicBody2D" groups=[
@@ -214,9 +243,8 @@ draw_order = 1
 process_material = SubResource( 3 )
 
 [node name="Trigger" type="Area2D" parent="."]
-visible = false
 position = Vector2( 0, 6 )
-collision_mask = 8
+collision_mask = 12
 
 [node name="TriggerBox" type="CollisionShape2D" parent="Trigger"]
 position = Vector2( 0, -5 )
@@ -226,23 +254,24 @@ shape = SubResource( 4 )
 anims/CrouchIdle_Anim = SubResource( 5 )
 anims/DoubleJump_Anim = SubResource( 6 )
 anims/Fall_Anim = SubResource( 7 )
-anims/Idle_Anim = SubResource( 8 )
-anims/Run_Anim = SubResource( 9 )
-anims/SpinUp_Anim = SubResource( 10 )
-anims/Up_Anim = SubResource( 11 )
-anims/toCrouch_Anim = SubResource( 12 )
+anims/Hurt_Anim = SubResource( 8 )
+anims/Idle_Anim = SubResource( 9 )
+anims/Run_Anim = SubResource( 10 )
+anims/SpinUp_Anim = SubResource( 11 )
+anims/Up_Anim = SubResource( 12 )
+anims/toCrouch_Anim = SubResource( 13 )
 
 [node name="AnimSpriteSheet" type="Sprite" parent="."]
 material = ExtResource( 3 )
 scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
-vframes = 7
-frame = 47
+vframes = 8
+frame = 49
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 1 )
-shape = SubResource( 13 )
+shape = SubResource( 14 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 material = ExtResource( 3 )
@@ -271,11 +300,11 @@ collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SquishHitBox"]
 position = Vector2( 0, -14 )
-shape = SubResource( 14 )
+shape = SubResource( 15 )
 
-[node name="SquishDamageMoveTimer" type="Timer" parent="."]
+[node name="HurtMoveTimer" type="Timer" parent="."]
 
 [connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_mushroom_area_entered"]
 [connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_enemy_area_entered"]
 [connection signal="body_entered" from="SquishHitBox" to="CharacterCollision" method="_on_SquishHitBox_body_entered"]
-[connection signal="timeout" from="SquishDamageMoveTimer" to="CharacterCollision" method="_on_SDM_Timer_timeout"]
+[connection signal="timeout" from="HurtMoveTimer" to="CharacterCollision" method="_on_SDM_Timer_timeout"]
