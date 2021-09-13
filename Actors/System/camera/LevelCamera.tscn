@@ -1,0 +1,79 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Actors/System/camera/LevelCamera.gd" type="Script" id=1]
+
+[sub_resource type="Curve" id=3]
+bake_resolution = 1
+_data = [ Vector2( 0, 1 ), 0.0, -4.98485, 0, 0, Vector2( 0.0714286, 0.609091 ), -0.35, -0.35, 0, 0, Vector2( 0.12987, 0.6 ), 0.0, 4.32, 0, 0, Vector2( 0.470745, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.994681, 1 ), -0.131468, 0.0, 0, 0 ]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Shake_Anim"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 0 ), Vector2( -1, 0 ), Vector2( 1, 0 ), Vector2( -1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "Zoom_In_Anim"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:zoom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.2, 1 ),
+"transitions": PoolRealArray( 2.73208, 1, 0.189465, 0.353553 ),
+"update": 0,
+"values": [ Vector2( 0.25, 0.25 ), Vector2( 0.245, 0.245 ), Vector2( 0.245, 0.245 ), Vector2( 0.25, 0.25 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.15, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 0 ), Vector2( -1, 0 ), Vector2( 1, 0 ), Vector2( -1, 0 ), Vector2( 0, 0 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "anim_start"
+}, {
+"args": [  ],
+"method": "anim_end"
+} ]
+}
+
+[node name="LevelCamera" type="Camera2D" groups=[
+"LevelCamera",
+]]
+current = true
+zoom = Vector2( 0.245, 0.245 )
+script = ExtResource( 1 )
+time_slow_curve = SubResource( 3 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Shake_Anim = SubResource( 1 )
+anims/Zoom_In_Anim = SubResource( 2 )

@@ -32,11 +32,15 @@ onready var ground_ray_cast_r = $RayCastR
 onready var standing_collision = $Standing_Shape
 #onready var crouching_collision = $Crouching_Shape
 onready var squish_collision = $SquishHitBox/CollisionShape2D
+onready var trigger_collision = $Trigger/TriggerBox
 
-onready var animation_player = $AnimationPlayer
+onready var movement_anim_player = $MovementAnimPlayer
+onready var effect_anim_player = $EffectAnimPlayer
 onready var animation_sprite_sheet = $AnimSpriteSheet
 
+#timer
 onready var hurt_move_timer = $HurtMoveTimer
+onready var invincible_timer = $InvincibleTimer
 
 func _ready():
 	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
@@ -55,7 +59,7 @@ func _physics_process(delta) -> void:
 		if str1.begins_with("Slime"):
 			pass
 		
-	if is_on_floor() and velocity.x != 0:
+	if movement_module.is_on_object and velocity.x != 0:
 		$Particles2D.set_emitting(true)
 	else :
 		$Particles2D.set_emitting(false)
@@ -78,7 +82,7 @@ func facing() -> bool : #the boolean means is character facing left,true means l
 		return pre_facing
 	
 func tocourch_anim_end():
-	animation_player.play("CrouchIdle_Anim")
+	movement_anim_player.play("CrouchIdle_Anim")
 
 func hurt_anim_end():
 	if is_on_floor() or movement_module.is_on_object:

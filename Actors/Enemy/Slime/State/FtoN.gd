@@ -1,7 +1,5 @@
 extends State
 
-signal ice_to_normal()
-
 func _init(o).(o):
 	pass
 

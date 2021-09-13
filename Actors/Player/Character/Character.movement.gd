@@ -104,12 +104,12 @@ func bounce():
 
 func squish_damage_move(will_go_left):
 	if will_go_left:
-		owner.velocity = Vector2(125 , -200) 
+		owner.velocity = Vector2(125 , -150) 
 	#	if !owner.is_facing_left:
 	#		owner.scale.x = -owner.scale.x
 	#		owner.is_facing_left = !owner.is_facing_left
 	else :
-		owner.velocity = Vector2(-125 , -200) 
+		owner.velocity = Vector2(-125 , -150) 
 	#	if owner.is_facing_left:
 	#		owner.scale.x = -owner.scale.x
 	#		owner.is_facing_left = !owner.is_facing_left

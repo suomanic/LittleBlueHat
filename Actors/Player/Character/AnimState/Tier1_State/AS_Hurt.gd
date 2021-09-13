@@ -4,7 +4,9 @@ func _init(o).(o):
 	pass
 
 func enter():
-	owner.animation_player.play("Hurt_Anim")
+	owner.movement_anim_player.play("Hurt_Anim")
+	owner.effect_anim_player.play("Invincible_Effect_Anim")
+	owner.get_tree().call_group("LevelCamera","player_hurt")
 	pass
 	
 func execute():

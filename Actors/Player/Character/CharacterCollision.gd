@@ -58,8 +58,14 @@ func _on_SquishHitBox_body_entered(body):
 		owner.movement_state_machine.change_state(owner.MS_HurtState.new(owner))
 		pass
 
-
 func _on_SDM_Timer_timeout():
 	owner.set_collision_mask(00000000000000100011)
 	owner.hurt_move_timer.stop()
 	pass # Replace with function body.
+
+
+func invincible_anim_start():
+	owner.trigger_collision.set_disabled(true)
+	
+func invincible_anim_end():
+	owner.trigger_collision.set_disabled(false)	

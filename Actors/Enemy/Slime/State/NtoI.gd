@@ -1,7 +1,5 @@
 extends State
 
-signal change_to_ice()
-
 func _init(o).(o):
 	pass
 

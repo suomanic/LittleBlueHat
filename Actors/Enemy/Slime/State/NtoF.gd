@@ -1,7 +1,5 @@
 extends State
 
-signal change_to_fire()
-
 func _init(o).(o):
 	pass
 

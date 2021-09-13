@@ -5,7 +5,7 @@ func _init(o).(o):
 
 func enter():
 	print_debug("Fall")
-	owner.owner.animation_player.play("Fall_Anim")
+	owner.owner.movement_anim_player.play("Fall_Anim")
 	pass
 	
 func execute():

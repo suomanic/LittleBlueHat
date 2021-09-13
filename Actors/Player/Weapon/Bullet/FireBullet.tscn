@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/Weapon/Bullet-Sheet.png" type="Texture" id=1]
-[ext_resource path="res://Shader/smooth_pixel.tres" type="Material" id=2]
+[ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=2]
 [ext_resource path="res://Actors/Player/Weapon/Bullet/Bullet.gd" type="Script" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -62,6 +62,7 @@ extents = Vector2( 4.5, 2.5 )
 "Fire",
 ]]
 modulate = Color( 1, 0, 0, 1 )
+material = ExtResource( 2 )
 collision_layer = 0
 collision_mask = 0
 script = ExtResource( 3 )

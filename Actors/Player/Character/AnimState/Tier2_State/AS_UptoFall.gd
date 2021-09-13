@@ -10,7 +10,7 @@ func _init(o).(o):
 	pass
 
 func enter():
-	owner.owner.animation_player.stop(false)
+	owner.owner.movement_anim_player.stop(false)
 	
 	jf =  owner.owner.movement_module.jump_force
 	djf = owner.owner.movement_module.double_jump_force

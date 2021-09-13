@@ -1,8 +1,8 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Assets/Player/animation/animation package-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Actors/Player/Character/Character.gd" type="Script" id=2]
-[ext_resource path="res://Shader/smooth_pixel.tres" type="Material" id=3]
+[ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=3]
 [ext_resource path="res://Actors/Player/Character/Character.movement.gd" type="Script" id=4]
 [ext_resource path="res://Actors/Player/Character/CharacterCollision.gd" type="Script" id=6]
 
@@ -35,8 +35,40 @@ hue_variation = -1.0
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 5, 13 )
 
-[sub_resource type="Animation" id=5]
-resource_name = "CrouchIdle_Anim"
+[sub_resource type="Animation" id=19]
+resource_name = "Invincible_Effect_Anim"
+step = 0.25
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.001, 0.25, 0.5, 0.75, 1 ),
+"transitions": PoolRealArray( 0.933035, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.568627 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.568627 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("CharacterCollision")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "invincible_anim_start"
+}, {
+"args": [  ],
+"method": "invincible_anim_end"
+} ]
+}
+
+[sub_resource type="Animation" id=20]
 length = 0.1
 loop = true
 tracks/0/type = "value"
@@ -52,7 +84,7 @@ tracks/0/keys = {
 "values": [ 47 ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=21]
 length = 0.525
 step = 0.075
 tracks/0/type = "value"
@@ -68,7 +100,7 @@ tracks/0/keys = {
 "values": [ 38, 39, 40, 41, 42, 43, 6 ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=22]
 length = 0.4
 loop = true
 tracks/0/type = "value"
@@ -84,8 +116,7 @@ tracks/0/keys = {
 "values": [ 7, 8, 9, 10 ]
 }
 
-[sub_resource type="Animation" id=8]
-resource_name = "Hurt_Anim"
+[sub_resource type="Animation" id=23]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimSpriteSheet:frame")
@@ -114,7 +145,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=24]
 length = 0.8
 loop = true
 tracks/0/type = "value"
@@ -130,7 +161,7 @@ tracks/0/keys = {
 "values": [ 11, 12, 13, 14, 15, 16, 17, 18 ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=25]
 length = 0.8
 loop = true
 step = 0.05
@@ -147,7 +178,7 @@ tracks/0/keys = {
 "values": [ 19, 20, 21, 22, 23, 24, 25, 26 ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=26]
 length = 0.35
 loop = true
 tracks/0/type = "value"
@@ -163,7 +194,7 @@ tracks/0/keys = {
 "values": [ 28, 29, 31, 32, 33, 34 ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=27]
 length = 0.2
 loop = true
 tracks/0/type = "value"
@@ -179,7 +210,7 @@ tracks/0/keys = {
 "values": [ 35, 36 ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=28]
 length = 0.2
 step = 0.05
 tracks/0/type = "value"
@@ -209,10 +240,44 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="RectangleShape2D" id=14]
+[sub_resource type="RectangleShape2D" id=29]
 extents = Vector2( 4, 11 )
 
-[sub_resource type="RectangleShape2D" id=15]
+[sub_resource type="Shader" id=16]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+// Texture must have 'Filter'-flag enabled!
+
+// Automatic smoothing
+// independent of geometry and perspective
+vec4 texturePointSmooth(sampler2D smp, vec2 uv, vec2 pixel_size)
+{
+	vec2 ddx = dFdx(uv);
+	vec2 ddy = dFdy(uv);
+	vec2 lxy = sqrt(ddx * ddx + ddy * ddy);
+	
+	vec2 uv_pixels = uv / pixel_size;
+	
+	vec2 uv_pixels_floor = round(uv_pixels) - vec2(0.5f);
+	vec2 uv_dxy_pixels = uv_pixels - uv_pixels_floor;
+	
+	uv_dxy_pixels = clamp((uv_dxy_pixels - vec2(0.5f)) * pixel_size / lxy + vec2(0.5f), 0.0f, 1.0f);
+	
+	uv = uv_pixels_floor * pixel_size;
+	
+	return textureGrad(smp, uv + uv_dxy_pixels * pixel_size, ddx, ddy);
+}
+
+void fragment()
+{
+	COLOR = texturePointSmooth(TEXTURE, UV, TEXTURE_PIXEL_SIZE);
+}"
+
+[sub_resource type="ShaderMaterial" id=17]
+shader = SubResource( 16 )
+
+[sub_resource type="RectangleShape2D" id=18]
 extents = Vector2( 5, 1 )
 
 [node name="Character" type="KinematicBody2D" groups=[
@@ -250,16 +315,19 @@ collision_mask = 12
 position = Vector2( 0, -5 )
 shape = SubResource( 4 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/CrouchIdle_Anim = SubResource( 5 )
-anims/DoubleJump_Anim = SubResource( 6 )
-anims/Fall_Anim = SubResource( 7 )
-anims/Hurt_Anim = SubResource( 8 )
-anims/Idle_Anim = SubResource( 9 )
-anims/Run_Anim = SubResource( 10 )
-anims/SpinUp_Anim = SubResource( 11 )
-anims/Up_Anim = SubResource( 12 )
-anims/toCrouch_Anim = SubResource( 13 )
+[node name="EffectAnimPlayer" type="AnimationPlayer" parent="."]
+anims/Invincible_Effect_Anim = SubResource( 19 )
+
+[node name="MovementAnimPlayer" type="AnimationPlayer" parent="."]
+anims/CrouchIdle_Anim = SubResource( 20 )
+anims/DoubleJump_Anim = SubResource( 21 )
+anims/Fall_Anim = SubResource( 22 )
+anims/Hurt_Anim = SubResource( 23 )
+anims/Idle_Anim = SubResource( 24 )
+anims/Run_Anim = SubResource( 25 )
+anims/SpinUp_Anim = SubResource( 26 )
+anims/Up_Anim = SubResource( 27 )
+anims/toCrouch_Anim = SubResource( 28 )
 
 [node name="AnimSpriteSheet" type="Sprite" parent="."]
 material = ExtResource( 3 )
@@ -267,14 +335,14 @@ scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 8
-frame = 49
+frame = 47
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 1 )
-shape = SubResource( 14 )
+shape = SubResource( 29 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-material = ExtResource( 3 )
+material = SubResource( 17 )
 zoom = Vector2( 0.2, 0.2 )
 process_mode = 0
 drag_margin_left = 0.1
@@ -300,9 +368,11 @@ collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SquishHitBox"]
 position = Vector2( 0, -14 )
-shape = SubResource( 15 )
+shape = SubResource( 18 )
 
 [node name="HurtMoveTimer" type="Timer" parent="."]
+
+[node name="InvincibleTimer" type="Timer" parent="."]
 
 [connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_mushroom_area_entered"]
 [connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_enemy_area_entered"]
