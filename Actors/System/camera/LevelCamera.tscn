@@ -2,12 +2,11 @@
 
 [ext_resource path="res://Actors/System/camera/LevelCamera.gd" type="Script" id=1]
 
-[sub_resource type="Curve" id=3]
+[sub_resource type="Curve" id=1]
 bake_resolution = 1
-_data = [ Vector2( 0, 1 ), 0.0, -4.98485, 0, 0, Vector2( 0.0714286, 0.609091 ), -0.35, -0.35, 0, 0, Vector2( 0.12987, 0.6 ), 0.0, 4.32, 0, 0, Vector2( 0.470745, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.994681, 1 ), -0.131468, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 1 ), 0.0, -4.98485, 0, 0, Vector2( 0.0291777, 0.381818 ), -0.35, -0.35, 0, 0, Vector2( 0.0689655, 0.381818 ), 0.0, 4.32, 0, 0, Vector2( 0.466843, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), -0.131468, 0.0, 0, 0 ]
 
-[sub_resource type="Animation" id=1]
-resource_name = "Shake_Anim"
+[sub_resource type="Animation" id=2]
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:offset")
 tracks/0/interp = 1
@@ -21,8 +20,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1, 0 ), Vector2( -1, 0 ), Vector2( 1, 0 ), Vector2( -1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "Zoom_In_Anim"
+[sub_resource type="Animation" id=3]
 step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:zoom")
@@ -72,8 +70,8 @@ tracks/2/keys = {
 current = true
 zoom = Vector2( 0.245, 0.245 )
 script = ExtResource( 1 )
-time_slow_curve = SubResource( 3 )
+time_slow_curve = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Shake_Anim = SubResource( 1 )
-anims/Zoom_In_Anim = SubResource( 2 )
+anims/Shake_Anim = SubResource( 2 )
+anims/Zoom_In_Anim = SubResource( 3 )

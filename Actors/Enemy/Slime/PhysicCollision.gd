@@ -34,7 +34,7 @@ func change_to_fire_collision_box() :
 	
 	owner.set_collision_layer(00000000000000000000) 
 	
-	owner.squish_collsion.set_disabled(false)
+	owner.squish_collsion.set_deferred("disabled",false)
 
 func change_to_normal_collision_box():
 	print_debug(owner.get_collision_mask_bit(0))
@@ -47,15 +47,15 @@ func change_to_normal_collision_box():
 	#启用转向
 	owner.f_ray_cast.set_enabled(true)
 	owner.b_ray_cast.set_enabled(true)
-	
-	owner.player_detectshape.disabled = true
+
+	owner.player_detectshape.set_deferred("disabled",true)
 	
 	owner.set_collision_layer(00000000000000000000) 
 	
-	owner.squish_collsion.set_disabled(false)
+	owner.squish_collsion.set_deferred("disabled",false)
 
 func disable_squish_damage_collision():
-	owner.squish_collsion.set_disabled(true)
+	owner.squish_collsion.set_deferred("disabled",true)
 	owner.set_collision_layer(00000000000000000000) 
 	owner.set_collision_mask(00000000000000000010) 
 	owner.SDM_Timer.set_wait_time(0.1)

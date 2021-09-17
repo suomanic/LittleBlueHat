@@ -4,15 +4,21 @@ func _init(o).(o):
 	pass
 
 func enter():
-	owner.movement_module.squish_damage_move(owner.collision_module.will_go_left)
+	owner.hp = owner.hp - 1
+	print_debug("inininininininininin")
+	print_debug(owner.hp)
+	if owner.hp <= 0:
+		owner.movement_state_machine.change_state(owner.MS_DieState.new(owner))
+		
+	owner.movement_module.hurt_move(owner.collision_module.will_go_left)
+	
 	pass
 	
 func execute():
-	
 	pass
 
 func exit():
 	pass
 
 func get_name():
-	return ""
+	return "MS_Hurt"

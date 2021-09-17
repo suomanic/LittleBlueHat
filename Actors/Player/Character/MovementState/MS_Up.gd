@@ -4,7 +4,6 @@ func _init(o).(o):
 	pass
 
 func enter():
-	print_debug("Up")
 	pass
 	
 func execute():
@@ -24,4 +23,4 @@ func exit():
 	pass
 
 func get_name():
-	return "Up"
+	return "MS_Up"

@@ -7,10 +7,10 @@
 [ext_resource path="res://Actors/Enemy/Slime/SlimeMovement.gd" type="Script" id=5]
 [ext_resource path="res://Actors/Enemy/Slime/PhysicCollision.gd" type="Script" id=6]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10, 10.5 )
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=2]
 length = 1.6
 loop = true
 tracks/0/type = "value"
@@ -43,7 +43,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=3]
 length = 0.8
 loop = true
 tracks/0/type = "value"
@@ -59,7 +59,7 @@ tracks/0/keys = {
 "values": [ 42, 44, 45, 46, 47, 48, 49, 50 ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=4]
 length = 0.9
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimationSheet:frame")
@@ -91,7 +91,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=5]
 length = 0.8
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimationSheet:frame")
@@ -120,7 +120,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=6]
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimationSheet:frame")
@@ -135,7 +135,7 @@ tracks/0/keys = {
 "values": [ 20 ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=7]
 length = 0.15
 step = 0.05
 tracks/0/type = "value"
@@ -151,7 +151,7 @@ tracks/0/keys = {
 "values": [ Vector2( 0, -8 ), Vector2( 0.5, -8 ), Vector2( -0.5, -8 ), Vector2( 0, -8 ) ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=8]
 length = 0.2
 step = 0.05
 tracks/0/type = "value"
@@ -167,7 +167,7 @@ tracks/0/keys = {
 "values": [ 19, 21, 22, 20 ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=9]
 length = 0.6
 step = 0.075
 tracks/0/type = "value"
@@ -197,7 +197,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=10]
 length = 1.2
 loop = true
 step = 0.15
@@ -214,7 +214,7 @@ tracks/0/keys = {
 "values": [ 7, 8, 9, 10, 11, 12, 13, 14 ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=11]
 length = 0.6
 step = 0.075
 tracks/0/type = "value"
@@ -247,7 +247,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=12]
 length = 0.825
 step = 0.075
 tracks/0/type = "value"
@@ -277,7 +277,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=13]
 length = 0.25
 step = 0.05
 tracks/0/type = "value"
@@ -307,13 +307,13 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="RectangleShape2D" id=15]
+[sub_resource type="RectangleShape2D" id=14]
 extents = Vector2( 11, 1 )
 
-[sub_resource type="RectangleShape2D" id=16]
+[sub_resource type="RectangleShape2D" id=15]
 extents = Vector2( 9, 8 )
 
-[sub_resource type="RectangleShape2D" id=17]
+[sub_resource type="RectangleShape2D" id=16]
 extents = Vector2( 95, 55 )
 
 [node name="Slime" type="KinematicBody2D" groups=[
@@ -341,22 +341,22 @@ frame = 23
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
 position = Vector2( 1, -0.5 )
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 script = ExtResource( 6 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/F_Chase_Anim = SubResource( 3 )
-anims/F_Idle_Anim = SubResource( 4 )
-anims/F_Move_Anim = SubResource( 5 )
-anims/FtoN_Anim = SubResource( 6 )
-anims/I_Idle_Anim = SubResource( 7 )
-anims/I_Shake_Anim = SubResource( 8 )
-anims/I_Wink_Anim = SubResource( 9 )
-anims/ItoN_Anim = SubResource( 10 )
-anims/N_Idle_Anim = SubResource( 11 )
-anims/N_Move_Anim = SubResource( 12 )
-anims/NtoF_Anim = SubResource( 13 )
-anims/NtoI_Anim = SubResource( 14 )
+anims/F_Chase_Anim = SubResource( 2 )
+anims/F_Idle_Anim = SubResource( 3 )
+anims/F_Move_Anim = SubResource( 4 )
+anims/FtoN_Anim = SubResource( 5 )
+anims/I_Idle_Anim = SubResource( 6 )
+anims/I_Shake_Anim = SubResource( 7 )
+anims/I_Wink_Anim = SubResource( 8 )
+anims/ItoN_Anim = SubResource( 9 )
+anims/N_Idle_Anim = SubResource( 10 )
+anims/N_Move_Anim = SubResource( 11 )
+anims/NtoF_Anim = SubResource( 12 )
+anims/NtoI_Anim = SubResource( 13 )
 script = ExtResource( 5 )
 
 [node name="SquishHitBox" type="Area2D" parent="."]
@@ -366,7 +366,7 @@ collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SquishHitBox"]
 position = Vector2( 1, 0 )
-shape = SubResource( 15 )
+shape = SubResource( 14 )
 
 [node name="HitBox" type="Area2D" parent="." groups=[
 "Hitbox",
@@ -377,7 +377,7 @@ collision_mask = 21
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 visible = false
 position = Vector2( 1, 1 )
-shape = SubResource( 16 )
+shape = SubResource( 15 )
 
 [node name="FrontRayCast" type="RayCast2D" parent="."]
 enabled = true
@@ -397,7 +397,7 @@ collision_layer = 0
 
 [node name="PlayerDetectShape" type="CollisionShape2D" parent="PlayerDetector"]
 visible = false
-shape = SubResource( 17 )
+shape = SubResource( 16 )
 
 [node name="RightGroundRaycast" type="RayCast2D" parent="."]
 position = Vector2( 11, 0 )

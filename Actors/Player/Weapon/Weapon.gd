@@ -11,7 +11,7 @@ onready var weapon_data :={
 }
 
 func _ready():
-	owner=get_parent()
+	owner = get_parent()
 	pass # Replace with function body.
 	
 func _physics_process(delta):

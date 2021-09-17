@@ -19,4 +19,4 @@ func exit():
 	pass
 
 func get_name():
-	return ""
+	return "AS_Idle"

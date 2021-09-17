@@ -19,11 +19,8 @@ func execute():
 	if owner.owner.input_module.is_jump_pressed:
 		owner.movement_state_machine.change_state(owner.MS_DoubleJumpState.new(owner))
 		
-	
-
-
 func exit():
 	pass
 
 func get_name():
-	return "Fall"
+	return "MS_Fall"

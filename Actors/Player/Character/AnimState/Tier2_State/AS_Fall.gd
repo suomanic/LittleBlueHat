@@ -4,7 +4,6 @@ func _init(o).(o):
 	pass
 
 func enter():
-	print_debug("Fall")
 	owner.owner.movement_anim_player.play("Fall_Anim")
 	pass
 	
@@ -18,4 +17,4 @@ func exit():
 	pass
 
 func get_name():
-	return ""
+	return "AS_Fall"

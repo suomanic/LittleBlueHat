@@ -10,10 +10,12 @@ onready var bullet_data = {
 
 
 func _ready():
+	owner = get_parent().owner
 	anim_player.play("Idle")
 
 func _physics_process(delta):
-	get_parent().follow_player()
+	if owner.get_node("Character") != null:
+		get_parent().follow_player()
 	
 	if get_parent().owner.input_module.is_attack_just_pressed:
 		

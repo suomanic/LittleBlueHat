@@ -16,7 +16,7 @@ func enter():
 func execute():
 	Ground_State_Machine.update()
 	
-	if !owner.is_on_floor() and abs(owner.velocity.y) > 20:
+	if !owner.movement_module.is_on_object and abs(owner.velocity.y) > 20:
 		owner.anim_state_machine.change_state(owner.AS_AirState.new(owner))	
 	pass
 
@@ -24,4 +24,4 @@ func exit():
 	pass
 
 func get_name():
-	return "Ground"
+	return "AS_Ground"

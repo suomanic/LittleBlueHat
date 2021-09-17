@@ -4,7 +4,7 @@ func _init(o).(o):
 	pass
 
 func enter():
-	owner.owner.movement_anim_player .play("toCrouch_Anim")
+	owner.owner.movement_anim_player.play("toCrouch_Anim")
 	pass
 	
 func execute():
@@ -19,4 +19,4 @@ func exit():
 	pass
 
 func get_name():
-	return ""
+	return "AS_Crouch"

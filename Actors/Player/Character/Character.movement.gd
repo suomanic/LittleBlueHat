@@ -92,17 +92,17 @@ func apply_gravity(delta):
 	elif owner.velocity.y > 0 and jump_count != 0:
 		owner.velocity.y += owner.gravity * fall_mutiply * delta
 		
-	elif !owner.is_on_floor():
+	elif !is_on_object:
 		owner.velocity.y += owner.gravity * delta
 	
-	elif owner.is_on_floor():
+	elif is_on_object:
 		owner.velocity.y += owner.gravity / 4 * delta
 
 func bounce():
 	jump_count = 1
 	owner.velocity.y = -300
 
-func squish_damage_move(will_go_left):
+func hurt_move(will_go_left):
 	if will_go_left:
 		owner.velocity = Vector2(125 , -150) 
 	#	if !owner.is_facing_left:

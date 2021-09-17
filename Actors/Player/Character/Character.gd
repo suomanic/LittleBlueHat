@@ -2,6 +2,7 @@ extends Actor
 
 var is_facing_left
 var pre_facing = false #false means facing right
+var hp = 4
 
 # movement state machine
 var movement_state_machine : StateMachine
@@ -17,16 +18,19 @@ const MS_DoubleJumpState = preload("res://Actors/Player/Character/Movementstate/
 const MS_CrouchState = preload("res://Actors/Player/Character/Movementstate/MS_Crouch.gd")
 const MS_UpState = preload("res://Actors/Player/Character/Movementstate/MS_Up.gd")
 const MS_HurtState = preload("res://Actors/Player/Character/MovementState/MS_Hurt.gd")
+const MS_DieState = preload("res://Actors/Player/Character/MovementState/MS_Die.gd")
 
 # preload aniamtion states
-
 const AS_HurtState = preload("res://Actors/Player/Character/AnimState/Tier1_State/AS_Hurt.gd")
 const AS_AirState = preload("res://Actors/Player/Character/AnimState/Tier1_State/AS_Air.gd")
 const AS_GroundState = preload("res://Actors/Player/Character/Animstate/Tier1_State/AS_Ground.gd")
+const AS_DieState = preload("res://Actors/Player/Character/AnimState/Tier1_State/AS_Die.gd")
 
+# separate code module reference
 onready var movement_module = $CharacterMovement
 onready var collision_module = $CharacterCollision
 
+# collision references
 onready var ground_ray_cast_l = $RayCastL
 onready var ground_ray_cast_r = $RayCastR
 onready var standing_collision = $Standing_Shape
@@ -34,23 +38,31 @@ onready var standing_collision = $Standing_Shape
 onready var squish_collision = $SquishHitBox/CollisionShape2D
 onready var trigger_collision = $Trigger/TriggerBox
 
+# animation references
 onready var movement_anim_player = $MovementAnimPlayer
 onready var effect_anim_player = $EffectAnimPlayer
 onready var animation_sprite_sheet = $AnimSpriteSheet
 
-#timer
+# timer
 onready var hurt_move_timer = $HurtMoveTimer
 onready var invincible_timer = $InvincibleTimer
+
+onready var label = $Label
+onready var label2 = $Label2
 
 func _ready():
 	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
 	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
 	
+	
 func _physics_process(delta) -> void:
 	anim_state_machine.update()
 	movement_state_machine.update()
 	is_facing_left = facing()
-	print_debug(is_facing_left)
+	
+	
+	label.text = anim_state_machine.current_state.get_name()
+	label2.text = movement_state_machine.current_state.get_name()
 	
 	for i in get_slide_count():
 		var collision = get_slide_collision(i)
@@ -85,12 +97,15 @@ func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")
 
 func hurt_anim_end():
-	if is_on_floor() or movement_module.is_on_object:
-		movement_state_machine.change_state(MS_IdleState.new(self))
-		anim_state_machine.change_state(AS_GroundState.new(self))
-	else:
-		movement_state_machine.change_state(MS_FallState.new(self))
-		anim_state_machine.change_state(AS_AirState.new(self))
+	if hp > 0:
+		if is_on_floor() or movement_module.is_on_object:
+			movement_state_machine.change_state(MS_IdleState.new(self))
+			anim_state_machine.change_state(AS_GroundState.new(self))
+		else:
+			movement_state_machine.change_state(MS_FallState.new(self))
+			anim_state_machine.change_state(AS_AirState.new(self))
 
 
+func die_anim_end():
+	queue_free()
 

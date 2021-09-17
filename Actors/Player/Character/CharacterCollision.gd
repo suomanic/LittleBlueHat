@@ -2,6 +2,7 @@ extends Node
 
 var is_bounced := false
 var will_go_left
+var can_be_squished := true
 
 func _physics_process(delta):
 	if owner.is_on_floor() or owner.movement_module.is_on_object:
@@ -27,8 +28,9 @@ func _on_enemy_area_entered(area: Area2D):
 			else:
 				will_go_left = true
 			
-			owner.movement_state_machine.change_state(owner.MS_HurtState.new(owner))
-			owner.anim_state_machine.change_state(owner.AS_HurtState.new(owner))
+			if owner.hp > 0: 
+				owner.movement_state_machine.change_state(owner.MS_HurtState.new(owner))
+				owner.anim_state_machine.change_state(owner.AS_HurtState.new(owner))
 
 	pass # Replace with function body.
 
@@ -54,13 +56,17 @@ func _on_SquishHitBox_body_entered(body):
 			will_go_left = false
 		else:
 			will_go_left = true
-		owner.anim_state_machine.change_state(owner.AS_HurtState.new(owner))
-		owner.movement_state_machine.change_state(owner.MS_HurtState.new(owner))
+			
+		if owner.hp > 0 and can_be_squished: 
+			owner.anim_state_machine.change_state(owner.AS_HurtState.new(owner))
+			owner.movement_state_machine.change_state(owner.MS_HurtState.new(owner))
+			can_be_squished = false
 		pass
 
 func _on_SDM_Timer_timeout():
 	owner.set_collision_mask(00000000000000100011)
 	owner.hurt_move_timer.stop()
+	can_be_squished = true
 	pass # Replace with function body.
 
 

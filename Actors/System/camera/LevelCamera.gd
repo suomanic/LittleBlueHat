@@ -4,7 +4,6 @@ var time = 1
 var is_player_hurt_anim_playing
 
 onready var anim_player = $AnimationPlayer
-onready var player_hurt_timer = $PlayerHurtTImer
 
 export(Curve) var time_slow_curve
 
