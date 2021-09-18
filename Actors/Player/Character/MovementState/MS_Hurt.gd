@@ -9,12 +9,14 @@ func enter():
 	print_debug(owner.hp)
 	if owner.hp <= 0:
 		owner.movement_state_machine.change_state(owner.MS_DieState.new(owner))
-		
-	owner.movement_module.hurt_move(owner.collision_module.will_go_left)
+		owner.movement_module.hurt_move(owner.collision_module.will_go_left,true)
+	else :
+		owner.movement_module.hurt_move(owner.collision_module.will_go_left,false)
 	
 	pass
 	
 func execute():
+	owner.movement_module.apply_gravity(owner.get_physics_process_delta_time())
 	pass
 
 func exit():

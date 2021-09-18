@@ -1,8 +1,6 @@
 extends Actor
 
-var is_facing_left
-var pre_facing = false #false means facing right
-var hp = 4
+var hp = 2
 
 # movement state machine
 var movement_state_machine : StateMachine
@@ -47,6 +45,9 @@ onready var animation_sprite_sheet = $AnimSpriteSheet
 onready var hurt_move_timer = $HurtMoveTimer
 onready var invincible_timer = $InvincibleTimer
 
+onready var anim_sprite = $AnimSpriteSheet
+onready var die_sprite = $DieSpriteSheet
+
 onready var label = $Label
 onready var label2 = $Label2
 
@@ -58,9 +59,8 @@ func _ready():
 func _physics_process(delta) -> void:
 	anim_state_machine.update()
 	movement_state_machine.update()
-	is_facing_left = facing()
 	
-	
+	# test only
 	label.text = anim_state_machine.current_state.get_name()
 	label2.text = movement_state_machine.current_state.get_name()
 	
@@ -76,29 +76,14 @@ func _physics_process(delta) -> void:
 	else :
 		$Particles2D.set_emitting(false)
 
-func facing() -> bool : #the boolean means is character facing left,true means left
-	
-	if owner.input_module.get_direction().x > 0 :
-		$AnimSpriteSheet.scale.x = 1
-		$Particles2D.scale.x = 1
-		$Particles2D.set_position(Vector2(-4,12))
-		pre_facing = false
-		return false
-	elif owner.input_module.get_direction().x < 0 :
-		$AnimSpriteSheet.scale.x = -1
-		$Particles2D.scale.x = -1
-		$Particles2D.set_position(Vector2(4,12))
-		pre_facing = true
-		return true
-	else:
-		return pre_facing
+
 	
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")
 
 func hurt_anim_end():
 	if hp > 0:
-		if is_on_floor() or movement_module.is_on_object:
+		if movement_module.is_on_object:
 			movement_state_machine.change_state(MS_IdleState.new(self))
 			anim_state_machine.change_state(AS_GroundState.new(self))
 		else:

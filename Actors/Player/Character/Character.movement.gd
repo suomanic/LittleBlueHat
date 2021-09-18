@@ -22,7 +22,6 @@ export var double_jump_force := 180
 
 
 func _physics_process(delta):
-	apply_gravity(delta)
 	owner.velocity = owner.move_and_slide(owner.velocity,Vector2.UP,false,4,PI/4,false)
 	
 	if is_on_object:
@@ -77,6 +76,12 @@ func crouch_move():
 		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
 	
 func apply_gravity(delta):
+	# max velocity.y
+	if owner.hp <= 0: 
+		owner.velocity.y = min(owner.velocity.y,100)
+	else:
+		owner.velocity.y = min(owner.velocity.y,800)
+	
 	if owner.ground_ray_cast_l.is_colliding() or owner.ground_ray_cast_r.is_colliding():
 			owner.gravity -= 100
 			owner.gravity = max(0,owner.gravity)
@@ -102,17 +107,27 @@ func bounce():
 	jump_count = 1
 	owner.velocity.y = -300
 
-func hurt_move(will_go_left):
+# 精灵图scale.x转换暂时写在这里
+func hurt_move(will_go_left,is_dying):
 	if will_go_left:
-		owner.velocity = Vector2(125 , -150) 
-	#	if !owner.is_facing_left:
-	#		owner.scale.x = -owner.scale.x
-	#		owner.is_facing_left = !owner.is_facing_left
+		if is_dying:
+			owner.velocity = Vector2(0, -150) 
+		else:
+			owner.velocity = Vector2(125 , -150) 
+			
+		if !owner.collision_module.is_facing_left:
+			owner.anim_sprite.scale.x = -owner.anim_sprite.scale.x
+			owner.die_sprite.scale.x = -owner.die_sprite.scale.x
+			owner.collision_module.is_facing_left = !owner.collision_module.is_facing_left
 	else :
-		owner.velocity = Vector2(-125 , -150) 
-	#	if owner.is_facing_left:
-	#		owner.scale.x = -owner.scale.x
-	#		owner.is_facing_left = !owner.is_facing_left
+		if is_dying:
+			owner.velocity = Vector2(0, -150) 
+		else:
+			owner.velocity = Vector2(-125 , -150)  
+			
+		if owner.collision_module.is_facing_left:
+			owner.anim_sprite.scale.x = -owner.anim_sprite.scale.x
+			owner.die_sprite.scale.x = -owner.die_sprite.scale.x
+			owner.collision_module.is_facing_left = !owner.collision_module.is_facing_left
 	pass
 	
-

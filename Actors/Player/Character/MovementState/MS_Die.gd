@@ -7,6 +7,7 @@ func enter():
 	pass
 	
 func execute():
+	owner.movement_module.apply_gravity(owner.get_physics_process_delta_time())
 	pass
 
 func exit():

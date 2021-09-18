@@ -4,12 +4,29 @@ var is_bounced := false
 var will_go_left
 var can_be_squished := true
 
+#false means facing right
+var is_facing_left : bool
+var pre_facing = false 
+
 func _physics_process(delta):
-	if owner.is_on_floor() or owner.movement_module.is_on_object:
+	if owner.movement_module.is_on_object:
 		owner.squish_collision.set_disabled(false)
 	else :
 		owner.squish_collision.set_disabled(true)
-		
+
+func facing() -> bool : #the boolean means is character facing left,true means left
+	if owner.owner.input_module.get_direction().x > 0 :
+		owner.anim_sprite.scale.x = 1
+		owner.die_sprite.scale.x = -1
+		pre_facing = false
+		return false
+	elif owner.owner.input_module.get_direction().x < 0 :
+		owner.anim_sprite.scale.x = -1
+		owner.die_sprite.scale.x = 1
+		pre_facing = true
+		return true
+	else:
+		return pre_facing
 
 func _on_enemy_area_entered(area: Area2D):
 	# 部分area的owner本身目前没有element_state这个变量（比如剑），会卡死游戏

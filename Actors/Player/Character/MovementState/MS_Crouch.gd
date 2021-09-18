@@ -8,6 +8,8 @@ func enter():
 	
 func execute():
 	owner.movement_module.crouch_move()
+	owner.movement_module.apply_gravity(owner.get_physics_process_delta_time())
+	owner.collision_module.is_facing_left = owner.collision_module.facing()
 	
 	if !owner.movement_module.is_on_object or !owner.owner.input_module.is_crouch_pressed:
 		if owner.velocity.y != 0:
