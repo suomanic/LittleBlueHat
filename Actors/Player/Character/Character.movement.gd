@@ -108,26 +108,18 @@ func bounce():
 	owner.velocity.y = -300
 
 # 精灵图scale.x转换暂时写在这里
-func hurt_move(will_go_left,is_dying):
+func hurt_move(will_go_left):
+	
 	if will_go_left:
-		if is_dying:
-			owner.velocity = Vector2(0, -150) 
-		else:
-			owner.velocity = Vector2(125 , -150) 
-			
+		owner.velocity = Vector2(125 , -150) 
 		if !owner.collision_module.is_facing_left:
 			owner.anim_sprite.scale.x = -owner.anim_sprite.scale.x
-			owner.die_sprite.scale.x = -owner.die_sprite.scale.x
 			owner.collision_module.is_facing_left = !owner.collision_module.is_facing_left
 	else :
-		if is_dying:
-			owner.velocity = Vector2(0, -150) 
-		else:
-			owner.velocity = Vector2(-125 , -150)  
+		owner.velocity = Vector2(-125 , -150)  
 			
 		if owner.collision_module.is_facing_left:
 			owner.anim_sprite.scale.x = -owner.anim_sprite.scale.x
-			owner.die_sprite.scale.x = -owner.die_sprite.scale.x
 			owner.collision_module.is_facing_left = !owner.collision_module.is_facing_left
 	pass
 	

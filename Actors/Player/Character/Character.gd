@@ -43,10 +43,8 @@ onready var animation_sprite_sheet = $AnimSpriteSheet
 
 # timer
 onready var hurt_move_timer = $HurtMoveTimer
-onready var invincible_timer = $InvincibleTimer
 
 onready var anim_sprite = $AnimSpriteSheet
-onready var die_sprite = $DieSpriteSheet
 
 onready var label = $Label
 onready var label2 = $Label2
@@ -90,7 +88,9 @@ func hurt_anim_end():
 			movement_state_machine.change_state(MS_FallState.new(self))
 			anim_state_machine.change_state(AS_AirState.new(self))
 
+func die_anim_start():
+	collision_module.die_collision_change()
 
 func die_anim_end():
-	queue_free()
+	owner.queue_free()
 
