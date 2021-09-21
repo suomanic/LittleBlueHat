@@ -21,6 +21,8 @@ func _physics_process(delta):
 	calc_velocity(delta)
 	
 func apply_gravity():
+	velocity.y = min(velocity.y,150)
+	
 	if owner.r_ground_ray_cast.is_colliding() or owner.l_ground_ray_cast.is_colliding() :
 		gravity -= 50
 		gravity = max(0,gravity)

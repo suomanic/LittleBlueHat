@@ -84,7 +84,7 @@ tracks/0/keys = {
 "values": [ 47 ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=21]
 resource_name = "Die_Anim"
 length = 0.48
 step = 0.06
@@ -118,7 +118,7 @@ tracks/1/keys = {
 "values": [ 50, 51, 52, 53, 54, 55, 56, 57 ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=22]
 length = 0.525
 step = 0.075
 tracks/0/type = "value"
@@ -134,7 +134,7 @@ tracks/0/keys = {
 "values": [ 38, 39, 40, 41, 42, 43, 6 ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=23]
 length = 0.4
 loop = true
 tracks/0/type = "value"
@@ -150,7 +150,7 @@ tracks/0/keys = {
 "values": [ 7, 8, 9, 10 ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=24]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimSpriteSheet:frame")
@@ -179,7 +179,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=25]
 length = 0.8
 loop = true
 tracks/0/type = "value"
@@ -195,7 +195,7 @@ tracks/0/keys = {
 "values": [ 11, 12, 13, 14, 15, 16, 17, 18 ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=26]
 length = 0.8
 loop = true
 step = 0.05
@@ -212,7 +212,7 @@ tracks/0/keys = {
 "values": [ 19, 20, 21, 22, 23, 24, 25, 26 ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=27]
 length = 0.35
 loop = true
 tracks/0/type = "value"
@@ -228,7 +228,7 @@ tracks/0/keys = {
 "values": [ 28, 29, 31, 32, 33, 34 ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=28]
 length = 0.2
 loop = true
 tracks/0/type = "value"
@@ -244,7 +244,7 @@ tracks/0/keys = {
 "values": [ 35, 36 ]
 }
 
-[sub_resource type="Animation" id=16]
+[sub_resource type="Animation" id=29]
 length = 0.2
 step = 0.05
 tracks/0/type = "value"
@@ -274,10 +274,10 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="RectangleShape2D" id=17]
+[sub_resource type="RectangleShape2D" id=30]
 extents = Vector2( 4, 11 )
 
-[sub_resource type="Shader" id=18]
+[sub_resource type="Shader" id=31]
 code = "shader_type canvas_item;
 render_mode unshaded;
 
@@ -308,8 +308,8 @@ void fragment()
 	COLOR = texturePointSmooth(TEXTURE, UV, TEXTURE_PIXEL_SIZE);
 }"
 
-[sub_resource type="ShaderMaterial" id=19]
-shader = SubResource( 18 )
+[sub_resource type="ShaderMaterial" id=32]
+shader = SubResource( 31 )
 
 [sub_resource type="RectangleShape2D" id=20]
 extents = Vector2( 5, 1 )
@@ -355,15 +355,15 @@ anims/Invincible_Effect_Anim = SubResource( 5 )
 
 [node name="MovementAnimPlayer" type="AnimationPlayer" parent="."]
 anims/CrouchIdle_Anim = SubResource( 6 )
-anims/Die_Anim = SubResource( 7 )
-anims/DoubleJump_Anim = SubResource( 9 )
-anims/Fall_Anim = SubResource( 10 )
-anims/Hurt_Anim = SubResource( 11 )
-anims/Idle_Anim = SubResource( 12 )
-anims/Run_Anim = SubResource( 13 )
-anims/SpinUp_Anim = SubResource( 14 )
-anims/Up_Anim = SubResource( 15 )
-anims/toCrouch_Anim = SubResource( 16 )
+anims/Die_Anim = SubResource( 21 )
+anims/DoubleJump_Anim = SubResource( 22 )
+anims/Fall_Anim = SubResource( 23 )
+anims/Hurt_Anim = SubResource( 24 )
+anims/Idle_Anim = SubResource( 25 )
+anims/Run_Anim = SubResource( 26 )
+anims/SpinUp_Anim = SubResource( 27 )
+anims/Up_Anim = SubResource( 28 )
+anims/toCrouch_Anim = SubResource( 29 )
 
 [node name="AnimSpriteSheet" type="Sprite" parent="."]
 material = ExtResource( 3 )
@@ -375,10 +375,10 @@ frame = 57
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 1 )
-shape = SubResource( 17 )
+shape = SubResource( 30 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-material = SubResource( 19 )
+material = SubResource( 32 )
 zoom = Vector2( 0.2, 0.2 )
 process_mode = 0
 drag_margin_left = 0.1

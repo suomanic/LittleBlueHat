@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Actors/Enemy/Mushroom/Mushroom.gd" type="Script" id=1]
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=2]
@@ -41,6 +41,66 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3 ]
 }
 
+[sub_resource type="Animation" id=4]
+resource_name = "NtoF_Anim"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("Mushroom-Sheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 11, 12, 13, 14, 15, 16, 17, 18 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.7 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "NtoF_anim_end"
+} ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "NtoF_oppsite_Anim"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("Mushroom-Sheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 19, 20, 21, 22, 23, 24, 25, 26 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.7 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "NtoF_anim_end"
+} ]
+}
+
 [node name="Mushroom" type="Area2D" groups=[
 "Hitbox",
 "Mushroom",
@@ -53,8 +113,8 @@ script = ExtResource( 1 )
 material = ExtResource( 2 )
 texture = ExtResource( 3 )
 hframes = 7
-vframes = 2
-frame = 10
+vframes = 4
+frame = 26
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 5 )
@@ -63,5 +123,7 @@ shape = SubResource( 1 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/F_Idle_Anim = SubResource( 2 )
 anims/N_Idle_Anim = SubResource( 3 )
+anims/NtoF_Anim = SubResource( 4 )
+anims/NtoF_oppsite_Anim = SubResource( 5 )
 
 [connection signal="area_entered" from="." to="." method="_on_Hitbox_area_entered"]

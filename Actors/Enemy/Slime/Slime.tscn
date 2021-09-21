@@ -337,7 +337,7 @@ position = Vector2( 0, -8 )
 texture = ExtResource( 1 )
 hframes = 8
 vframes = 9
-frame = 23
+frame = 59
 
 [node name="PhysicCollision" type="CollisionShape2D" parent="."]
 position = Vector2( 1, -0.5 )

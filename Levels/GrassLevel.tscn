@@ -237,7 +237,6 @@ points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
 
 [node name="LevelCamera" parent="." instance=ExtResource( 5 )]
 position = Vector2( -16, 24 )
-zoom = Vector2( 0.25, 0.25 )
 
 [node name="TileMap" type="TileMap" parent="."]
 material = ExtResource( 6 )
