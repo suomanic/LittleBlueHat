@@ -7,9 +7,9 @@ const GAME_SCENE := 'res://Level/TestLevel.tscn'
 
 class PlayerInfo:
 	var name: String
-	var type: String
+	var type: String # fire or ice
 
-# 基本属性：联网id，名字，颜色，其他玩家的相关信息等
+# 基本属性：联网id，名字，类型
 var myId : int
 var myInfo: PlayerInfo
 var otherPlayerId : int
@@ -17,6 +17,9 @@ var otherPlayerInfo: PlayerInfo
 
 # 这里5个信号都是 Godot High-level multiplayer API 自带信号
 func _ready() -> void:
+	#var peer = NetworkedMultiplayerENet.new()
+	#peer.create_server(PORT, MAX_PLAYERS)
+	#get_tree().network_peer = peer
 	self.get_tree().connect('network_peer_connected', self, '_onNetworkPeerConnected')
 	self.get_tree().connect('network_peer_disconnected', self, '_onNetworkPeerDisconnected')
 	self.get_tree().connect('server_disconnected', self, '_onServerDisconnected')
