@@ -4,6 +4,9 @@ func _init(o).(o):
 	pass
 
 func enter():
+	owner.collision_module.change_to_fire_collision()
+	owner.element_state = "Fire"
+	
 	if owner.is_hit_left:
 		owner.anim_player.play("NtoF_Anim")
 	else :

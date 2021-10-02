@@ -1,10 +1,14 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Actors/Enemy/Mushroom/Mushroom.gd" type="Script" id=1]
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=2]
 [ext_resource path="res://Assets/Enemy/Mushroom/mushroom-Sheet.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Enemy/Mushroom/icice-Sheet.png" type="Texture" id=4]
 [ext_resource path="res://Actors/Enemy/Mushroom/MushroomCollision.gd" type="Script" id=5]
+[ext_resource path="res://Assets/Enemy/Mushroom/icearea.png" type="Texture" id=6]
+
+[sub_resource type="Curve" id=12]
+_data = [ Vector2( 0, 0 ), 0.0, 2.68806, 0, 0, Vector2( 0.72679, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 14, 6 )
@@ -26,7 +30,7 @@ tracks/0/keys = {
 "values": [ 4, 5, 6, 7, 8, 9, 10 ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=3]
 resource_name = "I_Idle_Anim"
 tracks/0/type = "value"
 tracks/0/path = NodePath("Mushroom-Sheet:frame")
@@ -41,7 +45,7 @@ tracks/0/keys = {
 "values": [ 27 ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=4]
 length = 0.5
 loop = true
 step = 0.125
@@ -58,8 +62,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3 ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "NtoF_Anim"
+[sub_resource type="Animation" id=5]
 length = 0.8
 tracks/0/type = "value"
 tracks/0/path = NodePath("Mushroom-Sheet:frame")
@@ -88,8 +91,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=5]
-resource_name = "NtoF_oppsite_Anim"
+[sub_resource type="Animation" id=6]
 length = 0.8
 tracks/0/type = "value"
 tracks/0/path = NodePath("Mushroom-Sheet:frame")
@@ -118,30 +120,30 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="CanvasItemMaterial" id=9]
+[sub_resource type="CanvasItemMaterial" id=7]
 blend_mode = 1
 particles_animation = true
 particles_anim_h_frames = 7
 particles_anim_v_frames = 3
 particles_anim_loop = false
 
-[sub_resource type="Curve" id=10]
+[sub_resource type="Curve" id=8]
 _data = [ Vector2( 0, 0.631818 ), 0.0, 0.0, 0, 0, Vector2( 0.358166, 0.989773 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -0.0978927, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=11]
-curve = SubResource( 10 )
+[sub_resource type="CurveTexture" id=9]
+curve = SubResource( 8 )
 
-[sub_resource type="ParticlesMaterial" id=8]
+[sub_resource type="ParticlesMaterial" id=10]
 emission_shape = 1
 emission_sphere_radius = 80.0
 flag_disable_z = true
 gravity = Vector3( 0, 98, 0 )
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
-scale_curve = SubResource( 11 )
+scale_curve = SubResource( 9 )
 anim_speed = 0.8
 
-[sub_resource type="CircleShape2D" id=7]
+[sub_resource type="CircleShape2D" id=11]
 radius = 80.0
 
 [node name="Mushroom" type="Area2D" groups=[
@@ -151,13 +153,14 @@ radius = 80.0
 collision_layer = 4
 collision_mask = 21
 script = ExtResource( 1 )
+icefog_spread_curve = SubResource( 12 )
 
 [node name="Mushroom-Sheet" type="Sprite" parent="."]
 material = ExtResource( 2 )
 texture = ExtResource( 3 )
 hframes = 7
 vframes = 4
-frame = 27
+frame = 5
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 5 )
@@ -165,24 +168,33 @@ shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/F_Idle_Anim = SubResource( 2 )
-anims/I_Idle_Anim = SubResource( 6 )
-anims/N_Idle_Anim = SubResource( 3 )
-anims/NtoF_Anim = SubResource( 4 )
-anims/NtoF_oppsite_Anim = SubResource( 5 )
+anims/I_Idle_Anim = SubResource( 3 )
+anims/N_Idle_Anim = SubResource( 4 )
+anims/NtoF_Anim = SubResource( 5 )
+anims/NtoF_oppsite_Anim = SubResource( 6 )
 
-[node name="Particles2D" type="Particles2D" parent="."]
-material = SubResource( 9 )
+[node name="Icefog" type="Node2D" parent="."]
 position = Vector2( 0, 5 )
+scale = Vector2( 0.3, 0.3 )
+
+[node name="Icice" type="Particles2D" parent="Icefog"]
+material = SubResource( 7 )
+scale = Vector2( 3.33333, 3.33333 )
+emitting = false
 amount = 150
-process_material = SubResource( 8 )
+process_material = SubResource( 10 )
 texture = ExtResource( 4 )
 
-[node name="IcefogArea" type="Area2D" parent="Particles2D"]
-position = Vector2( 0, -5 )
+[node name="Icefog_sprite" type="Sprite" parent="Icefog"]
+visible = false
+texture = ExtResource( 6 )
 
-[node name="IcefogShape" type="CollisionShape2D" parent="Particles2D/IcefogArea"]
-position = Vector2( 0, 5 )
-shape = SubResource( 7 )
+[node name="Icefog_area" type="Area2D" parent="Icefog"]
+scale = Vector2( 3.33333, 3.33333 )
+
+[node name="Icefog_triggershape" type="CollisionShape2D" parent="Icefog/Icefog_area"]
+shape = SubResource( 11 )
+disabled = true
 
 [node name="MushroomCollision" type="Node" parent="."]
 script = ExtResource( 5 )

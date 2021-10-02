@@ -7,7 +7,6 @@ onready var anim_player = $AnimationPlayer
 
 export(Curve) var time_slow_curve
 
-#onready var character = get_tree().get_node("Player").get_node("Character")
 
 func _physics_process(delta):
 	if time < 1 :

@@ -60,8 +60,6 @@ func _physics_process(delta) -> void:
 	anim_state_machine.update()
 	movement_state_machine.update()
 	
-	print_debug(velocity.x)
-	
 	# test only
 	label.text = anim_state_machine.current_state.get_name()
 	label2.text = movement_state_machine.current_state.get_name()
