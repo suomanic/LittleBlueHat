@@ -30,7 +30,7 @@ func change_to_fire_collision_box() :
 	owner.f_ray_cast.set_enabled(true)
 	owner.b_ray_cast.set_enabled(true)
 	
-	owner.player_detectshape.disabled = false
+	owner.player_detectshape.set_deferred("disabled",false)
 	
 	owner.set_collision_layer(00000000000000000000) 
 	

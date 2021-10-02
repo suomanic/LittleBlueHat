@@ -11,6 +11,8 @@ var is_hurt_move_left := true
 var is_moving_left := true
 var is_moving_finished := false
 
+var is_on_object := false
+
 func _ready():
 	velocity = owner.velocity
 	gravity = owner.gravity
@@ -24,9 +26,11 @@ func apply_gravity():
 	velocity.y = min(velocity.y,150)
 	
 	if owner.r_ground_ray_cast.is_colliding() or owner.l_ground_ray_cast.is_colliding() :
+		is_on_object = true
 		gravity -= 50
 		gravity = max(0,gravity)
 	else:
+		is_on_object = false
 		gravity = 600
 
 func calc_velocity(delta):
@@ -41,24 +45,29 @@ func calc_velocity(delta):
 
 
 func N_move():
-	if is_normal_move:
-		if is_moving_left:
-			velocity.x = -75
-		else:
-			velocity.x = 75
-	else:
-		velocity.x = 0 
-		
-func F_move():
-	if is_fire_move:
-		if is_moving_left:
-			velocity.x = -100
-		else:
-			velocity.x = 100
-			
-	else:
+	if velocity.y > 0 and velocity.x == 0:
 		velocity.x = 0
-
+	else:
+		if is_normal_move:
+			if is_moving_left:
+				velocity.x = -75
+			else:
+				velocity.x = 75
+		else:
+			velocity.x = 0 
+	
+func F_move():
+	if velocity.y > 0 and velocity.x == 0:
+		velocity.x = 0
+	else:
+		if is_fire_move or (is_moving_finished and !is_on_object):
+			if is_moving_left:
+				velocity.x = -100
+			else:
+				velocity.x = 100
+		elif !is_fire_move and is_on_object:
+			velocity.x = 0
+		
 #被打
 func hurt_move():
 	if is_hurt_move_left:
@@ -71,7 +80,7 @@ func hurt_move():
 func normal_move():
 	is_normal_move = true
 	is_moving_finished = false
-	velocity.y = -100
+	velocity.y = -125
 	
 func fire_move():
 	is_fire_move = true

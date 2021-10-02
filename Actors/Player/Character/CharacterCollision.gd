@@ -17,10 +17,14 @@ func _physics_process(delta):
 func facing() -> bool : #the boolean means is character facing left,true means left
 	if owner.owner.input_module.get_direction().x > 0 :
 		owner.anim_sprite.scale.x = 1
+		owner.walk_particles.scale.x = 1
+		owner.walk_particles.position = Vector2(-5,12)
 		pre_facing = false
 		return false
 	elif owner.owner.input_module.get_direction().x < 0 :
 		owner.anim_sprite.scale.x = -1
+		owner.walk_particles.scale.x = -1
+		owner.walk_particles.position = Vector2(5,12)
 		pre_facing = true
 		return true
 	else:

@@ -4,7 +4,7 @@ func _init(o).(o):
 	pass
 
 func enter():
-	owner.element_change_count = owner.element_change_time
+	owner.can_change_element = false
 	
 	owner.anim_player.play("ItoN_Anim")
 	owner.element_state = "Normal"
@@ -15,7 +15,7 @@ func execute():
 	pass
 
 func exit():
-	
+	owner.can_change_element = true
 	pass
 
 func get_name():

@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Actors/Enemy/Mushroom/Mushroom.gd" type="Script" id=1]
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=2]
 [ext_resource path="res://Assets/Enemy/Mushroom/mushroom-Sheet.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Enemy/Mushroom/icice-Sheet.png" type="Texture" id=4]
+[ext_resource path="res://Actors/Enemy/Mushroom/MushroomCollision.gd" type="Script" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 14, 6 )
@@ -22,6 +24,21 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 4, 5, 6, 7, 8, 9, 10 ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "I_Idle_Anim"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Mushroom-Sheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 27 ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -101,6 +118,32 @@ tracks/1/keys = {
 } ]
 }
 
+[sub_resource type="CanvasItemMaterial" id=9]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 3
+particles_anim_loop = false
+
+[sub_resource type="Curve" id=10]
+_data = [ Vector2( 0, 0.631818 ), 0.0, 0.0, 0, 0, Vector2( 0.358166, 0.989773 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -0.0978927, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=11]
+curve = SubResource( 10 )
+
+[sub_resource type="ParticlesMaterial" id=8]
+emission_shape = 1
+emission_sphere_radius = 80.0
+flag_disable_z = true
+gravity = Vector3( 0, 98, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale_curve = SubResource( 11 )
+anim_speed = 0.8
+
+[sub_resource type="CircleShape2D" id=7]
+radius = 80.0
+
 [node name="Mushroom" type="Area2D" groups=[
 "Hitbox",
 "Mushroom",
@@ -114,7 +157,7 @@ material = ExtResource( 2 )
 texture = ExtResource( 3 )
 hframes = 7
 vframes = 4
-frame = 26
+frame = 27
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 5 )
@@ -122,8 +165,26 @@ shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/F_Idle_Anim = SubResource( 2 )
+anims/I_Idle_Anim = SubResource( 6 )
 anims/N_Idle_Anim = SubResource( 3 )
 anims/NtoF_Anim = SubResource( 4 )
 anims/NtoF_oppsite_Anim = SubResource( 5 )
+
+[node name="Particles2D" type="Particles2D" parent="."]
+material = SubResource( 9 )
+position = Vector2( 0, 5 )
+amount = 150
+process_material = SubResource( 8 )
+texture = ExtResource( 4 )
+
+[node name="IcefogArea" type="Area2D" parent="Particles2D"]
+position = Vector2( 0, -5 )
+
+[node name="IcefogShape" type="CollisionShape2D" parent="Particles2D/IcefogArea"]
+position = Vector2( 0, 5 )
+shape = SubResource( 7 )
+
+[node name="MushroomCollision" type="Node" parent="."]
+script = ExtResource( 5 )
 
 [connection signal="area_entered" from="." to="." method="_on_Hitbox_area_entered"]

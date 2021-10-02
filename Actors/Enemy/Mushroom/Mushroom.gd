@@ -8,7 +8,10 @@ var is_hit_left
 
 onready var anim_player = $AnimationPlayer
 
+onready var collision_module = $MushroomCollision
+
 const N_IdleState = preload("res://Actors/Enemy/Mushroom/State/N_Idle.gd")
+const I_IdleState = preload("res://Actors/Enemy/Mushroom/State/I_Idle.gd")
 const F_IdleState = preload("res://Actors/Enemy/Mushroom/State/F_Idle.gd")
 
 const NtoFState = preload("res://Actors/Enemy/Mushroom/State/NtoF.gd")
@@ -23,7 +26,7 @@ func _physics_process(delta):
 
 func _on_Hitbox_area_entered(area):
 	
-	if get_tree().get_root().get_node("GrassLevel/Player/Character").global_position.x > global_position.x:
+	if area.global_position.x > global_position.x:
 		is_hit_left = false
 	else :
 		is_hit_left = true
@@ -32,7 +35,8 @@ func _on_Hitbox_area_entered(area):
 		if area.owner.is_in_group("Ice"):
 			match element_state:
 				"Normal":
-					pass
+					state_machine.change_state(I_IdleState.new(self))
+					element_state = "Ice"
 				"Ice":
 					pass
 				"Fire":
@@ -44,7 +48,8 @@ func _on_Hitbox_area_entered(area):
 					state_machine.change_state(NtoFState.new(self))
 					element_state = "Fire"
 				"Ice":
-					pass
+					state_machine.change_state(N_IdleState.new(self))
+					element_state = "Normal"
 				"Fire":
 					pass
 			

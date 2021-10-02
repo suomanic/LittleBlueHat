@@ -3,8 +3,7 @@ extends Actor
 var state_machine : StateMachine
 var element_state : String
 
-var element_change_time = 0.5
-var element_change_count = -1
+var can_change_element := true
 
 var can_cause_squish_damage
 var player
@@ -74,20 +73,19 @@ func _ready():
 	
 func _physics_process(delta):
 	state_machine.update()
-	element_change_count -= delta
 	
 	switch_can_cause_squish_damage()
 	
-	if movement_module.is_moving_finished and element_change_count < 0 and (element_state == "Fire") and player != null:
+	if movement_module.is_moving_finished and can_change_element and (element_state == "Fire") and player != null:
 		state_machine.change_state(F_ChaseState.new(self))
 	
 func _turn_around():
-	if movement_module.is_moving_finished:
+	if movement_module.is_moving_finished and movement_module.is_on_object:
 		movement_module.is_moving_left = !movement_module.is_moving_left
 		scale.x = -scale.x
 
 func _on_HitBox_area_entered(area):
-	if element_change_count < 0:
+	if can_change_element:
 		if area.get_owner().is_in_group("Ice"):
 			print_debug("ice damage")
 #			if area.get_owner().get_owner().is_in_group("Player"):
@@ -146,9 +144,6 @@ func _on_PlayerDetector_body_exited(body):
 
 func switch_can_cause_squish_damage():
 	if movement_module.gravity > 0 and element_state == "Ice":
-	#means can casue squish damage
 		can_cause_squish_damage = true
-		pass
 	else:
 		can_cause_squish_damage = false
-		pass

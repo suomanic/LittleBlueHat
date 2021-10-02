@@ -46,6 +46,8 @@ onready var hurt_move_timer = $HurtMoveTimer
 
 onready var anim_sprite = $AnimSpriteSheet
 
+onready var walk_particles= $WalkParticles
+
 onready var label = $Label
 onready var label2 = $Label2
 
@@ -58,6 +60,8 @@ func _physics_process(delta) -> void:
 	anim_state_machine.update()
 	movement_state_machine.update()
 	
+	print_debug(velocity.x)
+	
 	# test only
 	label.text = anim_state_machine.current_state.get_name()
 	label2.text = movement_state_machine.current_state.get_name()
@@ -69,10 +73,10 @@ func _physics_process(delta) -> void:
 		if str1.begins_with("Slime"):
 			pass
 		
-	if movement_module.is_on_object and velocity.x != 0:
-		$Particles2D.set_emitting(true)
+	if movement_module.is_on_object and abs(velocity.x) > 40:
+		walk_particles.set_emitting(true)
 	else :
-		$Particles2D.set_emitting(false)
+		walk_particles.set_emitting(false)
 
 
 	
