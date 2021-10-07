@@ -95,24 +95,19 @@ func _on_HitBox_area_entered(area):
 #					movement_module.is_hurt_move_left = false
 			match element_state:
 				"Normal":
-					movement_module.hurt_move()
 					state_machine.change_state(NtoIState.new(self))
 				"Ice":
 					anim_player.play("I_Shake_Anim")
 				"Fire":
-					movement_module.hurt_move()
 					state_machine.change_state(FtoNState.new(self))
 		elif area.owner.is_in_group("Fire"):
 			print_debug("fire damage")
 			match element_state:
 				"Normal":
-					movement_module.hurt_move()
 					state_machine.change_state(NtoFState.new(self))
 				"Ice":
-					movement_module.hurt_move()
 					state_machine.change_state(ItoNState.new(self))
 				"Fire":
-					movement_module.hurt_move()
 					pass
 			
 	pass # Replace with function body.
@@ -147,3 +142,12 @@ func switch_can_cause_squish_damage():
 		can_cause_squish_damage = true
 	else:
 		can_cause_squish_damage = false
+
+
+func inside_icefog():
+	if can_change_element:
+		match element_state:
+			"Normal":
+				state_machine.change_state(NtoIState.new(self))
+			"Fire":
+				state_machine.change_state(FtoNState.new(self))

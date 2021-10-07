@@ -14,6 +14,7 @@ func enter():
 	pass
 	
 func execute():
+	
 	pass
 
 func exit():

@@ -68,12 +68,6 @@ func F_move():
 		elif !is_fire_move and is_on_object:
 			velocity.x = 0
 		
-#被打
-func hurt_move():
-	if is_hurt_move_left:
-		velocity = Vector2(0,0)
-	else:
-		velocity = Vector2(0,0)
 		
 	
 #Animation call function	

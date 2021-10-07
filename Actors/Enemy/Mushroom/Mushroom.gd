@@ -1,5 +1,7 @@
 extends Area2D
 
+signal icefog_signal
+
 var state_machine : StateMachine
 var element_state
 var element_change_count = -1
@@ -22,6 +24,7 @@ const I_IdleState = preload("res://Actors/Enemy/Mushroom/State/I_Idle.gd")
 const F_IdleState = preload("res://Actors/Enemy/Mushroom/State/F_Idle.gd")
 const NtoFState = preload("res://Actors/Enemy/Mushroom/State/NtoF.gd")
 const NtoIState = preload("res://Actors/Enemy/Mushroom/State/NtoI.gd")
+const ItoNState = preload("res://Actors/Enemy/Mushroom/State/ItoN.gd")
 
 func _ready():
 	state_machine = StateMachine.new(N_IdleState.new(self))
@@ -30,10 +33,10 @@ func _ready():
 
 func _physics_process(delta):
 	state_machine.update()
+	
 	pass
 
 func _on_Hitbox_area_entered(area):
-	
 	if area.global_position.x > global_position.x:
 		is_hit_left = false
 	else :
@@ -62,5 +65,44 @@ func _on_Hitbox_area_entered(area):
 					pass
 			
 
+func inside_icefog():
+	if element_change_count < 0:
+		match element_state:
+			"Normal":
+				state_machine.change_state(NtoIState.new(self))
+			"Fire":
+				state_machine.change_state(N_IdleState.new(self))
+				collision_module.change_to_normal_collision()
+				element_state = "Normal"
+	
+
 func NtoF_anim_end():
 	state_machine.change_state(F_IdleState.new(self))
+
+func _on_Icefog_area_body_entered(body):
+	if body.is_in_group("CanChangeElement"):
+		connect("icefog_signal",body,"inside_icefog")
+		print_debug(body)
+	pass # Replace with function body.
+
+
+func _on_Icefog_area_body_exited(body):
+	if body.is_in_group("CanChangeElement"):
+		disconnect("icefog_signal",body,"inside_icefog")
+	pass # Replace with function body.
+
+
+func _on_Icefog_area_area_entered(area):
+	if area.is_in_group("CanChangeElement"):
+		connect("icefog_signal",area,"inside_icefog")
+	pass # Replace with function body.
+
+
+func _on_Icefog_area_area_exited(area):
+	if area.is_in_group("CanChangeElement"):
+		disconnect("icefog_signal",area,"inside_icefog")
+	pass # Replace with function body.
+
+
+func emit_icefog_signal():
+	emit_signal("icefog_signal")

@@ -248,7 +248,7 @@ texture = ExtResource( 8 )
 position = Vector2( 112, 35 )
 
 [node name="Mushroom2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 37, 99 )
+position = Vector2( 8, 99 )
 
 [node name="TileMap" type="TileMap" parent="."]
 material = ExtResource( 6 )
@@ -267,16 +267,16 @@ position = Vector2( 110, -75 )
 position = Vector2( -13, 22 )
 
 [node name="Slime7" parent="." instance=ExtResource( 3 )]
-position = Vector2( -124, 70 )
+position = Vector2( 138, -10 )
 
 [node name="Slime8" parent="." instance=ExtResource( 3 )]
-position = Vector2( -70, 23 )
+position = Vector2( 2, 85 )
 
 [node name="Slime9" parent="." instance=ExtResource( 3 )]
-position = Vector2( -73, -33 )
+position = Vector2( 18, 9 )
 
 [node name="Slime10" parent="." instance=ExtResource( 3 )]
-position = Vector2( -42, -79 )
+position = Vector2( 195, -22 )
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
-position = Vector2( -233, 56 )
+position = Vector2( -232, 39 )

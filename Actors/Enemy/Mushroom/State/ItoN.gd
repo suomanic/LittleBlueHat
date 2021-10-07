@@ -4,11 +4,14 @@ func _init(o).(o):
 	pass
 
 func enter():
-	owner.anim_player.play("I_Idle_Anim")
+	owner.collision_module.change_to_normal_collision()
+	owner.element_state = "Normal"
+	
+	
 	pass
 	
 func execute():
-	owner.emit_icefog_signal()
+	
 	pass
 
 func exit():

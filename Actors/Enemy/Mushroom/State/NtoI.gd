@@ -14,7 +14,10 @@ func enter():
 func execute():
 	time += owner.get_physics_process_delta_time()
 	owner.icefog_particle.process_material.set_emission_sphere_radius(lerp(0,80,owner.icefog_spread_curve.interpolate(time)))
-	owner.icefog_sprite.scale = Vector2(lerp(0,1,owner.icefog_spread_curve.interpolate(time)),lerp(0,1,owner.icefog_spread_curve.interpolate(time)))
+	owner.icefog_sprite.scale = Vector2(lerp(0,1.05,owner.icefog_spread_curve.interpolate(time)),lerp(0,1.05,owner.icefog_spread_curve.interpolate(time)))
+	owner.icefog_shape.scale = Vector2(lerp(0,1,owner.icefog_spread_curve.interpolate(time)),lerp(0,1,owner.icefog_spread_curve.interpolate(time)))
+	
+	owner.emit_icefog_signal()
 	
 	if time >= 1 :
 		owner.state_machine.change_state(owner.I_IdleState.new(owner))
