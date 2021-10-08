@@ -1,14 +1,18 @@
 extends State
 
 var time
+var collision_change_once_flag
 
 func _init(o).(o):
 	pass
 
 func enter():
 	time = 0
-	owner.collision_module.change_to_ice_collision()
+	collision_change_once_flag = true
+	owner.can_change_element = false
 	owner.element_state = "Ice"
+	
+	owner.anim_player.play("NtoI_Anim")
 	pass
 	
 func execute():
@@ -17,13 +21,15 @@ func execute():
 	owner.icefog_sprite.scale = Vector2(lerp(0,1.05,owner.icefog_spread_curve.interpolate(time)),lerp(0,1.05,owner.icefog_spread_curve.interpolate(time)))
 	owner.icefog_shape.scale = Vector2(lerp(0,1,owner.icefog_spread_curve.interpolate(time)),lerp(0,1,owner.icefog_spread_curve.interpolate(time)))
 	
-	owner.emit_icefog_signal()
+	if time > 0 and collision_change_once_flag:
+		owner.collision_module.change_to_ice_collision()
+		collision_change_once_flag = false
 	
-	if time >= 1 :
-		owner.state_machine.change_state(owner.I_IdleState.new(owner))
+	owner.emit_icefog_signal()
 	pass
 
 func exit():
+	owner.can_change_element = true
 	pass
 
 func get_name():
