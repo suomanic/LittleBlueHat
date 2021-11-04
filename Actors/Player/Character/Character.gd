@@ -52,6 +52,7 @@ onready var label = $Label
 onready var label2 = $Label2
 
 func _ready():
+	set_as_toplevel(true)
 	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
 	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
 	
@@ -94,5 +95,5 @@ func die_anim_start():
 	collision_module.die_collision_change()
 
 func die_anim_end():
-	owner.queue_free()
+	get_owner().queue_free()
 

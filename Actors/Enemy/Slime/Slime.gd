@@ -12,6 +12,7 @@ var player
 enum DROPOFF { fire,normal,ice }
 export(DROPOFF) var element
 
+
 const N_IdleState = preload("res://Actors/Enemy/Slime/State/N_Idle.gd")
 const I_IdleState = preload("res://Actors/Enemy/Slime/State/I_Idle.gd")
 const F_IdleState = preload("res://Actors/Enemy/Slime/State/F_Idle.gd")

@@ -2,12 +2,11 @@ extends Node2D
 
 onready var anim_player = $AnimationPlayer
 onready var sprite = $Sprite
-
+onready var player = get_parent().get_parent()
 onready var bullet_data = {
 	ice_bullet = preload("res://Actors/Player/Weapon/Bullet/IceBullet.tscn"),
 	fire_bullet = preload("res://Actors/Player/Weapon/Bullet/FireBullet.tscn")
 }
-
 
 func _ready():
 	owner = get_parent().owner
@@ -27,7 +26,15 @@ func _physics_process(delta):
 			bullet = bullet_data.ice_bullet.instance()
 		
 		var orb_position = get_parent().get_child(0).sprite.global_position
-		var rotation_angle = (get_parent().owner.input_module.mouse_global_position - orb_position).angle()
+		var rotation_angle
+		var position_x
+		
+		if player.get_node("Character").global_position.x - player.get_node("PlayerInput").mouse_global_position.x < 0:
+			position_x = abs((player.get_node("PlayerInput").mouse_global_position - orb_position).x)
+			rotation_angle = Vector2(position_x, player.get_node("PlayerInput").mouse_global_position.y - orb_position.y).angle()
+		else:
+			position_x = -abs((orb_position - player.get_node("PlayerInput").mouse_global_position).x)
+			rotation_angle = Vector2(position_x, player.get_node("PlayerInput").mouse_global_position.y - orb_position.y).angle()
 		
 		bullet.global_position = orb_position
 		bullet.rotate(rotation_angle)
