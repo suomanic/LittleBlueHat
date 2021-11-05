@@ -46,6 +46,18 @@ tracks/0/keys = {
 "method": "FtoN_anim_end"
 } ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("Mushroom-Sheet:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 44, 45, 46, 47, 48, 49, 50, 51 ]
+}
 
 [sub_resource type="Animation" id=5]
 tracks/0/type = "value"
@@ -245,10 +257,11 @@ icefog_spread_curve = SubResource( 1 )
 
 [node name="Mushroom-Sheet" type="Sprite" parent="."]
 material = ExtResource( 2 )
+position = Vector2( 0, -7 )
 texture = ExtResource( 3 )
 hframes = 7
-vframes = 7
-frame = 44
+vframes = 8
+frame = 51
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 5 )
