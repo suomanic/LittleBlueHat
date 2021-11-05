@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/grass_tilemap.png-42d30c30909e4363e517711da62c0bd7.stex"
+path="res://.import/fire_character-Sheet.png-627c90905de30571f3456d0c4ac6fea6.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/grass_tilemap.png"
-dest_files=[ "res://.import/grass_tilemap.png-42d30c30909e4363e517711da62c0bd7.stex" ]
+source_file="res://Assets/Player/animation/fire_character-Sheet.png"
+dest_files=[ "res://.import/fire_character-Sheet.png-627c90905de30571f3456d0c4ac6fea6.stex" ]
 
 [params]
 
@@ -24,11 +24,11 @@ flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
-process/fix_alpha_border=false
-process/premult_alpha=true
+process/fix_alpha_border=true
+process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
 stream=false
 size_limit=0
-detect_3d=false
-svg/scale=39.889
+detect_3d=true
+svg/scale=1.0

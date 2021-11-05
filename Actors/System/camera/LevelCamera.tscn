@@ -1,12 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Actors/System/camera/LevelCamera.gd" type="Script" id=1]
+[ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=2]
 
 [sub_resource type="Curve" id=1]
 bake_resolution = 1
 _data = [ Vector2( 0, 1 ), 0.0, -4.98485, 0, 0, Vector2( 0.061008, 0.363636 ), -0.35, -0.35, 0, 0, Vector2( 0.100796, 0.363636 ), 0.0, 4.32, 0, 0, Vector2( 0.466843, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), -0.131468, 0.0, 0, 0 ]
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=2]
 step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:zoom")
@@ -53,6 +54,7 @@ tracks/2/keys = {
 [node name="LevelCamera" type="Camera2D" groups=[
 "LevelCamera",
 ]]
+material = ExtResource( 2 )
 current = true
 zoom = Vector2( 0.247529, 0.247529 )
 drag_margin_v_enabled = true
@@ -60,4 +62,4 @@ script = ExtResource( 1 )
 time_slow_curve = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Zoom_In_Anim = SubResource( 3 )
+anims/Zoom_In_Anim = SubResource( 2 )

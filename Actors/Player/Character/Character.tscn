@@ -1,6 +1,6 @@
 [gd_scene load_steps=27 format=2]
 
-[ext_resource path="res://Assets/Player/animation/animation package-Sheet.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Player/animation/fire_character-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Actors/Player/Character/Character.gd" type="Script" id=2]
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=3]
 [ext_resource path="res://Actors/Player/Character/Character.movement.gd" type="Script" id=4]

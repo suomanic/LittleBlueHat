@@ -22,7 +22,7 @@ export var double_jump_force := 180
 
 
 func _physics_process(delta):
-	owner.velocity = owner.move_and_slide(owner.velocity,Vector2.UP,false,4,PI/4,false)
+	owner.velocity = owner.move_and_slide_with_snap(owner.velocity,Vector2(0,1),Vector2.UP,false,4,PI/4,false)
 	
 	if is_on_object:
 		jump_count = 0
