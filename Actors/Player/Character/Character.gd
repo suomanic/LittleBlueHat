@@ -17,6 +17,7 @@ const MS_CrouchState = preload("res://Actors/Player/Character/Movementstate/MS_C
 const MS_UpState = preload("res://Actors/Player/Character/Movementstate/MS_Up.gd")
 const MS_HurtState = preload("res://Actors/Player/Character/MovementState/MS_Hurt.gd")
 const MS_DieState = preload("res://Actors/Player/Character/MovementState/MS_Die.gd")
+const MS_AbsorbedState = preload("res://Actors/Player/Character/MovementState/MS_Absorbed.gd")
 
 # preload aniamtion states
 const AS_HurtState = preload("res://Actors/Player/Character/AnimState/Tier1_State/AS_Hurt.gd")
@@ -51,6 +52,9 @@ onready var walk_particles= $WalkParticles
 onready var label = $Label
 onready var label2 = $Label2
 
+export(Curve) var absorbed_curve
+var current_absorb_bubble_global_position
+
 func _ready():
 	set_as_toplevel(true)
 	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
@@ -77,7 +81,9 @@ func _physics_process(delta) -> void:
 	else :
 		walk_particles.set_emitting(false)
 
-
+func absorbed_by_bubble(bubble_position:Vector2):
+	movement_state_machine.change_state(MS_AbsorbedState.new(self))
+	current_absorb_bubble_global_position = bubble_position
 	
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")

@@ -1,5 +1,7 @@
 extends Node2D
 
+onready var sprite = $Sprite
+
 func _ready():
 	owner=get_parent().owner
 	pass

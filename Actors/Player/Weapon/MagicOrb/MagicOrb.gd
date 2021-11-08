@@ -8,15 +8,24 @@ onready var bullet_data = {
 	fire_bullet = preload("res://Actors/Player/Weapon/Bullet/FireBullet.tscn")
 }
 
+export onready var shoot_cd = 0.2
+onready var shoot_cd_counter = 0
+
+export onready var bullet_cpacity = 5
+onready var current_cpacity = bullet_cpacity
+
 func _ready():
 	owner = get_parent().owner
 	anim_player.play("Idle")
+	
 
 func _physics_process(delta):
 	if owner.get_node("Character") != null:
 		get_parent().follow_player()
 	
-	if get_parent().owner.input_module.is_attack_just_pressed:
+	shoot_cd_counter -= delta
+	
+	if get_parent().owner.input_module.is_attack_just_pressed and shoot_cd_counter < 0:
 		
 		var bullet
 		
@@ -28,17 +37,18 @@ func _physics_process(delta):
 		var orb_position = get_parent().get_child(0).sprite.global_position
 		var rotation_angle
 		var position_x
-		
+	
+	
+		shoot_cd_counter = shoot_cd
 		if player.get_node("Character").global_position.x - player.get_node("PlayerInput").mouse_global_position.x < 0:
 			position_x = abs((player.get_node("PlayerInput").mouse_global_position - orb_position).x)
 			rotation_angle = Vector2(position_x, player.get_node("PlayerInput").mouse_global_position.y - orb_position.y).angle()
 		else:
 			position_x = -abs((orb_position - player.get_node("PlayerInput").mouse_global_position).x)
 			rotation_angle = Vector2(position_x, player.get_node("PlayerInput").mouse_global_position.y - orb_position.y).angle()
-		
+	
 		bullet.global_position = orb_position
 		bullet.rotate(rotation_angle)
-		
 		get_tree().get_root().add_child(bullet)
 	pass
 

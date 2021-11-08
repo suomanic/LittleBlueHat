@@ -4,11 +4,13 @@ func _init(o).(o):
 	pass
 
 func enter():
-	owner.anim_player.play("F_Chase_Anim")
 	pass
 	
 func execute():
 	owner.movement_module.F_move()
+	
+	if owner.movement_module.is_on_object:
+		owner.anim_player.play("F_Chase_Anim")
 	
 	if owner.player != null:
 		if owner.movement_module.is_moving_left == (owner.global_position.x - owner.player.global_position.x < 0):

@@ -10,6 +10,9 @@ onready var weapon_data :={
 	I_orb = preload("res://Actors/Player/Weapon/MagicOrb/IceMagicOrb.tscn")
 }
 
+var current_weapon
+var previous_weapon
+
 func _ready():
 	owner = get_parent()
 	pass # Replace with function body.
@@ -119,15 +122,29 @@ func follow_player():
 	global_position = global_position.linear_interpolate(Vector2(global_position.x, owner.character.global_position.y + target_offset.y), linear_interpolate_scale_rate.y)
 
 func change_weapon(weapon_type:String):
+	if current_weapon != null:
+		previous_weapon = current_weapon
+	
 	for i in self.get_children():
 		i.queue_free()
 		
 	match weapon_type:
 		"F_sword":
 			add_child(weapon_data.F_sword.instance())
+			current_weapon = weapon_data.F_sword
 		"I_sword":
 			add_child(weapon_data.I_sword.instance())
+			current_weapon = weapon_data.F_sword
 		"F_orb":
 			add_child(weapon_data.F_orb.instance())
+			current_weapon = weapon_data.F_sword
 		"I_orb":
 			add_child(weapon_data.I_orb.instance())
+			current_weapon = weapon_data.F_sword
+			
+func character_absorbed():
+	get_child(0).sprite.set_visible(false)
+		
+	
+func character_exit_absorbed():
+	get_child(0).sprite.set_visible(true)
