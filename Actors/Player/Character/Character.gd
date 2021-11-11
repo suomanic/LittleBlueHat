@@ -60,23 +60,20 @@ export(Curve) var eject_curve
 
 var current_absorb_bubble_global_position
 var eject_angle
-
+	
 func _ready():
 	set_as_toplevel(true)
-	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
-	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
-	
-	
-	
+	if (self.get_tree().has_network_peer() and self.is_network_master()) or !self.get_tree().has_network_peer():
+		movement_state_machine = StateMachine.new(MS_IdleState.new(self))
+		anim_state_machine = StateMachine.new(AS_GroundState.new(self))
 	
 func _physics_process(delta) -> void:
-	anim_state_machine.update()
-	movement_state_machine.update()
-	
-	
-	# test only
-	label.text = anim_state_machine.current_state.get_name()
-	label2.text = movement_state_machine.current_state.get_name()
+	if (self.get_tree().has_network_peer() and self.is_network_master()) or !self.get_tree().has_network_peer():
+		anim_state_machine.update()
+		movement_state_machine.update()
+		# test only
+		label.text = anim_state_machine.current_state.get_name()
+		label2.text = movement_state_machine.current_state.get_name()
 	
 	for i in get_slide_count():
 		var collision = get_slide_collision(i)
@@ -101,6 +98,7 @@ func ejected_from_bubble(eject_angle :float):
 	movement_state_machine.change_state(MS_EjectedState.new(self))
 	print_debug(eject_angle)
 	
+
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")
 

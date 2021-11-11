@@ -1,12 +1,12 @@
 extends Node
 
-# 定义最大连接数量，需要加载的游戏场景
-const MAX_PLAYERS := 2
-const GAME_SCENE := 'res://Level/TestLevel.tscn'
+# 定义初始加载的游戏场景
+const INITIAL_SCENE := 'res://Levels/InitialLevel.tscn'
 
 class PlayerInfo:
 	var name: String = ""
 	var type: String = "" # fire or ice
+
 
 # 基本属性：联网id，名字，类型
 var myId : int = 0
@@ -14,8 +14,8 @@ var myInfo: PlayerInfo
 var remotePlayerId : int = 0
 var remotePlayerInfo: PlayerInfo
 
-var myPlayerInstance: Node2D
-var remotePlayerInstance: Node2D
+var myPlayerInstance: Node2D = null
+var remotePlayerInstance: Node2D = null
 
 var isMyPlayerDone:bool = false
 var isRemotePlayerDone:bool = false
@@ -38,7 +38,7 @@ func _on_network_peer_connected(remote_id : int) -> void:
 	
 	if self.get_tree().is_network_server():
 		self.get_tree().refuse_new_network_connections = true
-		
+	
 
 # 每当有终端断开链接，就会调用该方法，不论自身是服务端还是客户端
 func _on_network_peer_disconnected(remote_id : int) -> void:
@@ -64,7 +64,7 @@ remote func registerPlayerInfo(remote_info: PlayerInfo) -> bool:
 	if(remotePlayerId == 0):
 		remotePlayerId = remote_id
 		remotePlayerInfo = remote_info
-		pre_configure_game('res://Levels/InitialLevel.tscn')
+		pre_configure_game(INITIAL_SCENE)
 		return true
 	return false
 
@@ -82,7 +82,7 @@ func hostGame(port:int, myName: String) -> bool:
 	resetNetwork()
 	
 	var host := NetworkedMultiplayerENet.new()
-	var error := host.create_server(port, MAX_PLAYERS)
+	var error := host.create_server(port, 2)
 	if error != OK:
 		return false
 	
@@ -126,7 +126,7 @@ func resetNetwork() -> void:
 # 初始化游戏关卡设置，加载好人物和关卡并设置主从关系
 func pre_configure_game(level: String):
 	# Load world
-	var world = load(level).instance()
+	var world: Node2D = load(level).instance()
 	get_node("/root").add_child(world)
 
 	# Load my player
@@ -134,12 +134,14 @@ func pre_configure_game(level: String):
 	myPlayerInstance.set_name(str(myId))
 	myPlayerInstance.set_network_master(myId)
 	world.add_child(myPlayerInstance)
+	myPlayerInstance.position = Vector2(20,80)
 
 	# Load remote player
 	remotePlayerInstance = preload('res://Actors/Player/Player.tscn').instance()
 	remotePlayerInstance.set_name(str(remotePlayerId))
 	remotePlayerInstance.set_network_master(remotePlayerId)
 	world.add_child(remotePlayerInstance)
+	remotePlayerInstance.position = Vector2(0,60)
 	
 	# 先暂停
 	get_tree().set_pause(true)

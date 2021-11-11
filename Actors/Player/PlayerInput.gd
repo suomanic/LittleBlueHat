@@ -23,6 +23,9 @@ func _init():
 	is_weapon4_just_pressed = false
 	
 func _physics_process(delta) -> void:
+	# 如果处于联机模式下且自己不是master节点
+	if get_tree().has_network_peer() and !is_network_master():
+		return
 	mouse_global_position = get_global_mouse_position()
 	
 	if Input.is_action_pressed("move_right"):
@@ -69,10 +72,12 @@ func _physics_process(delta) -> void:
 		is_weapon4_just_pressed = true
 	else:
 		is_weapon4_just_pressed = false
-		
+	
+	
+	
 func get_direction() -> Vector2:
 	return Vector2(
-		Input.get_action_strength("move_right")-Input.get_action_strength("move_left"),
+		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
 		-1.0 if Input.is_action_pressed("jump") else 1.0
-		)
+	)
 	
