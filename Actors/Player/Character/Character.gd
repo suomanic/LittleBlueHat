@@ -48,19 +48,19 @@ onready var anim_sprite = $AnimSpriteSheet
 
 onready var label = $Label
 onready var label2 = $Label2
-
 func _ready():
-	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
-	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
-	
+	if (self.get_tree().has_network_peer() and self.is_network_master()) or !self.get_tree().has_network_peer():
+		movement_state_machine = StateMachine.new(MS_IdleState.new(self))
+		anim_state_machine = StateMachine.new(AS_GroundState.new(self))
+
 	
 func _physics_process(delta) -> void:
-	anim_state_machine.update()
-	movement_state_machine.update()
-	
-	# test only
-	label.text = anim_state_machine.current_state.get_name()
-	label2.text = movement_state_machine.current_state.get_name()
+	if (self.get_tree().has_network_peer() and self.is_network_master()) or !self.get_tree().has_network_peer():
+		anim_state_machine.update()
+		movement_state_machine.update()
+		# test only
+		label.text = anim_state_machine.current_state.get_name()
+		label2.text = movement_state_machine.current_state.get_name()
 	
 	for i in get_slide_count():
 		var collision = get_slide_collision(i)
@@ -73,9 +73,8 @@ func _physics_process(delta) -> void:
 		$Particles2D.set_emitting(true)
 	else :
 		$Particles2D.set_emitting(false)
-
-
 	
+
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")
 

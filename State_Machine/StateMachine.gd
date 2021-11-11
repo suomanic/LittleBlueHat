@@ -1,4 +1,4 @@
-extends Object
+extends Node
 
 class_name StateMachine
 
@@ -20,7 +20,7 @@ func change_state(state:State):
 	
 	if current_state != null:
 		current_state.enter()
-		
+
 func update():
 	if current_state != null:
 		current_state.execute()
@@ -29,3 +29,4 @@ func is_state(state_name :String):
 	if current_state == null:
 		return false
 	return current_state.get_name() == state_name
+	
