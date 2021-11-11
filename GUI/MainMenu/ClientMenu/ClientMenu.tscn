@@ -109,12 +109,14 @@ custom_constants/separation = 100
 [node name="ClientTestButton" type="Button" parent="MenuContainer/ContentContainer/ButtonContainer"]
 margin_right = 39.0
 margin_bottom = 20.0
+focus_mode = 0
 text = "Test"
 
 [node name="ClientJoinButton" type="Button" parent="MenuContainer/ContentContainer/ButtonContainer"]
 margin_left = 139.0
 margin_right = 174.0
 margin_bottom = 20.0
+focus_mode = 0
 text = "Join"
 __meta__ = {
 "_edit_use_anchors_": false
