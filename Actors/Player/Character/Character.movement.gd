@@ -20,6 +20,15 @@ export var max_speed: = 100.0
 export var jump_force := 200
 export var double_jump_force := 180
 
+onready var basic_status: Dictionary = {
+	position = owner.position,
+	velocity = owner.velocity,
+	gravity = owner.gravity,
+	acceleration = owner.acceleration,
+	deceleration = owner.deceleration
+}
+export var rpc_sync_interval = 0
+var rpc_sync_interval_count = rpc_sync_interval
 
 func _physics_process(delta):
 	owner.velocity = owner.move_and_slide_with_snap(owner.velocity,Vector2(0,1),Vector2.UP,false,4,PI/4,false)
@@ -35,16 +44,27 @@ func _physics_process(delta):
 	else:
 		_jump_buffer_counter -= delta
 	
+	
 	# 如果处于联机模式下且自己是master节点
 	if owner.get_tree().has_network_peer() and owner.is_network_master():
-		var basic_status: Dictionary = {
-			position = owner.position,
-			velocity = owner.velocity,
-			gravity = owner.gravity,
-			acceleration = owner.acceleration,
-			deceleration = owner.deceleration
-		}
-		owner.rpc_unreliable('_update_basic_status', basic_status)
+		if(basic_status.get('position') != owner.position 
+		or basic_status.get('velocity') != owner.velocity 
+		or basic_status.get('gravity') != owner.gravity
+		or basic_status.get('acceleration') != owner.acceleration
+		or basic_status.get('deceleration') != owner.deceleration):
+			if(rpc_sync_interval_count<=0):
+				basic_status = {
+					position = owner.position,
+					velocity = owner.velocity,
+					gravity = owner.gravity,
+					acceleration = owner.acceleration,
+					deceleration = owner.deceleration
+				}
+				owner.rpc_unreliable('_update_basic_status', basic_status)
+				rpc_sync_interval_count = rpc_sync_interval
+			else:
+				rpc_sync_interval_count-=1
+			
 
 func jump():
 	# single jump
@@ -63,18 +83,6 @@ func jump():
 		 _jump_buffer_counter = 0
 		 jump_count += 1
 	
-	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() and owner.is_network_master():
-		var basic_status: Dictionary = {
-			position = owner.position,
-			velocity = owner.velocity,
-			gravity = owner.gravity,
-			acceleration = owner.acceleration,
-			deceleration = owner.deceleration
-		}
-		owner.rpc_unreliable('_update_basic_status', basic_status)
-	else:
-		print_debug('do not rpc!!!')
 		
 func move():
 	if owner.owner.input_module.get_direction().x == 0:
@@ -87,18 +95,6 @@ func move():
 	elif owner.owner.input_module.is_left_pressed:
 		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-max_speed)
 	
-	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() and owner.is_network_master():
-		var basic_status: Dictionary = {
-			position = owner.position,
-			velocity = owner.velocity,
-			gravity = owner.gravity,
-			acceleration = owner.acceleration,
-			deceleration = owner.deceleration
-		}
-		owner.rpc_unreliable('_update_basic_status', basic_status)
-	else:
-		print_debug('do not rpc!!!')
 	
 #简单复制，需要修改
 func crouch_move():
@@ -112,18 +108,6 @@ func crouch_move():
 	elif owner.owner.input_module.is_left_pressed:
 		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
 	
-	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() and owner.is_network_master():
-		var basic_status: Dictionary = {
-			position = owner.position,
-			velocity = owner.velocity,
-			gravity = owner.gravity,
-			acceleration = owner.acceleration,
-			deceleration = owner.deceleration
-		}
-		owner.rpc_unreliable('_update_basic_status', basic_status)
-	else:
-		print_debug('do not rpc!!!')
 	
 func apply_gravity(delta):
 	# max velocity.y
@@ -153,35 +137,11 @@ func apply_gravity(delta):
 	elif is_on_object:
 		owner.velocity.y += owner.gravity / 4 * delta
 		
-	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() and owner.is_network_master():
-		var basic_status: Dictionary = {
-			position = owner.position,
-			velocity = owner.velocity,
-			gravity = owner.gravity,
-			acceleration = owner.acceleration,
-			deceleration = owner.deceleration
-		}
-		owner.rpc_unreliable('_update_basic_status', basic_status)
-	else:
-		print_debug('do not rpc!!!')
 
 func bounce():
 	jump_count = 1
 	owner.velocity.y = -300
 	
-	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() and owner.is_network_master():
-		var basic_status: Dictionary = {
-			position = owner.position,
-			velocity = owner.velocity,
-			gravity = owner.gravity,
-			acceleration = owner.acceleration,
-			deceleration = owner.deceleration
-		}
-		owner.rpc_unreliable('_update_basic_status', basic_status)
-	else:
-		print_debug('do not rpc!!!')
 
 # 精灵图scale.x转换暂时写在这里
 func hurt_move(will_go_left):
