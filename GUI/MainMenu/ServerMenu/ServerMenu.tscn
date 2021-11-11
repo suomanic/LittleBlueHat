@@ -95,12 +95,14 @@ custom_constants/separation = 100
 [node name="ServerTestButton" type="Button" parent="MenuContainer/ContentContainer/ButtonContainer"]
 margin_right = 39.0
 margin_bottom = 20.0
+focus_mode = 0
 text = "Test"
 
 [node name="ServerCreateButton" type="Button" parent="MenuContainer/ContentContainer/ButtonContainer"]
 margin_left = 139.0
 margin_right = 192.0
 margin_bottom = 20.0
+focus_mode = 0
 text = "Create"
 __meta__ = {
 "_edit_use_anchors_": false

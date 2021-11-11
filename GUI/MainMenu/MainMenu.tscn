@@ -85,12 +85,14 @@ custom_constants/separation = 100
 [node name="DebugLeaveButton" type="Button" parent="MarginContainer/TabContainer/DebugMenu/VBoxContainer/VBoxContainer/HBoxContainer"]
 margin_right = 172.0
 margin_bottom = 53.0
+focus_mode = 0
 text = "Leave"
 
 [node name="DebugStartButton" type="Button" parent="MarginContainer/TabContainer/DebugMenu/VBoxContainer/VBoxContainer/HBoxContainer"]
 margin_left = 272.0
 margin_right = 444.0
 margin_bottom = 53.0
+focus_mode = 0
 text = "Start"
 __meta__ = {
 "_edit_use_anchors_": false
