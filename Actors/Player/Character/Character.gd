@@ -124,9 +124,9 @@ func die_anim_start():
 func die_anim_end():
 	owner.queue_free()
 
-# 接收rpc调用同步状态机状态
+# 接收rpc调用，同步状态机状态
 puppet func _change_state_machine_status(new_state_machine_status : Dictionary):
-	print_debug(new_state_machine_status)
+	#print_debug(new_state_machine_status)
 	
 	var movement_state_name = new_state_machine_status.get("movement_state")
 	var anim_state_name = new_state_machine_status.get("anim_state")

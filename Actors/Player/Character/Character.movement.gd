@@ -21,7 +21,7 @@ export var jump_force := 200
 export var double_jump_force := 180
 
 # 储存上一次同步的内容
-onready var basic_status: Dictionary = {
+onready var last_sync_basic_status: Dictionary = {
 	global_position = owner.global_position,
 	velocity = owner.velocity,
 	gravity = owner.gravity,
@@ -50,22 +50,22 @@ func _physics_process(delta):
 	# 如果处于联机模式下且自己是master节点
 	if owner.get_tree().has_network_peer() and owner.is_network_master():
 		var new_basic_status :Dictionary = {}
-		# 如果上一次同步的内容（basic_status）和当前内容不一样，
+		# 如果上一次同步的内容（last_sync_basic_status）和当前内容不一样，
 		# 将变更过的内容放入new_basic_status内并更新basic_status
-		if basic_status.get('global_position') != owner.global_position:
-			basic_status.global_position = owner.global_position
+		if last_sync_basic_status.get('global_position') != owner.global_position:
+			last_sync_basic_status.global_position = owner.global_position
 			new_basic_status.global_position = owner.global_position
-		if basic_status.get('velocity') != owner.velocity:
-			basic_status.velocity = owner.velocity
+		if last_sync_basic_status.get('velocity') != owner.velocity:
+			last_sync_basic_status.velocity = owner.velocity
 			new_basic_status.velocity = owner.velocity
-		if basic_status.get('gravity') != owner.gravity:
-			basic_status.gravity = owner.gravity
+		if last_sync_basic_status.get('gravity') != owner.gravity:
+			last_sync_basic_status.gravity = owner.gravity
 			new_basic_status.gravity = owner.gravity
-		if basic_status.get('acceleration') != owner.acceleration:
-			basic_status.acceleration = owner.acceleration
+		if last_sync_basic_status.get('acceleration') != owner.acceleration:
+			last_sync_basic_status.acceleration = owner.acceleration
 			new_basic_status.acceleration = owner.acceleration
-		if basic_status.get('deceleration') != owner.deceleration:
-			basic_status.deceleration = owner.deceleration
+		if last_sync_basic_status.get('deceleration') != owner.deceleration:
+			last_sync_basic_status.deceleration = owner.deceleration
 			new_basic_status.deceleration = owner.deceleration
 		
 		# 如果new_basic_status为空，则说明当前状态和上一次同步时相比没有改变，则不进行同步

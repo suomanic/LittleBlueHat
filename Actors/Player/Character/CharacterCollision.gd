@@ -5,6 +5,7 @@ var is_bounced := false
 var hit_to_direction: bool
 var can_be_squished := true
 
+onready var last_sync_facing: bool
 
 func _physics_process(delta):
 	if owner.movement_module.is_on_object:
@@ -18,18 +19,27 @@ func facing() -> bool:
 	# 如果处于联机模式下且自己不是master节点
 	if get_tree().has_network_peer() and !is_network_master():
 		return owner.anim_sprite.scale.x >= 0
+	
+	var new_facing:bool = owner.anim_sprite.scale.x >= 0
 	if owner.owner.input_module.get_direction().x > 0 :
 		change_facing(true)
-		return true
+		new_facing = true 
 	elif owner.owner.input_module.get_direction().x < 0 :
 		change_facing(false)
-		return false
-	else:
-		return owner.anim_sprite.scale.x >= 0
+		new_facing = false 
+	
+	# 如果处于联机模式下且自己是master节点
+	if get_tree().has_network_peer() and is_network_master():
+		if new_facing != last_sync_facing:
+			last_sync_facing = new_facing
+			rpc_unreliable("change_facing", new_facing)
+	
+	return new_facing
 
 # 更新朝向，true表示向右
-func change_facing(new_facing: bool):
-	print_debug("change facing to ", "right" if new_facing else "left")
+puppet func change_facing(new_facing: bool):
+	if get_tree().has_network_peer() and !is_network_master():
+		print_debug("change facing to ", "right" if new_facing else "left")
 	if new_facing == true :
 		owner.anim_sprite.scale.x = 1
 	elif new_facing == false :

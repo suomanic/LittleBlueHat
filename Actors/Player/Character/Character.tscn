@@ -371,7 +371,7 @@ material = ExtResource( 3 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 9
-frame = 47
+frame = 38
 
 [node name="Standing_Shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 1 )
