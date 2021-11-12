@@ -124,10 +124,10 @@ func resetNetwork() -> void:
 	self.get_tree().network_peer = null
 
 # 初始化游戏关卡设置，加载好人物和关卡并设置主从关系
-func pre_configure_game(level: String):
+func pre_configure_game(level_path: String):
 	# Load world
-	var world: Node2D = load(level).instance()
-	get_node("/root").add_child(world)
+	var world: Node2D = load(level_path).instance()
+	get_tree().root.add_child(world)
 
 	# Load my player
 	myPlayerInstance = preload('res://Actors/Player/Player.tscn').instance()

@@ -49,13 +49,11 @@ onready var anim_sprite = $AnimSpriteSheet
 onready var label = $Label
 onready var label2 = $Label2
 
+# 记录上一次同步的状态机状态
 onready var state_machine_status : Dictionary = {
 	movement_state = "",
-	anim_state = "" # = anim_state_machine.current_state.get_name()
+	anim_state = ""
 }
-
-export var rpc_sync_state_interval = 0
-var rpc_sync_state_interval_count = rpc_sync_state_interval
 
 func _ready():
 	movement_state_machine.change_state(MS_IdleState.new(self))
@@ -87,11 +85,15 @@ func _physics_process(delta) -> void:
 		var curr_movement_state_name: String = ""
 		var curr_anim_state_name: String = ""
 		
+		# 如果movement_state_machine和anim_state_machine的状态都不为null，
+		# 则将其状态的名称存入curr_movement_state_name和curr_anim_state_name内
 		if movement_state_machine.current_state != null:
 			curr_movement_state_name = movement_state_machine.current_state.get_name()
 		if anim_state_machine.current_state != null:
 			curr_anim_state_name = anim_state_machine.current_state.get_name()
 		
+		# 如果上一次同步的状态机状态（state_machine_status）和当前的状态机状态不一样，
+		# 将变更过的内容放入new_state_machine_status内并更新state_machine_status
 		if curr_movement_state_name != state_machine_status.movement_state:
 			state_machine_status.movement_state = curr_movement_state_name
 			new_state_machine_status.movement_state = curr_movement_state_name
@@ -99,12 +101,10 @@ func _physics_process(delta) -> void:
 			state_machine_status.anim_state = curr_anim_state_name
 			new_state_machine_status.anim_state = curr_anim_state_name
 		
+		# 如果new_state_machine_status为空，则说明当前状态机的状态和上一次同步时相比没有改变，
+		# 则不进行同步。否则，同步。
 		if !new_state_machine_status.empty():
-			if(rpc_sync_state_interval_count<=0):
-				self.rpc_unreliable('_change_state_machine_status', new_state_machine_status)
-				rpc_sync_state_interval_count = rpc_sync_state_interval
-			else:
-				rpc_sync_state_interval_count-=1
+			self.rpc_unreliable('_change_state_machine_status', new_state_machine_status)
 
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")
@@ -124,19 +124,27 @@ func die_anim_start():
 func die_anim_end():
 	owner.queue_free()
 
+# 接收rpc调用同步状态机状态
 puppet func _change_state_machine_status(new_state_machine_status : Dictionary):
 	print_debug(new_state_machine_status)
+	
 	var movement_state_name = new_state_machine_status.get("movement_state")
 	var anim_state_name = new_state_machine_status.get("anim_state")
+	
 	if movement_state_name != null:
-		var new_state = _get_new_state_by_name(movement_state_name)
-		movement_state_machine.change_state(new_state)
+		movement_state_name = str(movement_state_name)
+		if movement_state_machine.current_state.get_name() != movement_state_name:
+			var new_state = _get_new_state_by_name(movement_state_name)
+			movement_state_machine.change_state(new_state)
 	if anim_state_name != null:
-		var new_state = _get_new_state_by_name(anim_state_name)
-		anim_state_machine.change_state(new_state)
+		anim_state_name = str(anim_state_name)
+		if anim_state_machine.current_state.get_name() != anim_state_name:
+			var new_state = _get_new_state_by_name(anim_state_name)
+			anim_state_machine.change_state(new_state)
 
-
+# 输入State的name，返回一个新建的State对象，如果找不到对应的State，则返回null
 func _get_new_state_by_name(state_name: String) -> State:
+	# movement state
 	if state_name == MS_IdleState.get_name():
 		return MS_IdleState.new(self)
 	elif state_name == MS_RunState.get_name():
@@ -153,7 +161,7 @@ func _get_new_state_by_name(state_name: String) -> State:
 		return MS_HurtState.new(self)
 	elif state_name == MS_DieState.get_name():
 		return MS_DieState.new(self)
-	
+	# animation state
 	elif state_name == AS_HurtState.get_name():
 		return AS_HurtState.new(self)
 	elif state_name == AS_AirState.get_name():
@@ -163,16 +171,3 @@ func _get_new_state_by_name(state_name: String) -> State:
 	elif state_name == AS_DieState.get_name():
 		return AS_DieState.new(self)
 	return null
-
-puppet func _update_basic_status(basic_status: Dictionary) -> void:
-	print_debug(basic_status)
-	if(basic_status.has('global_position')):
-		self.global_position = basic_status.global_position
-	if(basic_status.has('velocity')):
-		self.velocity = basic_status.velocity
-	if(basic_status.has('gravity')):
-		self.gravity = basic_status.gravity
-	if(basic_status.has('acceleration')):
-		self.acceleration = basic_status.acceleration
-	if(basic_status.has('deceleration')):
-		self.deceleration = basic_status.deceleration

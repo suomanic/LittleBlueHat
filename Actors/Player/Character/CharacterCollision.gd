@@ -1,12 +1,10 @@
 extends Node
 
 var is_bounced := false
-var will_go_left
+# 被撞飞的朝向
+var hit_to_direction: bool
 var can_be_squished := true
 
-#false means facing right
-var is_facing_left : bool
-var pre_facing = false 
 
 func _physics_process(delta):
 	if owner.movement_module.is_on_object:
@@ -14,17 +12,28 @@ func _physics_process(delta):
 	else :
 		owner.squish_collision.set_disabled(true)
 
-func facing() -> bool : #the boolean means is character facing left,true means left
+# 更新并获取朝向信息，朝右则返回true
+# the boolean means is character facing right,true means right
+func facing() -> bool:
+	# 如果处于联机模式下且自己不是master节点
+	if get_tree().has_network_peer() and !is_network_master():
+		return owner.anim_sprite.scale.x >= 0
 	if owner.owner.input_module.get_direction().x > 0 :
-		owner.anim_sprite.scale.x = 1
-		pre_facing = false
-		return false
-	elif owner.owner.input_module.get_direction().x < 0 :
-		owner.anim_sprite.scale.x = -1
-		pre_facing = true
+		change_facing(true)
 		return true
+	elif owner.owner.input_module.get_direction().x < 0 :
+		change_facing(false)
+		return false
 	else:
-		return pre_facing
+		return owner.anim_sprite.scale.x >= 0
+
+# 更新朝向，true表示向右
+func change_facing(new_facing: bool):
+	print_debug("change facing to ", "right" if new_facing else "left")
+	if new_facing == true :
+		owner.anim_sprite.scale.x = 1
+	elif new_facing == false :
+		owner.anim_sprite.scale.x = -1
 
 func die_collision_change():
 	owner.standing_collision.set_disabled(true) 
@@ -46,9 +55,9 @@ func _on_enemy_area_entered(area: Area2D):
 			pass
 		elif body.get("element_state") == "Fire" :
 			if body.global_position.x - owner.global_position.x > 0 :
-				will_go_left = false
+				hit_to_direction = false
 			else:
-				will_go_left = true
+				hit_to_direction = true
 			
 			if owner.hp > 0: 
 				owner.movement_state_machine.change_state(owner.MS_HurtState.new(owner))
@@ -75,9 +84,9 @@ func _on_SquishHitBox_body_entered(body):
 		
 		#被砸击退
 		if body.global_position.x - owner.global_position.x > 0 :
-			will_go_left = false
+			hit_to_direction = false
 		else:
-			will_go_left = true
+			hit_to_direction = true
 			
 		if owner.hp > 0 and can_be_squished: 
 			owner.anim_state_machine.change_state(owner.AS_HurtState.new(owner))

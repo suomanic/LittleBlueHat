@@ -368,7 +368,6 @@ anims/toCrouch_Anim = SubResource( 15 )
 
 [node name="AnimSpriteSheet" type="Sprite" parent="."]
 material = ExtResource( 3 )
-scale = Vector2( -1, 1 )
 texture = ExtResource( 1 )
 hframes = 7
 vframes = 9
