@@ -165,13 +165,13 @@ master func set_pre_configure_done():
 		isRemotePlayerDone = true
 		print(remotePlayerId, ' done')
 	
-	# 如果服务端自身和远程客户端的游戏关卡设置初始化都完成，则让所有master节点开始游戏
+	# 如果服务端自身和远程客户端的游戏关卡设置初始化都完成，则让双方都开始游戏
 	if isMyPlayerDone and isRemotePlayerDone:
-		rpc('post_configure_game') # sent to all master
+		rpc('post_configure_game')
 
 # only execute when remote(sender) is server
 # 所有节点的游戏关卡设置都初始化完成，游戏开始
-master func post_configure_game():
+puppetsync func post_configure_game():
 	# 只接收服务端发送的信息
 	if 1 == get_tree().get_rpc_sender_id():
 		get_tree().set_pause(false)

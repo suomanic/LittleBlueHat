@@ -21,7 +21,7 @@ export var jump_force := 200
 export var double_jump_force := 180
 
 onready var basic_status: Dictionary = {
-	position = owner.position,
+	global_position = owner.global_position,
 	velocity = owner.velocity,
 	gravity = owner.gravity,
 	acceleration = owner.acceleration,
@@ -46,20 +46,26 @@ func _physics_process(delta):
 	
 	# 如果处于联机模式下且自己是master节点
 	if owner.get_tree().has_network_peer() and owner.is_network_master():
-		if(basic_status.get('position') != owner.position 
-		or basic_status.get('velocity') != owner.velocity 
-		or basic_status.get('gravity') != owner.gravity
-		or basic_status.get('acceleration') != owner.acceleration
-		or basic_status.get('deceleration') != owner.deceleration):
+		var new_basic_status :Dictionary = {}
+		if basic_status.get('global_position') != owner.global_position:
+			basic_status.global_position = owner.global_position
+			new_basic_status.global_position = owner.global_position
+		if basic_status.get('velocity') != owner.velocity:
+			basic_status.velocity = owner.velocity
+			new_basic_status.velocity = owner.velocity
+		if basic_status.get('gravity') != owner.gravity:
+			basic_status.gravity = owner.gravity
+			new_basic_status.gravity = owner.gravity
+		if basic_status.get('acceleration') != owner.acceleration:
+			basic_status.acceleration = owner.acceleration
+			new_basic_status.acceleration = owner.acceleration
+		if basic_status.get('deceleration') != owner.deceleration:
+			basic_status.deceleration = owner.deceleration
+			new_basic_status.deceleration = owner.deceleration
+		
+		if !new_basic_status.values().empty():
 			if(rpc_sync_interval_count<=0):
-				basic_status = {
-					position = owner.position,
-					velocity = owner.velocity,
-					gravity = owner.gravity,
-					acceleration = owner.acceleration,
-					deceleration = owner.deceleration
-				}
-				owner.rpc_unreliable('_update_basic_status', basic_status)
+				owner.rpc_unreliable('_update_basic_status', new_basic_status)
 				rpc_sync_interval_count = rpc_sync_interval
 			else:
 				rpc_sync_interval_count-=1
@@ -84,28 +90,32 @@ func jump():
 	
 		
 func move():
-	if owner.owner.input_module.get_direction().x == 0:
-		if owner.velocity.x > 0:
-			owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
-		elif owner.velocity.x < 0:
-			owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
-	elif owner.owner.input_module.is_right_pressed:
-		owner.velocity.x = min(owner.velocity.x + owner.acceleration,max_speed)
-	elif owner.owner.input_module.is_left_pressed:
-		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-max_speed)
+	# 如果处于联机模式下且自己是master节点
+	if owner.get_tree().has_network_peer() and owner.is_network_master():
+		if owner.owner.input_module.get_direction().x == 0:
+			if owner.velocity.x > 0:
+				owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
+			elif owner.velocity.x < 0:
+				owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
+		elif owner.owner.input_module.is_right_pressed:
+			owner.velocity.x = min(owner.velocity.x + owner.acceleration,max_speed)
+		elif owner.owner.input_module.is_left_pressed:
+			owner.velocity.x = max(owner.velocity.x - owner.acceleration,-max_speed)
 	
 	
 #简单复制，需要修改
 func crouch_move():
-	if owner.owner.input_module.get_direction().x == 0:
-		if owner.velocity.x > 0:
-			owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
-		elif owner.velocity.x < 0:
-			owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
-	elif owner.owner.input_module.is_right_pressed:
-		owner.velocity.x = min(owner.velocity.x + owner.acceleration,20)
-	elif owner.owner.input_module.is_left_pressed:
-		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
+	# 如果处于联机模式下且自己是master节点
+	if owner.get_tree().has_network_peer() and owner.is_network_master():
+		if owner.owner.input_module.get_direction().x == 0:
+			if owner.velocity.x > 0:
+				owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
+			elif owner.velocity.x < 0:
+				owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
+		elif owner.owner.input_module.is_right_pressed:
+			owner.velocity.x = min(owner.velocity.x + owner.acceleration,20)
+		elif owner.owner.input_module.is_left_pressed:
+			owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
 	
 	
 func apply_gravity(delta):

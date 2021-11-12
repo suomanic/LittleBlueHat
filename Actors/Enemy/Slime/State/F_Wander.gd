@@ -27,7 +27,7 @@ func exit():
 	owner.movement_module.is_moving_finished = true
 	pass
 
-func get_name():
+static func get_name():
 	return "F_Move"
 	
 	
