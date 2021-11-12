@@ -22,5 +22,5 @@ func execute():
 func exit():
 	pass
 
-func get_name():
+static func get_name():
 	return "AS_Air"
