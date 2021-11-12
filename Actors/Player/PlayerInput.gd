@@ -76,6 +76,9 @@ func _physics_process(delta) -> void:
 	
 	
 func get_direction() -> Vector2:
+	# 如果处于联机模式下且自己不是master节点
+	#if get_tree().has_network_peer() and !is_network_master():
+	#	return Vector2(0, 0)
 	return Vector2(
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
 		-1.0 if Input.is_action_pressed("jump") else 1.0

@@ -11,7 +11,7 @@ func execute():
 	owner.movement_module.move()
 	owner.movement_module.jump()
 	owner.movement_module.apply_gravity(owner.get_physics_process_delta_time())
-	owner.collision_module.is_facing_left = owner.collision_module.facing()
+	owner.collision_module.facing()
 	
 	if owner.is_on_floor():
 		owner.movement_state_machine.change_state(owner.MS_IdleState.new(owner))

@@ -20,6 +20,7 @@ export var max_speed: = 100.0
 export var jump_force := 200
 export var double_jump_force := 180
 
+# 储存上一次同步的内容
 onready var basic_status: Dictionary = {
 	global_position = owner.global_position,
 	velocity = owner.velocity,
@@ -27,7 +28,9 @@ onready var basic_status: Dictionary = {
 	acceleration = owner.acceleration,
 	deceleration = owner.deceleration
 }
+# 同步间隔
 export var rpc_sync_interval = 0
+# 同步间隔计数
 var rpc_sync_interval_count = rpc_sync_interval
 
 func _physics_process(delta):
@@ -48,6 +51,8 @@ func _physics_process(delta):
 	# 如果处于联机模式下且自己是master节点
 	if owner.get_tree().has_network_peer() and owner.is_network_master():
 		var new_basic_status :Dictionary = {}
+		# 如果上一次同步的内容（basic_status）和当前内容不一样，
+		# 将变更过的内容放入new_basic_status内并更新basic_status
 		if basic_status.get('global_position') != owner.global_position:
 			basic_status.global_position = owner.global_position
 			new_basic_status.global_position = owner.global_position
@@ -64,6 +69,8 @@ func _physics_process(delta):
 			basic_status.deceleration = owner.deceleration
 			new_basic_status.deceleration = owner.deceleration
 		
+		# 如果new_basic_status为空，则说明当前状态和上一次同步时相比没有改变，则不进行同步
+		# 否则，同步间隔计数自减1，减到0时才进行一次同步，同步后恢复计数变量
 		if !new_basic_status.values().empty():
 			if(rpc_sync_interval_count<=0):
 				owner.rpc_unreliable('_update_basic_status', new_basic_status)
@@ -91,34 +98,38 @@ func jump():
 	
 		
 func move():
-	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() and owner.is_network_master():
-		if owner.owner.input_module.get_direction().x == 0:
-			if owner.velocity.x > 0:
-				owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
-			elif owner.velocity.x < 0:
-				owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
-		elif owner.owner.input_module.is_right_pressed:
-			owner.velocity.x = min(owner.velocity.x + owner.acceleration,max_speed)
-		elif owner.owner.input_module.is_left_pressed:
-			owner.velocity.x = max(owner.velocity.x - owner.acceleration,-max_speed)
+	# 如果处于联机模式下且自己不是master节点，则跳过
+	if owner.get_tree().has_network_peer() and !owner.is_network_master():
+		return
 	
+	if owner.owner.input_module.get_direction().x == 0:
+		if owner.velocity.x > 0:
+			owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
+		elif owner.velocity.x < 0:
+			owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
+	elif owner.owner.input_module.is_right_pressed:
+		owner.velocity.x = min(owner.velocity.x + owner.acceleration,max_speed)
+	elif owner.owner.input_module.is_left_pressed:
+		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-max_speed)
+
 	
 #简单复制，需要修改
 func crouch_move():
-	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() and owner.is_network_master():
-		if owner.owner.input_module.get_direction().x == 0:
-			if owner.velocity.x > 0:
-				owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
-			elif owner.velocity.x < 0:
-				owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
-		elif owner.owner.input_module.is_right_pressed:
-			owner.velocity.x = min(owner.velocity.x + owner.acceleration,20)
-		elif owner.owner.input_module.is_left_pressed:
-			owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
+	# 如果处于联机模式下且自己不是master节点，则跳过
+	if owner.get_tree().has_network_peer() and !owner.is_network_master():
+		return
 	
-	
+	if owner.owner.input_module.get_direction().x == 0:
+		if owner.velocity.x > 0:
+			owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
+		elif owner.velocity.x < 0:
+			owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
+	elif owner.owner.input_module.is_right_pressed:
+		owner.velocity.x = min(owner.velocity.x + owner.acceleration,20)
+	elif owner.owner.input_module.is_left_pressed:
+		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
+
+
 func apply_gravity(delta):
 	# max velocity.y
 	if owner.hp <= 0: 
@@ -154,17 +165,15 @@ func bounce():
 	
 
 # 精灵图scale.x转换暂时写在这里
-func hurt_move(will_go_left):
-	if will_go_left:
-		owner.velocity = Vector2(125 , -150) 
-		if !owner.collision_module.is_facing_left:
-			owner.anim_sprite.scale.x = -owner.anim_sprite.scale.x
-			owner.collision_module.is_facing_left = !owner.collision_module.is_facing_left
+func hurt_move(hit_to_direction):
+	# 如果将要被向右撞飞
+	if hit_to_direction:
+		owner.velocity = Vector2(125 , -150)
+		if owner.collision_module.facing():
+			owner.collision_module.change_facing(false)
 	else :
-		owner.velocity = Vector2(-125 , -150)  
-			
-		if owner.collision_module.is_facing_left:
-			owner.anim_sprite.scale.x = -owner.anim_sprite.scale.x
-			owner.collision_module.is_facing_left = !owner.collision_module.is_facing_left
+		owner.velocity = Vector2(-125 , -150)
+		if !owner.collision_module.facing():
+			owner.collision_module.change_facing(true)
 	pass
 	

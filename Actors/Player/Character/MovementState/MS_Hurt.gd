@@ -10,7 +10,7 @@ func enter():
 	if owner.hp <= 0:
 		owner.movement_state_machine.change_state(owner.MS_DieState.new(owner))
 		
-	owner.movement_module.hurt_move(owner.collision_module.will_go_left)
+	owner.movement_module.hurt_move(owner.collision_module.hit_to_direction)
 	
 	pass
 	
