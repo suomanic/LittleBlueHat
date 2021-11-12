@@ -8,7 +8,7 @@ export var velocity: = Vector2()
 
 # 接收rpc调用同步基础状态
 puppet func _update_basic_status(basic_status: Dictionary) -> void:
-	print_debug(basic_status)
+	#print_debug(basic_status)
 	if(basic_status.has('global_position')):
 		self.global_position = basic_status.global_position
 	if(basic_status.has('velocity')):
