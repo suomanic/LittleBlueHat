@@ -4,6 +4,8 @@ signal absorb_signal
 
 var state_machine : StateMachine
 
+var eject_angle
+
 onready var anim_player = $AnimationPlayer
 onready var bubble_sprite = $BubbleSprite
 onready var arrow_sprite = $ArrowSprite
@@ -25,6 +27,9 @@ func _physics_process(delta):
 	state_machine.update()
 	
 	time += delta
+	
+	eject_angle = (get_global_mouse_position() - bubble_sprite.global_position).angle()
+	
 	
 	if character != null:
 		bubble_sprite.global_position = lerp(absolute_position,character.global_position,absorb_curve.interpolate(time))

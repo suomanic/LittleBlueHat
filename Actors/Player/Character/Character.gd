@@ -48,13 +48,18 @@ onready var hurt_move_timer = $HurtMoveTimer
 
 onready var anim_sprite = $AnimSpriteSheet
 
+#particles
 onready var walk_particles= $WalkParticles
+onready var eject_particles = $Particles2D
 
 onready var label = $Label
 onready var label2 = $Label2
 
 export(Curve) var absorbed_curve
+export(Curve) var eject_curve
+
 var current_absorb_bubble_global_position
+var eject_angle
 
 func _ready():
 	set_as_toplevel(true)
@@ -62,9 +67,12 @@ func _ready():
 	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
 	
 	
+	
+	
 func _physics_process(delta) -> void:
 	anim_state_machine.update()
 	movement_state_machine.update()
+	
 	
 	# test only
 	label.text = anim_state_machine.current_state.get_name()
@@ -83,8 +91,15 @@ func _physics_process(delta) -> void:
 		walk_particles.set_emitting(false)
 
 func absorbed_by_bubble(bubble_position:Vector2):
+	print_debug("接受进入信号")
 	movement_state_machine.change_state(MS_AbsorbedState.new(self))
 	current_absorb_bubble_global_position = bubble_position
+	
+func ejected_from_bubble(eject_angle :float):
+	print_debug("接受弹出信号")
+	self.eject_angle = eject_angle
+	movement_state_machine.change_state(MS_EjectedState.new(self))
+	print_debug(eject_angle)
 	
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")

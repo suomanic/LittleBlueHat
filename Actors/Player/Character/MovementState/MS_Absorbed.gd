@@ -20,9 +20,6 @@ func execute():
 	
 	owner.global_position = lerp(absolute_position,owner.current_absorb_bubble_global_position,owner.absorbed_curve.interpolate(time))
 	
-	if owner.owner.input_module.is_attack_just_pressed:
-		owner.movement_state_machine.change_state(owner.MS_EjectedState.new(owner))
-	pass
 
 func exit():
 	
