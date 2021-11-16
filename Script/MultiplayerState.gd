@@ -135,20 +135,26 @@ func pre_configure_game(level_path: String):
 	# Load world
 	var world: Node2D = load(level_path).instance()
 	get_tree().root.add_child(world)
-
+	
+	var spanGlobalPosition = Vector2(0, 20)
+	var tempPlayer:Node2D = world.get_node_or_null("Player")
+	if tempPlayer != null:
+		spanGlobalPosition = tempPlayer.global_position
+		world.remove_child(tempPlayer)
+	
 	# Load my player
 	myPlayerInstance = preload('res://Actors/Player/Player.tscn').instance()
 	myPlayerInstance.set_name(myPlayerNodeName)
 	myPlayerInstance.set_network_master(myId)
 	world.add_child(myPlayerInstance)
-	myPlayerInstance.position = Vector2(20,80)
-
+	myPlayerInstance.global_position = spanGlobalPosition
+	
 	# Load remote player
 	remotePlayerInstance = preload('res://Actors/Player/Player.tscn').instance()
 	remotePlayerInstance.set_name(remotePlayerNodeName)
 	remotePlayerInstance.set_network_master(remotePlayerId)
 	world.add_child(remotePlayerInstance)
-	remotePlayerInstance.position = Vector2(0,60)
+	remotePlayerInstance.global_position = spanGlobalPosition
 	
 	# 先暂停
 	get_tree().set_pause(true)

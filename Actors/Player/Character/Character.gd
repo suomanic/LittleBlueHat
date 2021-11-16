@@ -76,8 +76,10 @@ func _physics_process(delta) -> void:
 	anim_state_machine.update()
 	movement_state_machine.update()
 	# test only
-	label.text = anim_state_machine.current_state.get_name()
-	label2.text = movement_state_machine.current_state.get_name()
+	if anim_state_machine.current_state != null:
+		label.text = anim_state_machine.current_state.get_name()
+	if movement_state_machine.current_state != null:
+		label2.text = movement_state_machine.current_state.get_name()
 	
 	for i in get_slide_count():
 		var collision = get_slide_collision(i)
