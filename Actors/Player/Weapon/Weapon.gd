@@ -3,6 +3,10 @@ extends Node2D
 class_name Weapon
 # Called when the node enters the scene tree for the first time.
 
+onready var state_machine : StateMachine
+
+onready var character = owner.get_node("Character")
+
 onready var weapon_data :={
 	F_sword = preload("res://Actors/Player/Weapon/Sword/FireSword.tscn"),
 	I_sword = preload("res://Actors/Player/Weapon/Sword/IceSword.tscn"),
@@ -10,22 +14,44 @@ onready var weapon_data :={
 	I_orb = preload("res://Actors/Player/Weapon/MagicOrb/IceMagicOrb.tscn")
 }
 
+const readyState = preload("res://Actors/Player/Weapon/State/ready.gd")
+const absorbedState = preload("res://Actors/Player/Weapon/State/absorbed.gd")
+
+export(Curve) var absorbed_position_curve
+export(Curve) var absorbed_scale_curve
+
+var absolute_position
+
+var can_attack
+var can_change_weapon
+
+var change_weapon_cd = 0.5
+var change_weapon_counter
+
 var current_weapon
 var previous_weapon
 
 func _ready():
 	owner = get_parent()
+	state_machine = StateMachine.new(readyState.new(self))
+	
+	change_weapon_counter = change_weapon_cd
 	pass # Replace with function body.
 	
 func _physics_process(delta):
-	if owner.input_module.is_weapon1_just_pressed:
-		change_weapon("F_sword")
-	elif owner.input_module.is_weapon2_just_pressed:
-		change_weapon("I_sword")
-	elif owner.input_module.is_weapon3_just_pressed:
-		change_weapon("F_orb")
-	elif owner.input_module.is_weapon4_just_pressed:
-		change_weapon("I_orb")
+	state_machine.update()
+	change_weapon_counter -= delta
+	
+	
+	if can_change_weapon and change_weapon_counter < 0:
+		if owner.input_module.is_weapon1_just_pressed:
+			change_weapon("F_sword")
+		elif owner.input_module.is_weapon2_just_pressed:
+			change_weapon("I_sword")
+		elif owner.input_module.is_weapon3_just_pressed:
+			change_weapon("F_orb")
+		elif owner.input_module.is_weapon4_just_pressed:
+			change_weapon("I_orb")
 	
 # 追随角色的该武器(self)是否正在换边过程中
 var on_changing_side : = Vector2(false, false)
@@ -128,6 +154,10 @@ func change_weapon(weapon_type:String):
 	for i in self.get_children():
 		i.queue_free()
 		
+	
+	change_weapon_counter = change_weapon_cd
+	
+		
 	match weapon_type:
 		"F_sword":
 			add_child(weapon_data.F_sword.instance())
@@ -142,9 +172,13 @@ func change_weapon(weapon_type:String):
 			add_child(weapon_data.I_orb.instance())
 			current_weapon = weapon_data.F_sword
 			
+#从角色接收信号函数处调用
 func character_absorbed():
-	get_child(0).sprite.set_visible(false)
-		
+	state_machine.change_state(absorbedState.new(self))
+	absolute_position = get_child(0).global_position
+	pass
 	
+#从角色接收信号函数处调用
 func character_exit_absorbed():
+	state_machine.change_state(readyState.new(self))
 	get_child(0).sprite.set_visible(true)

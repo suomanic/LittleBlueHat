@@ -109,7 +109,6 @@ func bounce():
 
 # 精灵图scale.x转换暂时写在这里
 func hurt_move(will_go_left):
-	
 	if will_go_left:
 		owner.velocity = Vector2(125 , -150) 
 		if !owner.collision_module.is_facing_left:

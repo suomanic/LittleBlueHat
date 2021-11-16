@@ -35,9 +35,7 @@ tracks/1/keys = {
 "values": [ true, false, true ]
 }
 
-[node name="FireSword" type="Node2D" groups=[
-"Fire",
-]]
+[node name="FireSword" type="Node2D" groups=["Fire"]]
 modulate = Color( 1, 0, 0, 1 )
 script = ExtResource( 1 )
 

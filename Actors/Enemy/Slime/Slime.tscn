@@ -316,10 +316,7 @@ extents = Vector2( 9, 8 )
 [sub_resource type="RectangleShape2D" id=16]
 extents = Vector2( 95, 55 )
 
-[node name="Slime" type="KinematicBody2D" groups=[
-"CanChangeElement",
-"Slime",
-]]
+[node name="Slime" type="KinematicBody2D" groups=["CanChangeElement", "Slime"]]
 collision_layer = 4
 collision_mask = 34
 collision/safe_margin = 0.01
@@ -369,9 +366,7 @@ collision_mask = 32
 position = Vector2( 1, 0 )
 shape = SubResource( 14 )
 
-[node name="HitBox" type="Area2D" parent="." groups=[
-"Hitbox",
-]]
+[node name="HitBox" type="Area2D" parent="." groups=["Hitbox"]]
 collision_layer = 4
 collision_mask = 21
 
@@ -392,9 +387,9 @@ collision_mask = 34
 
 [node name="PlayerDetector" type="Area2D" parent="."]
 visible = false
+collision_layer = 0
 input_pickable = false
 monitorable = false
-collision_layer = 0
 
 [node name="PlayerDetectShape" type="CollisionShape2D" parent="PlayerDetector"]
 shape = SubResource( 16 )

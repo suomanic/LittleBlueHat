@@ -20,12 +20,10 @@ func _ready():
 	
 
 func _physics_process(delta):
-	if owner.get_node("Character") != null:
-		get_parent().follow_player()
 	
 	shoot_cd_counter -= delta
 	
-	if get_parent().owner.input_module.is_attack_just_pressed and shoot_cd_counter < 0:
+	if get_parent().owner.input_module.is_attack_just_pressed and shoot_cd_counter < 0 and get_parent().can_attack:
 		
 		var bullet
 		

@@ -95,18 +95,20 @@ func _on_SDM_Timer_timeout():
 	can_be_squished = true
 	pass # Replace with function body.
 
+
 func absorbed_collision():
 	owner.anim_sprite.set_visible(false)
-	owner.owner.get_node("Weapon").character_absorbed()
-	
+	owner.trigger_collision.set_deferred("disabled",true)
+	owner.squish_collision.set_deferred("disabled",true)
+	#owner.standing_collision.set_deferred("disabled",true)
 	pass
 	
 func exit_absorbed_collision():
 	owner.anim_sprite.set_visible(true)
-	owner.owner.get_node("Weapon").character_exit_absorbed()
+	owner.trigger_collision.set_deferred("disabled",false)
+	owner.squish_collision.set_deferred("disabled",false)
+	#owner.standing_collision.set_deferred("disabled",false)
 	pass
-
-
 
 func invincible_anim_start():
 	owner.trigger_collision.set_disabled(true)

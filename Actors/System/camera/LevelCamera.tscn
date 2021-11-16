@@ -51,9 +51,7 @@ tracks/2/keys = {
 } ]
 }
 
-[node name="LevelCamera" type="Camera2D" groups=[
-"LevelCamera",
-]]
+[node name="LevelCamera" type="Camera2D" groups=["LevelCamera"]]
 material = ExtResource( 2 )
 current = true
 zoom = Vector2( 0.247529, 0.247529 )

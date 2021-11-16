@@ -18,6 +18,7 @@ const MS_UpState = preload("res://Actors/Player/Character/Movementstate/MS_Up.gd
 const MS_HurtState = preload("res://Actors/Player/Character/MovementState/MS_Hurt.gd")
 const MS_DieState = preload("res://Actors/Player/Character/MovementState/MS_Die.gd")
 const MS_AbsorbedState = preload("res://Actors/Player/Character/MovementState/MS_Absorbed.gd")
+const MS_EjectedState = preload("res://Actors/Player/Character/MovementState/MS_Ejected.gd")
 
 # preload aniamtion states
 const AS_HurtState = preload("res://Actors/Player/Character/AnimState/Tier1_State/AS_Hurt.gd")

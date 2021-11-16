@@ -1,10 +1,17 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Actors/Player/Weapon/Weapon.gd" type="Script" id=1]
 [ext_resource path="res://Actors/Player/Weapon/Sword/IceSword.tscn" type="PackedScene" id=2]
 
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 0 ), 0.0, 2.90358, 0, 0, Vector2( 0.406452, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0, 0 ), 0.0, 2.22532, 0, 0, Vector2( 0.302013, 0.481818 ), 0.0, 0.0, 0, 0 ]
+
 [node name="Weapon" type="Node2D"]
 script = ExtResource( 1 )
+absorbed_position_curve = SubResource( 1 )
+absorbed_scale_curve = SubResource( 2 )
 
 [node name="IceSword" parent="." instance=ExtResource( 2 )]
-visible = false

@@ -23,6 +23,8 @@ func change_to_ice_collision_box() :
 
 func change_to_fire_collision_box() :
 	owner.f_ray_cast.position.y = -20
+	owner.b_ray_cast.position.y = -20
+	
 	set_shape(RectangleShape2D.new())
 	shape.extents = Vector2(10,8)
 	
@@ -42,6 +44,8 @@ func change_to_fire_collision_box() :
 
 func change_to_normal_collision_box():
 	owner.f_ray_cast.position.y = 0
+	owner.b_ray_cast.position.y = 0
+	
 	set_shape(RectangleShape2D.new())
 	shape.extents = Vector2(10,8)
 	

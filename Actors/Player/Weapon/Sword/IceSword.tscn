@@ -35,9 +35,7 @@ tracks/1/keys = {
 "values": [ true, false, true ]
 }
 
-[node name="IceSword" type="Node2D" groups=[
-"Ice",
-]]
+[node name="IceSword" type="Node2D" groups=["Ice"]]
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]

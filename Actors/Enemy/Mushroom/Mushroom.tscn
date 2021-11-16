@@ -245,11 +245,7 @@ anim_speed = 0.8
 [sub_resource type="CircleShape2D" id=15]
 radius = 80.0
 
-[node name="Mushroom" type="Area2D" groups=[
-"CanChangeElement",
-"Hitbox",
-"Mushroom",
-]]
+[node name="Mushroom" type="Area2D" groups=["CanChangeElement", "Hitbox", "Mushroom"]]
 collision_layer = 4
 collision_mask = 21
 script = ExtResource( 1 )
@@ -295,9 +291,7 @@ scale = Vector2( 1.05, 1.05 )
 z_index = 1
 texture = ExtResource( 6 )
 
-[node name="Icefog_area" type="Area2D" parent="Icefog" groups=[
-"Ice",
-]]
+[node name="Icefog_area" type="Area2D" parent="Icefog" groups=["Ice"]]
 scale = Vector2( 3.33333, 3.33333 )
 collision_layer = 4
 collision_mask = 53
