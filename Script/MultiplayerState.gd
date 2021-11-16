@@ -1,7 +1,7 @@
 extends Node
 
 # 定义初始加载的游戏场景
-const INITIAL_SCENE := 'res://Levels/InitialLevel.tscn'
+const INITIAL_SCENE := 'res://Levels/GrassLevel.tscn'
 
 class PlayerInfo:
 	var name: String = ""
@@ -11,8 +11,10 @@ class PlayerInfo:
 # 基本属性：联网id，名字，类型
 var myId : int = 0
 var myInfo: PlayerInfo
+var myPlayerNodeName: String
 var remotePlayerId : int = 0
 var remotePlayerInfo: PlayerInfo
+var remotePlayerNodeName: String
 
 var myPlayerInstance: Node2D = null
 var remotePlayerInstance: Node2D = null
@@ -63,6 +65,7 @@ remote func registerPlayerInfo(remote_info: PlayerInfo) -> bool:
 	# 如果我方没被连接过，则注册新玩家id和信息
 	if(remotePlayerId == 0):
 		remotePlayerId = remote_id
+		remotePlayerNodeName = "Player" + str(remotePlayerId)
 		remotePlayerInfo = remote_info
 		pre_configure_game(INITIAL_SCENE)
 		return true
@@ -90,6 +93,7 @@ func hostGame(port:int, myName: String) -> bool:
 	self.get_tree().refuse_new_network_connections = false
 	
 	myId = self.get_tree().get_network_unique_id() # 1
+	myPlayerNodeName = "Player" + str(myId)
 	myInfo.name = myName
 	
 	return true
@@ -105,6 +109,7 @@ func joinGame(address: String, port:int, myName: String) -> bool:
 	
 	self.get_tree().network_peer = host
 	myId = self.get_tree().get_network_unique_id()
+	myPlayerNodeName = "Player" + str(myId)
 	myInfo.name = myName
 	
 	return true
@@ -112,10 +117,12 @@ func joinGame(address: String, port:int, myName: String) -> bool:
 # 重设网络为null，重设各个变量，断开所有连接
 func resetNetwork() -> void:
 	myId = 0
+	myPlayerNodeName = ""
 	myInfo = PlayerInfo.new()
 	isMyPlayerDone = false
 	
 	remotePlayerId = 0
+	remotePlayerNodeName = ""
 	remotePlayerInfo = PlayerInfo.new()
 	isRemotePlayerDone = false
 	
@@ -131,14 +138,14 @@ func pre_configure_game(level_path: String):
 
 	# Load my player
 	myPlayerInstance = preload('res://Actors/Player/Player.tscn').instance()
-	myPlayerInstance.set_name(str(myId))
+	myPlayerInstance.set_name(myPlayerNodeName)
 	myPlayerInstance.set_network_master(myId)
 	world.add_child(myPlayerInstance)
 	myPlayerInstance.position = Vector2(20,80)
 
 	# Load remote player
 	remotePlayerInstance = preload('res://Actors/Player/Player.tscn').instance()
-	remotePlayerInstance.set_name(str(remotePlayerId))
+	remotePlayerInstance.set_name(remotePlayerNodeName)
 	remotePlayerInstance.set_network_master(remotePlayerId)
 	world.add_child(remotePlayerInstance)
 	remotePlayerInstance.position = Vector2(0,60)

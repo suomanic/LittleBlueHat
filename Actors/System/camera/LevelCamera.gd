@@ -15,11 +15,10 @@ func _physics_process(delta):
 		time = min(time + delta , 1)
 	Engine.time_scale = time_slow_curve.interpolate(time)
 	
-	player = get_tree().get_current_scene().get_node("Player")
 	if player != null:
 		global_position = player.global_position
 	else:
-		player = get_tree().get_current_scene().get_node("Player")
+		player = get_tree().get_current_scene().get_node(MultiplayerState.myPlayerNodeName)
 
 func player_hurt():
 	camera_zoom_in()

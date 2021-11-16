@@ -27,5 +27,5 @@ func exit():
 	owner.owner.get_node("Weapon").character_exit_absorbed()
 	pass
 
-func get_name():
+static func get_name():
 	return "MS_Absorbed"

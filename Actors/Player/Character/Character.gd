@@ -50,7 +50,7 @@ onready var anim_sprite = $AnimSpriteSheet
 
 #particles
 onready var walk_particles= $WalkParticles
-onready var eject_particles = $Particles2D
+onready var eject_particles = $EjectParticles
 
 onready var label = $Label
 onready var label2 = $Label2
@@ -69,9 +69,8 @@ onready var state_machine_status : Dictionary = {
 
 func _ready():
 	set_as_toplevel(true)
-	if (self.get_tree().has_network_peer() and self.is_network_master()) or !self.get_tree().has_network_peer():
-		movement_state_machine = StateMachine.new(MS_IdleState.new(self))
-		anim_state_machine = StateMachine.new(AS_GroundState.new(self))
+	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
+	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
 
 func _physics_process(delta) -> void:
 	anim_state_machine.update()
@@ -91,17 +90,6 @@ func _physics_process(delta) -> void:
 		walk_particles.set_emitting(true)
 	else :
 		walk_particles.set_emitting(false)
-
-func absorbed_by_bubble(bubble_position:Vector2):
-	print_debug("接受进入信号")
-	movement_state_machine.change_state(MS_AbsorbedState.new(self))
-	current_absorb_bubble_global_position = bubble_position
-	
-func ejected_from_bubble(eject_angle :float):
-	print_debug("接受弹出信号")
-	self.eject_angle = eject_angle
-	movement_state_machine.change_state(MS_EjectedState.new(self))
-	print_debug(eject_angle)
 	
 	# 如果处于联机模式下且自己是master节点
 	if self.get_tree().has_network_peer() and self.is_network_master():
@@ -130,6 +118,18 @@ func ejected_from_bubble(eject_angle :float):
 		# 则不进行同步。否则，同步。
 		if !new_state_machine_status.empty():
 			self.rpc_unreliable('_change_state_machine_status', new_state_machine_status)
+
+
+func absorbed_by_bubble(bubble_position:Vector2):
+	print_debug("接受进入信号")
+	movement_state_machine.change_state(MS_AbsorbedState.new(self))
+	current_absorb_bubble_global_position = bubble_position
+	
+func ejected_from_bubble(eject_angle :float):
+	print_debug("接受弹出信号")
+	self.eject_angle = eject_angle
+	movement_state_machine.change_state(MS_EjectedState.new(self))
+	print_debug(eject_angle)
 
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")

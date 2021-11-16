@@ -32,5 +32,5 @@ func exit():
 	owner.can_change_element = true
 	pass
 
-func get_name():
+static func get_name():
 	return ""

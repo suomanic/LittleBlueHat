@@ -18,5 +18,5 @@ func exit():
 	owner.can_change_weapon = false
 	pass
 
-func get_name():
+static func get_name():
 	return "ready"

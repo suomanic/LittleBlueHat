@@ -13,5 +13,5 @@ func execute():
 func exit():
 	pass
 
-func get_name():
+static func get_name():
 	return "Free"

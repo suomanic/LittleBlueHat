@@ -23,5 +23,5 @@ func exit():
 	owner.arrow_sprite.set_visible(false)
 	pass
 
-func get_name():
+static func get_name():
 	return "Occupied"
