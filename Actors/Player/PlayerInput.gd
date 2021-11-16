@@ -86,6 +86,7 @@ func _physics_process(delta) -> void:
 	else:
 		is_weapon4_just_pressed = false
 	
+	return # debug
 	# 如果处于联机模式下且自己是master节点
 	if get_tree().has_network_peer() and is_network_master():
 		var new_input_status:Dictionary = {}

@@ -5,8 +5,18 @@ var is_bounced := false
 var hit_to_direction: bool
 var can_be_squished := true
 
+# 储存上一次同步的人物朝向信息
 onready var last_sync_facing: bool
 
+# 定时强行同步额外信息的计时器（需要定时同步防止因为丢包造成问题）
+var rpc_timing_sync_facing_timer:Timer
+
+func _ready():
+	rpc_timing_sync_facing_timer = Timer.new()
+	rpc_timing_sync_facing_timer.one_shot = false
+	rpc_timing_sync_facing_timer.wait_time = 1
+	rpc_timing_sync_facing_timer.connect("timeout", self, "sync_facing")
+	rpc_timing_sync_facing_timer.autostart = true
 func _physics_process(delta):
 	if owner.movement_module.is_on_object:
 		owner.squish_collision.set_disabled(false)
@@ -28,13 +38,18 @@ func facing() -> bool:
 		change_facing(false)
 		new_facing = false 
 	
+	sync_facing(new_facing)
+	
+	return new_facing
+
+func sync_facing(new_facing = null):
 	# 如果处于联机模式下且自己是master节点
 	if get_tree().has_network_peer() and is_network_master():
+		if new_facing == null:
+			new_facing = facing()
 		if new_facing != last_sync_facing:
 			last_sync_facing = new_facing
 			rpc_unreliable("change_facing", new_facing)
-	
-	return new_facing
 
 # 更新朝向，true表示向右
 puppet func change_facing(new_facing: bool):
