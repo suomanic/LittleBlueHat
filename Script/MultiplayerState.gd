@@ -7,6 +7,8 @@ class PlayerInfo:
 	var name: String = ""
 	var type: String = "" # fire or ice
 
+# Load world
+onready var world: Node2D = null
 
 # 基本属性：联网id，名字，类型
 var myId : int = 0
@@ -133,7 +135,7 @@ func resetNetwork() -> void:
 # 初始化游戏关卡设置，加载好人物和关卡并设置主从关系
 func pre_configure_game(level_path: String):
 	# Load world
-	var world: Node2D = load(level_path).instance()
+	world = load(level_path).instance()
 	get_tree().root.add_child(world)
 	
 	var spanGlobalPosition = Vector2(0, 20)
@@ -188,4 +190,5 @@ puppetsync func post_configure_game():
 	# 只接收服务端发送的信息
 	if 1 == get_tree().get_rpc_sender_id():
 		get_tree().set_pause(false)
+		get_tree().current_scene = world
 		print('start game')
