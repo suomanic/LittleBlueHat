@@ -29,4 +29,9 @@ func is_state(state_name :String):
 	if current_state == null:
 		return false
 	return current_state.get_name() == state_name
-	
+
+func get_curr_state_name() -> String:
+	if current_state == null:
+		return ""
+	else:
+		return current_state.get_name()

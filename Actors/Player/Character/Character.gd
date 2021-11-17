@@ -103,9 +103,9 @@ func _physics_process(delta) -> void:
 		# 如果movement_state_machine和anim_state_machine的状态都不为null，
 		# 则将其状态的名称存入curr_movement_state_name和curr_anim_state_name内
 		if movement_state_machine.current_state != null:
-			curr_movement_state_name = movement_state_machine.current_state.get_name()
+			curr_movement_state_name = movement_state_machine.get_curr_state_name()
 		if anim_state_machine.current_state != null:
-			curr_anim_state_name = anim_state_machine.current_state.get_name()
+			curr_anim_state_name = anim_state_machine.get_curr_state_name()
 		
 		# 如果上一次同步的状态机状态（state_machine_status）和当前的状态机状态不一样，
 		# 将变更过的内容放入new_state_machine_status内并更新state_machine_status
@@ -160,17 +160,17 @@ puppet func _change_state_machine_status(new_state_machine_status : Dictionary):
 	
 	if movement_state_name != null:
 		movement_state_name = str(movement_state_name)
-		if movement_state_machine.current_state.get_name() != movement_state_name:
+		if movement_state_machine.get_curr_state_name() != movement_state_name:
 			var new_state = _get_new_state_by_name(movement_state_name)
 			movement_state_machine.change_state(new_state)
 	if anim_state_name != null:
 		anim_state_name = str(anim_state_name)
-		if anim_state_machine.current_state.get_name() != anim_state_name:
+		if anim_state_machine.get_curr_state_name() != anim_state_name:
 			var new_state = _get_new_state_by_name(anim_state_name)
 			anim_state_machine.change_state(new_state)
 
 # 输入State的name，返回一个新建的State对象，如果找不到对应的State，则返回null
-func _get_new_state_by_name(state_name: String) -> State:
+func _get_new_state_by_name(state_name) -> State:
 	# movement state
 	if state_name == MS_IdleState.get_name():
 		return MS_IdleState.new(self)
