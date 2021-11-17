@@ -18,8 +18,10 @@ func _physics_process(delta):
 	if player != null:
 		global_position = player.global_position
 	else:
-		player = get_tree().get_current_scene().get_node(MultiplayerState.myPlayerNodeName)
-
+		if get_tree().has_network_peer():
+			player = get_tree().get_current_scene().get_node(MultiplayerState.myPlayerNodeName)
+		else:
+			player = get_tree().get_current_scene().get_node("Player")
 func player_hurt():
 	camera_zoom_in()
 	
