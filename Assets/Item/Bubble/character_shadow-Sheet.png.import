@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Bubble_animation-Sheet.png-6bd411ffaf0a0b1b8b36f03e78e85895.stex"
+path="res://.import/character_shadow-Sheet.png-c6e0fab54029b1b8aaa6aa81fc10b89d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Item/Bubble/Bubble_animation-Sheet.png"
-dest_files=[ "res://.import/Bubble_animation-Sheet.png-6bd411ffaf0a0b1b8b36f03e78e85895.stex" ]
+source_file="res://Assets/Item/Bubble/character_shadow-Sheet.png"
+dest_files=[ "res://.import/character_shadow-Sheet.png-c6e0fab54029b1b8aaa6aa81fc10b89d.stex" ]
 
 [params]
 

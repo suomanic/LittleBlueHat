@@ -312,7 +312,7 @@ position = Vector2( -85, -156 )
 position = Vector2( 310, -34 )
 
 [node name="Bubble4" parent="." instance=ExtResource( 9 )]
-position = Vector2( -595, -27 )
+position = Vector2( -614, -27 )
 
 [node name="Bubble9" parent="." instance=ExtResource( 9 )]
 position = Vector2( -426, -27 )

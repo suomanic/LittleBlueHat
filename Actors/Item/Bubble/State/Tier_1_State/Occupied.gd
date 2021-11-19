@@ -11,7 +11,11 @@ func enter():
 	time = 0
 	
 	owner.arrow_sprite.set_visible(true)
+	owner.character_shadow_sprite.set_visible(true)
+	
 	owner.arrow_anim_player.play("arrow_appear_anim")
+	owner.character_shadow_anim_player.play("appear_anim")
+	
 	pass
 	
 func execute():

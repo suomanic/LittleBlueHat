@@ -123,12 +123,10 @@ func _physics_process(delta) -> void:
 
 
 func absorbed_by_bubble(bubble_position:Vector2):
-	print_debug("接受进入信号")
 	movement_state_machine.change_state(MS_AbsorbedState.new(self))
 	current_absorb_bubble_global_position = bubble_position
 	
 func ejected_from_bubble(eject_angle :float):
-	print_debug("接受弹出信号")
 	self.eject_angle = eject_angle
 	movement_state_machine.change_state(MS_EjectedState.new(self))
 	print_debug(eject_angle)

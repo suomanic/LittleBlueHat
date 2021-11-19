@@ -1,9 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=1]
-[ext_resource path="res://Assets/Item/Bubble/Bubble_animation-Sheet.png" type="Texture" id=2]
 [ext_resource path="res://Actors/Item/Bubble/Bubble.gd" type="Script" id=3]
 [ext_resource path="res://Assets/Item/Bubble/arrow-Sheet.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Item/Bubble/character_shadow-Sheet.png" type="Texture" id=5]
 
 [sub_resource type="Curve" id=3]
 _data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.167785, 1 ), -0.135454, -0.135454, 0, 0, Vector2( 0.365772, -0.196364 ), -1.34036, -1.34036, 0, 0, Vector2( 0.5, 0 ), -0.0744057, 0.0, 0, 0 ]
@@ -12,6 +12,10 @@ _data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.167785, 1 ), -0.135454, -0
 min_value = -1.0
 max_value = 0.0
 _data = [ Vector2( 0, -0.00909092 ), 0.0, -7.90151, 0, 0, Vector2( 0.0671141, -0.245455 ), 0.0, 0.0, 0, 0, Vector2( 0.308725, 0 ), 1.01591, 0.0, 1, 0 ]
+
+[sub_resource type="StreamTexture" id=10]
+flags = 4
+load_path = "res://.import/Bubble_animation-Sheet.png-6bd411ffaf0a0b1b8b36f03e78e85895.stex"
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 12.0
@@ -64,6 +68,68 @@ tracks/0/keys = {
 "values": [ 3, 1, 2, 0 ]
 }
 
+[sub_resource type="Animation" id=7]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../CharacterShadowSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "appear_anim"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("../CharacterShadowSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "anim_called_character_shadow_to_idle"
+} ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "idle_anim"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("../CharacterShadowSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 2, 3, 4, 5, 6, 7, 8, 9 ]
+}
+
 [node name="Bubble" type="Area2D" groups=["Bubble"]]
 z_index = 2
 collision_layer = 0
@@ -73,9 +139,9 @@ eject_curve = SubResource( 4 )
 
 [node name="BubbleSprite" type="Sprite" parent="."]
 material = ExtResource( 1 )
-texture = ExtResource( 2 )
+texture = SubResource( 10 )
 hframes = 8
-frame = 5
+frame = 2
 
 [node name="EnterShape" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
@@ -94,6 +160,19 @@ frame = 1
 [node name="ArrowAniamtionPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 5 )
 anims/arrow_appear_anim = SubResource( 6 )
+
+[node name="CharacterShadowSprite" type="Sprite" parent="."]
+visible = false
+material = ExtResource( 1 )
+texture = ExtResource( 5 )
+hframes = 7
+vframes = 2
+
+[node name="CharacterShadowAnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../ArrowAniamtionPlayer")
+anims/RESET = SubResource( 7 )
+anims/appear_anim = SubResource( 8 )
+anims/idle_anim = SubResource( 9 )
 
 [node name="Label" type="Label" parent="."]
 margin_left = -20.0

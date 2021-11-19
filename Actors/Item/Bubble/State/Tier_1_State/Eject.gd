@@ -8,6 +8,7 @@ func _init(o).(o):
 func enter():
 	owner.arrow_sprite.set_visible(false)
 	owner.disconnect_absorb_signal()
+	owner.character_shadow_sprite.set_visible(false)
 	time = 0
 	
 	pass

@@ -181,4 +181,5 @@ func character_absorbed():
 #从角色接收信号函数处调用
 func character_exit_absorbed():
 	state_machine.change_state(readyState.new(self))
+	get_child(0).scale = Vector2(1,1)
 	get_child(0).sprite.set_visible(true)

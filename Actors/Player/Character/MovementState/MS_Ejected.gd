@@ -8,6 +8,15 @@ func _init(o).(o):
 func enter():
 	time = 0
 	owner.movement_module.jump_count = 1
+	
+	#更改弹出朝向
+	if owner.eject_angle <= PI/2 and owner.eject_angle > -PI/2:
+		if !owner.collision_module.facing():
+			owner.collision_module.change_facing(true)
+	else:
+		if owner.collision_module.facing():
+			owner.collision_module.change_facing(false)
+	
 	if owner.current_absorb_bubble_global_position != null:
 		owner.global_position = owner.current_absorb_bubble_global_position
 		owner.current_absorb_bubble_global_position = null
