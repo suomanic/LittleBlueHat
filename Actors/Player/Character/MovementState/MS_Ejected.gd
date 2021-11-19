@@ -8,6 +8,9 @@ func _init(o).(o):
 func enter():
 	time = 0
 	owner.movement_module.jump_count = 1
+	if owner.current_absorb_bubble_global_position != null:
+		owner.global_position = owner.current_absorb_bubble_global_position
+		owner.current_absorb_bubble_global_position = null
 	pass
 	
 func execute():
@@ -18,10 +21,10 @@ func execute():
 	if time >= 0.25 :
 		owner.movement_state_machine.change_state(owner.MS_FallState.new(owner))
 		
-	
 	pass
 
 func exit():
+	
 	pass
 
 static func get_name():

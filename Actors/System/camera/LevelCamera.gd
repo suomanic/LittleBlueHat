@@ -8,7 +8,6 @@ onready var anim_player = $AnimationPlayer
 
 export(Curve) var time_slow_curve
 
-	
 
 func _physics_process(delta):
 	if time < 1 :
@@ -16,7 +15,8 @@ func _physics_process(delta):
 	Engine.time_scale = time_slow_curve.interpolate(time)
 	
 	if player != null:
-		global_position = player.global_position
+		global_position = player.global_position.round()
+		force_update_scroll()
 	else:
 		if get_tree().has_network_peer():
 			player = get_tree().get_current_scene().get_node(MultiplayerState.myPlayerNodeName)

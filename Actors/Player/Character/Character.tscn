@@ -8,10 +8,10 @@
 [ext_resource path="res://Actors/Player/Character/CharacterCollision.gd" type="Script" id=6]
 
 [sub_resource type="Curve" id=1]
-_data = [ Vector2( 0, 0 ), 0.0, 4.16124, 0, 0, Vector2( 0.477578, 0.890909 ), -0.115844, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 0 ), 0.0, 3.04773, 0, 0, Vector2( 0.379195, 0.872727 ), -0.115844, 0.0, 0, 0 ]
 
 [sub_resource type="Curve" id=2]
-_data = [ Vector2( 0, 0.963636 ), 0.0, -10.8364, 0, 0, Vector2( 0.255034, 0 ), 0.0, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 0.945454 ), 0.0, -8.57879, 0, 0, Vector2( 0.251678, 0 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="Gradient" id=22]
 colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
@@ -443,7 +443,7 @@ script = ExtResource( 5 )
 [node name="CharacterAnimStateMachine" type="Node" parent="."]
 script = ExtResource( 5 )
 
-[connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_mushroom_area_entered"]
 [connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_enemy_area_entered"]
+[connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_mushroom_area_entered"]
 [connection signal="body_entered" from="SquishHitBox" to="CharacterCollision" method="_on_SquishHitBox_body_entered"]
 [connection signal="timeout" from="HurtMoveTimer" to="CharacterCollision" method="_on_SDM_Timer_timeout"]
