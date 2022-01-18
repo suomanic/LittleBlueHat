@@ -9,7 +9,6 @@ func _init(o).(o):
 
 func enter():
 	time = 0
-	
 	owner.arrow_sprite.set_visible(true)
 	owner.character_shadow_sprite.set_visible(true)
 	
@@ -27,9 +26,7 @@ func execute():
 	if owner.character.get_parent().input_module.is_attack_just_pressed and time > 0.1 :
 		connect("eject_signal",owner.character,"ejected_from_bubble")
 		emit_signal("eject_signal",owner.eject_angle)
-		owner.state_machine.change_state(owner.ejectState.new(owner))
-	
-	
+		owner.behavior_state_machine.change_state(owner.ejectState.new(owner))
 	pass
 
 func exit():

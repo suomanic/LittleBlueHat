@@ -19,7 +19,7 @@ func execute():
 	owner.bubble_sprite.global_position = lerp(owner.absolute_position,owner.character.global_position,owner.eject_curve.interpolate(time))
 	
 	if time >= 0.4 :
-		owner.state_machine.change_state(owner.freeState.new(owner))
+		owner.behavior_state_machine.change_state(owner.freeState.new(owner))
 		owner.character = null	
 	pass
 
