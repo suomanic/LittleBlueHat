@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=1]
 [ext_resource path="res://Assets/Item/Bubble/Bubble_animation-Sheet.png" type="Texture" id=2]
@@ -14,6 +14,9 @@ _data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.167785, 1 ), -0.135454, -0
 min_value = -1.0
 max_value = 0.0
 _data = [ Vector2( 0, -0.00909092 ), 0.0, -7.90151, 0, 0, Vector2( 0.0671141, -0.245455 ), 0.0, 0.0, 0, 0, Vector2( 0.308725, 0 ), 1.01591, 0.0, 1, 0 ]
+
+[sub_resource type="Curve" id=16]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0104196, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 12.0
@@ -201,6 +204,7 @@ collision_layer = 0
 script = ExtResource( 3 )
 absorb_curve = SubResource( 3 )
 eject_curve = SubResource( 4 )
+move_curve = SubResource( 16 )
 
 [node name="EnterShape" type="CollisionShape2D" parent="."]
 visible = false
@@ -280,13 +284,11 @@ collision_mask = 20
 [node name="HitboxShape" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource( 11 )
 
-[node name="NormalPostion" type="Position2D" parent="."]
-
-[node name="IcePostion" type="Position2D" parent="."]
-position = Vector2( 0, 65 )
+[node name="NormalPosition" type="Position2D" parent="."]
 
 [node name="FirePosition" type="Position2D" parent="."]
-position = Vector2( 0, -66 )
+
+[node name="IcePosition" type="Position2D" parent="."]
 
 [connection signal="body_entered" from="." to="." method="_on_Bubble_body_entered"]
 [connection signal="area_entered" from="Hitbox" to="." method="_on_Hitbox_area_entered"]

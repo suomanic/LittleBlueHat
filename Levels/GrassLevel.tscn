@@ -275,7 +275,7 @@ position = Vector2( 432, 226 )
 position = Vector2( -45, 99 )
 
 [node name="Mushroom2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 226, 34 )
+position = Vector2( 247, 34 )
 
 [node name="TileMap" type="TileMap" parent="."]
 material = ExtResource( 6 )
@@ -318,13 +318,15 @@ position = Vector2( -614, -27 )
 position = Vector2( -426, -27 )
 
 [node name="Bubble10" parent="." instance=ExtResource( 9 )]
-position = Vector2( -345, -19 )
+position = Vector2( -344, -19 )
 
 [node name="Bubble6" parent="." instance=ExtResource( 9 )]
-position = Vector2( 141, -78 )
+position = Vector2( 182, -75 )
+ice_pos = Vector2( 0, 100 )
 
 [node name="Bubble5" parent="." instance=ExtResource( 9 )]
-position = Vector2( 238, -94 )
+position = Vector2( 133, -70 )
+ice_pos = Vector2( 0, 50 )
 
 [node name="Bubble3" parent="." instance=ExtResource( 9 )]
 position = Vector2( 383, 50 )
@@ -333,4 +335,4 @@ position = Vector2( 383, 50 )
 position = Vector2( 408, 7 )
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
-position = Vector2( 74, 1 )
+position = Vector2( 71, 3 )

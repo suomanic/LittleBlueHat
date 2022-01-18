@@ -1,3 +1,4 @@
+tool
 extends Area2D
 
 signal absorb_signal
@@ -22,13 +23,8 @@ onready var arrow_sprite = $BubbleSprite/ArrowSprite
 onready var character_shadow_sprite = $BubbleSprite/CharacterShadowSprite
 onready var effect_sprite = $BubbleSprite/EffectSprite
 
-onready var normal_position = $NormalPostion
-onready var ice_position = $IcePostion
-onready var fire_position = $FirePostion
-
 onready var enter_shape = $EnterShape
 onready var character
-onready var absolute_position = global_position
 
 onready var label = $Label
 onready var label2 = $Label2
@@ -47,82 +43,109 @@ const NtoIState = preload("res://Actors/Item/Bubble/State/Element_State/NtoI.gd"
 const FtoNState = preload("res://Actors/Item/Bubble/State/Element_State/FtoN.gd")
 const NtoFState = preload("res://Actors/Item/Bubble/State/Element_State/NtoF.gd")
 
-
 export var absorb_curve : Curve
 export var eject_curve : Curve
+export var move_curve : Curve
 
+#不同状态下泡泡的目标绝对位置
+onready var normal_absolute_position 
+onready var ice_absolute_position 
+onready var fire_absolute_position 
+
+export var normal_pos : Vector2
+export var fire_pos : Vector2
+export var ice_pos : Vector2
 
 func _ready():
-	behavior_state_machine = StateMachine.new(freeState.new(self))
-	element_state_machine = StateMachine.new(N_IdleState.new(self))
+	if not Engine.editor_hint:
+		behavior_state_machine = StateMachine.new(freeState.new(self))
+		element_state_machine = StateMachine.new(N_IdleState.new(self))
 
+		normal_absolute_position = global_position + normal_pos
+		ice_absolute_position = global_position + ice_pos
+		fire_absolute_position = global_position + fire_pos
+	
 func _physics_process(delta):
-	behavior_state_machine.update()
-	element_state_machine.update()
+	if  Engine.editor_hint: #只在编辑器中运行的代码，用于在编辑器中显示不同元素下泡泡的目标位置
+		get_node("NormalPosition").position = normal_pos
+		get_node("IcePosition").position = ice_pos
+		get_node("FirePosition").position = fire_pos
 	
-	eject_angle = (get_global_mouse_position() - bubble_sprite.global_position).angle()
 	
-	
-	if behavior_state_machine.current_state != null:
-		label.text = behavior_state_machine.current_state.get_name()
-	if element_state_machine.current_state != null:
-		label2.text = element_state_machine.current_state.get_name()	
+	if not Engine.editor_hint: #只在游戏中运行的代码
+		behavior_state_machine.update()
+		element_state_machine.update()
 		
-	if absorb_direction :
-		character_shadow_sprite.scale.x = 1
-	else : 
-		character_shadow_sprite.scale.x = -1
+		eject_angle = (get_global_mouse_position() - bubble_sprite.global_position).angle()
 		
+		
+		if behavior_state_machine.current_state != null:
+			label.text = behavior_state_machine.current_state.get_name()
+		if element_state_machine.current_state != null:
+			label2.text = element_state_machine.current_state.get_name()	
+			
+		if absorb_direction :
+			character_shadow_sprite.scale.x = 1
+		else : 
+			character_shadow_sprite.scale.x = -1
+			
 	
 func arrow_sprite_movement():
-	arrow_sprite.global_position = (get_global_mouse_position() - bubble_sprite.global_position).normalized() * 25 + bubble_sprite.global_position
-	arrow_sprite.rotation = (get_global_mouse_position() - bubble_sprite.global_position).angle() + PI/2
+	if not Engine.editor_hint: 
+		arrow_sprite.global_position = (get_global_mouse_position() - bubble_sprite.global_position).normalized() * 25 + bubble_sprite.global_position
+		arrow_sprite.rotation = (get_global_mouse_position() - bubble_sprite.global_position).angle() + PI/2
 
 
 func _on_Bubble_body_entered(body):
-	if body.is_in_group("Player"):
-		if body.collision_module.facing():
-			absorb_direction = true
-		else :
-			absorb_direction = false
-		
-		character = body 
-		connect("absorb_signal",body,"absorbed_by_bubble")
-		emit_signal("absorb_signal",global_position)
-	behavior_state_machine.change_state(occupiedState.new(self))
+	if not Engine.editor_hint: 
+		if body.is_in_group("Player"):
+			if body.collision_module.facing():
+				absorb_direction = true
+			else :
+				absorb_direction = false
+			
+			character = body 
+			connect("absorb_signal",body,"absorbed_by_bubble")
+			emit_signal("absorb_signal",global_position)
+		behavior_state_machine.change_state(occupiedState.new(self))
 	
 func disconnect_absorb_signal():
-	disconnect("absorb_signal",character,"absorbed_by_bubble")
+	if not Engine.editor_hint: 
+		disconnect("absorb_signal",character,"absorbed_by_bubble")
 
 func anim_called_character_shadow_to_idle():
-	character_shadow_anim_player.play("idle_anim")
-	character_shadow_anim_player.advance(bubble_anim_player.current_animation_position)
+	if not Engine.editor_hint: 
+		character_shadow_anim_player.play("idle_anim")
+		character_shadow_anim_player.advance(bubble_anim_player.current_animation_position)
 
 
 func _on_Hitbox_area_entered(area):
-	print_debug(area)
-	if can_change_element:
-		if area.get_owner().is_in_group("Ice"):
-			match element_state:
-				"Normal":
-					element_state_machine.change_state(NtoIState.new(self))
-					pass
-				"Ice":
-					#anim_player.play("I_Shake_Anim")
-					pass
-				"Fire":
-					pass
-					#element_state_machine.change_state(FtoNState.new(self))
-		elif area.owner.is_in_group("Fire"):
-			print_debug("fire damage")
-			match element_state:
-				"Normal":
-					#element_state_machine.change_state(NtoFState.new(self))
-					pass
-				"Ice":
-					element_state_machine.change_state(ItoNState.new(self))
-					pass
-				"Fire":
-					pass
-			
-	pass # Replace with function body.
+	if not Engine.editor_hint: 
+		print_debug(area)
+		if can_change_element:
+			if area.get_owner().is_in_group("Ice"):
+				match element_state:
+					"Normal":
+						element_state_machine.change_state(NtoIState.new(self))
+						pass
+					"Ice":
+						#anim_player.play("I_Shake_Anim")
+						pass
+					"Fire":
+						pass
+						#element_state_machine.change_state(FtoNState.new(self))
+			elif area.owner.is_in_group("Fire"):
+				print_debug("fire damage")
+				match element_state:
+					"Normal":
+						#element_state_machine.change_state(NtoFState.new(self))
+						pass
+					"Ice":
+						element_state_machine.change_state(ItoNState.new(self))
+						pass
+					"Fire":
+						pass
+				
+		pass # Replace with function body.
+
+
