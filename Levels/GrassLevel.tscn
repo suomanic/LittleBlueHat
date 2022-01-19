@@ -275,7 +275,7 @@ position = Vector2( 432, 226 )
 position = Vector2( -45, 99 )
 
 [node name="Mushroom2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 247, 34 )
+position = Vector2( 251, 34 )
 
 [node name="TileMap" type="TileMap" parent="."]
 material = ExtResource( 6 )
@@ -321,11 +321,15 @@ position = Vector2( -426, -27 )
 position = Vector2( -344, -19 )
 
 [node name="Bubble6" parent="." instance=ExtResource( 9 )]
-position = Vector2( 182, -75 )
-ice_pos = Vector2( 0, 100 )
+position = Vector2( 210, -31 )
+move_speed = 50.0
+fire_pos = Vector2( 0, -50 )
+ice_pos = Vector2( 0, 50 )
 
 [node name="Bubble5" parent="." instance=ExtResource( 9 )]
-position = Vector2( 133, -70 )
+position = Vector2( 104, -20 )
+move_speed = 20.0
+fire_pos = Vector2( 0, -100 )
 ice_pos = Vector2( 0, 50 )
 
 [node name="Bubble3" parent="." instance=ExtResource( 9 )]

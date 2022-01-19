@@ -11,12 +11,17 @@ func enter():
 	owner.character_shadow_sprite.set_visible(false)
 	time = 0
 	
+	owner.set_collision_mask_bit(0,0)
+	
 	pass
 	
 func execute():
 	time += owner.get_physics_process_delta_time()
 	
 	owner.bubble_sprite.global_position = lerp(owner.global_position,owner.character.global_position,owner.eject_curve.interpolate(time))
+	
+	if time > 0.2 :
+		owner.set_collision_mask_bit(0,1)
 	
 	if time >= 0.4 :
 		owner.behavior_state_machine.change_state(owner.freeState.new(owner))

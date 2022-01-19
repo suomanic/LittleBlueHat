@@ -126,10 +126,10 @@ func absorbed_by_bubble(bubble_position:Vector2):
 	movement_state_machine.change_state(MS_AbsorbedState.new(self))
 	current_absorb_bubble_global_position = bubble_position
 	
-func ejected_from_bubble(eject_angle :float):
+func ejected_from_bubble(eject_angle :float , bubble_position : Vector2):
 	self.eject_angle = eject_angle
 	movement_state_machine.change_state(MS_EjectedState.new(self))
-	print_debug(eject_angle)
+	current_absorb_bubble_global_position = bubble_position
 
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")

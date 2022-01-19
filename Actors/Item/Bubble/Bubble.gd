@@ -5,9 +5,14 @@ signal absorb_signal
 
 var behavior_state_machine : StateMachine
 var element_state_machine : StateMachine
+var movement_state_machine : StateMachine
 
 var element_state : String
 var can_change_element := true
+
+var will_move := false
+var move_time = 0
+var move_target
 
 var eject_angle
 var absorb_direction := false  #true为右，false为左
@@ -29,6 +34,10 @@ onready var character
 onready var label = $Label
 onready var label2 = $Label2
 
+#movement state
+const moveState = preload("res://Actors/Item/Bubble/State/Movement_State/Move.gd")
+const idleState = preload("res://Actors/Item/Bubble/State/Movement_State/Idle.gd")
+
 #behavior state
 const freeState = preload("res://Actors/Item/Bubble/State/Behavior_State/Free.gd")
 const occupiedState = preload("res://Actors/Item/Bubble/State/Behavior_State/Occupied.gd")
@@ -47,6 +56,10 @@ export var absorb_curve : Curve
 export var eject_curve : Curve
 export var move_curve : Curve
 
+export var move_speed : float
+
+
+onready var current_absolute_position
 #不同状态下泡泡的目标绝对位置
 onready var normal_absolute_position 
 onready var ice_absolute_position 
@@ -60,6 +73,7 @@ func _ready():
 	if not Engine.editor_hint:
 		behavior_state_machine = StateMachine.new(freeState.new(self))
 		element_state_machine = StateMachine.new(N_IdleState.new(self))
+		movement_state_machine = StateMachine.new(idleState.new(self))
 
 		normal_absolute_position = global_position + normal_pos
 		ice_absolute_position = global_position + ice_pos
@@ -75,9 +89,9 @@ func _physics_process(delta):
 	if not Engine.editor_hint: #只在游戏中运行的代码
 		behavior_state_machine.update()
 		element_state_machine.update()
+		movement_state_machine.update()
 		
 		eject_angle = (get_global_mouse_position() - bubble_sprite.global_position).angle()
-		
 		
 		if behavior_state_machine.current_state != null:
 			label.text = behavior_state_machine.current_state.get_name()
@@ -118,34 +132,40 @@ func anim_called_character_shadow_to_idle():
 		character_shadow_anim_player.play("idle_anim")
 		character_shadow_anim_player.advance(bubble_anim_player.current_animation_position)
 
-
 func _on_Hitbox_area_entered(area):
 	if not Engine.editor_hint: 
 		print_debug(area)
 		if can_change_element:
-			if area.get_owner().is_in_group("Ice"):
+			if area.get_owner().is_in_group("Ice"): #要改，还未包含所有种类的冰道具
 				match element_state:
 					"Normal":
 						element_state_machine.change_state(NtoIState.new(self))
-						pass
 					"Ice":
-						#anim_player.play("I_Shake_Anim")
 						pass
 					"Fire":
-						pass
-						#element_state_machine.change_state(FtoNState.new(self))
-			elif area.owner.is_in_group("Fire"):
-				print_debug("fire damage")
+						element_state_machine.change_state(FtoNState.new(self))
+			elif area.owner.is_in_group("Fire"): #要改，还未包含所有种类的火道具
 				match element_state:
 					"Normal":
-						#element_state_machine.change_state(NtoFState.new(self))
-						pass
+						element_state_machine.change_state(NtoFState.new(self))
 					"Ice":
 						element_state_machine.change_state(ItoNState.new(self))
-						pass
 					"Fire":
 						pass
 				
 		pass # Replace with function body.
 
 
+#气泡移动静止切换函数
+func move(target_position):
+	move_time += get_physics_process_delta_time()
+	
+	var offset
+	var distance = current_absolute_position.distance_to(target_position)	
+	if distance != 0:
+		offset = min (move_time / distance * move_speed,1)
+		global_position = lerp(current_absolute_position,target_position,move_curve.interpolate(offset))
+	pass
+	
+	if offset == 1:
+		movement_state_machine.change_state(idleState.new(self))

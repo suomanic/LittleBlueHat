@@ -22,8 +22,6 @@ func execute():
 	
 
 func exit():
-	
-	owner.collision_module.exit_absorbed_collision()
 	owner.owner.get_node("Weapon").character_exit_absorbed()
 	pass
 
