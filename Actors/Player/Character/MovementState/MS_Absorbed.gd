@@ -18,7 +18,7 @@ func execute():
 	if time > 0.2:
 		owner.collision_module.absorbed_collision()
 	
-	owner.global_position = lerp(absolute_position,owner.current_absorb_bubble_global_position,owner.absorbed_curve.interpolate(time))
+	owner.global_position = lerp(absolute_position,owner.current_absorb_bubble.global_position,owner.absorbed_curve.interpolate(time))
 	
 
 func exit():

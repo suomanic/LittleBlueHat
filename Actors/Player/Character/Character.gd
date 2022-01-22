@@ -58,7 +58,7 @@ onready var label2 = $Label2
 export(Curve) var absorbed_curve
 export(Curve) var eject_curve
 
-var current_absorb_bubble_global_position
+var current_absorb_bubble
 var eject_angle
 
 # 记录上一次同步的状态机状态
@@ -122,14 +122,14 @@ func _physics_process(delta) -> void:
 			self.rpc_unreliable('_change_state_machine_status', new_state_machine_status)
 
 
-func absorbed_by_bubble(bubble_position:Vector2):
+func absorbed_by_bubble(bubble):
 	movement_state_machine.change_state(MS_AbsorbedState.new(self))
-	current_absorb_bubble_global_position = bubble_position
+	current_absorb_bubble = bubble
 	
-func ejected_from_bubble(eject_angle :float , bubble_position : Vector2):
+func ejected_from_bubble(eject_angle :float ,bubble):
 	self.eject_angle = eject_angle
 	movement_state_machine.change_state(MS_EjectedState.new(self))
-	current_absorb_bubble_global_position = bubble_position
+	current_absorb_bubble = bubble
 
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")

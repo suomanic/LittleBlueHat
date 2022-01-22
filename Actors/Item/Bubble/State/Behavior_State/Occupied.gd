@@ -25,7 +25,7 @@ func execute():
 	
 	if owner.character.get_parent().input_module.is_attack_just_pressed and time > 0.1 :
 		connect("eject_signal",owner.character,"ejected_from_bubble")
-		emit_signal("eject_signal",owner.eject_angle,owner.global_position)
+		emit_signal("eject_signal",owner.eject_angle,owner)
 		owner.behavior_state_machine.change_state(owner.ejectState.new(owner))
 	pass
 

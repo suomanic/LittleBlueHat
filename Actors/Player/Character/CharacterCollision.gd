@@ -134,12 +134,14 @@ func absorbed_collision():
 	owner.anim_sprite.set_visible(false)
 	owner.trigger_collision.set_deferred("disabled",true)
 	owner.squish_collision.set_deferred("disabled",true)
+	owner.set_collision_layer_bit(0,false)
 	pass
 	
 func exit_absorbed_collision():
 	owner.anim_sprite.set_visible(true)
 	owner.trigger_collision.set_deferred("disabled",false)
 	owner.squish_collision.set_deferred("disabled",false)
+	owner.set_collision_layer_bit(0,true)
 	pass
 
 func invincible_anim_start():

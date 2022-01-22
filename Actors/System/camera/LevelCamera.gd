@@ -2,7 +2,8 @@ extends Camera2D
 
 var time = 1
 var is_player_hurt_anim_playing
-var player 
+var player
+var character
 
 onready var anim_player = $AnimationPlayer
 
@@ -14,8 +15,13 @@ func _physics_process(delta):
 		time = min(time + delta , 1)
 	Engine.time_scale = time_slow_curve.interpolate(time)
 	
+	
 	if player != null:
-		global_position = player.global_position.round()
+		character = player.get_node("Character")
+		if character.movement_state_machine.is_state("Absorbed"):
+			global_position = player.current_absorb_bubble.round()
+		else:
+			global_position = player.global_position.round()
 		force_update_scroll()
 	else:
 		if get_tree().has_network_peer():

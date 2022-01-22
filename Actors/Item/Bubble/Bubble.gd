@@ -55,7 +55,7 @@ export var absorb_curve : Curve
 export var eject_curve : Curve
 export var move_curve : Curve
 
-export var move_speed : float
+export var move_speed := 50
 
 #不同状态下泡泡的目标绝对位置
 onready var normal_absolute_position 
@@ -118,7 +118,7 @@ func _on_Bubble_body_entered(body):
 			
 			character = body 
 			connect("absorb_signal",body,"absorbed_by_bubble")
-			emit_signal("absorb_signal",global_position)
+			emit_signal("absorb_signal",self)
 		behavior_state_machine.change_state(occupiedState.new(self))
 	
 func disconnect_absorb_signal():

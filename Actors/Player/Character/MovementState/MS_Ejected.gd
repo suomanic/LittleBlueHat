@@ -30,12 +30,10 @@ func execute():
 	owner.velocity = lerp(Vector2(0,0),Vector2(cos(owner.eject_angle), sin(owner.eject_angle)) * 1000,owner.eject_curve.interpolate(time))
 	
 	
-	
-	
 	#设置玩家位置到泡泡中心,不知道为啥写在enter里没用
-	if flag == true and owner.current_absorb_bubble_global_position != null:
-		owner.set_global_position(owner.current_absorb_bubble_global_position)
-		owner.current_absorb_bubble_global_position = null
+	if flag == true and owner.current_absorb_bubble != null:
+		owner.set_global_position(owner.current_absorb_bubble.global_position)
+		owner.current_absorb_bubble = null
 		flag = false
 	
 	if time >= 0.2 :
