@@ -6,6 +6,7 @@ func _init(o).(o):
 func enter():
 	owner.element_state = "Normal"
 	owner.bubble_anim_player.play("N_Idle_anim")
+	
 	pass
 	
 func execute():

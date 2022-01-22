@@ -4,11 +4,11 @@ func _init(o).(o):
 	pass
 
 func enter():
+	owner.can_change_element = true
 	pass
 	
 func execute():
-	if owner.will_move:
-		owner.movement_state_machine.change_state(owner.moveState.new(owner))
+	
 	pass
 
 func exit():

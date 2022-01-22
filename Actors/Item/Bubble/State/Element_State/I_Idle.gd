@@ -5,10 +5,10 @@ func _init(o).(o):
 
 func enter():
 	owner.effect_sprite.set_visible(true) 
-	
 	owner.bubble_anim_player.play("I_Idle_anim")
 	owner.effect_anim_player.play("ice_effect_anim")
 	owner.effect_anim_player.advance(owner.bubble_anim_player.get_current_animation_position())
+	
 	
 	pass
 	

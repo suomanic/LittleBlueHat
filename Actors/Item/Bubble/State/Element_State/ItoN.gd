@@ -1,4 +1,5 @@
 extends State
+var time = 0
 
 func _init(o).(o):
 	pass
@@ -6,7 +7,6 @@ func _init(o).(o):
 func enter():
 	owner.element_state = "Normal"
 	owner.character_shadow_sprite.set_modulate("ffffff")
-	owner.will_move = true
 	owner.move_target = owner.normal_absolute_position
 	pass
 	

@@ -9,9 +9,6 @@ var movement_state_machine : StateMachine
 
 var element_state : String
 var can_change_element := true
-
-var will_move := false
-var move_time = 0
 var move_target
 
 var eject_angle
@@ -33,6 +30,8 @@ onready var character
 
 onready var label = $Label
 onready var label2 = $Label2
+onready var label3 = $Label3
+onready var label4 = $Label4
 
 #movement state
 const moveState = preload("res://Actors/Item/Bubble/State/Movement_State/Move.gd")
@@ -58,8 +57,6 @@ export var move_curve : Curve
 
 export var move_speed : float
 
-
-onready var current_absolute_position
 #不同状态下泡泡的目标绝对位置
 onready var normal_absolute_position 
 onready var ice_absolute_position 
@@ -97,6 +94,7 @@ func _physics_process(delta):
 			label.text = behavior_state_machine.current_state.get_name()
 		if element_state_machine.current_state != null:
 			label2.text = element_state_machine.current_state.get_name()	
+		label4.text = String(global_position.y)
 			
 		if absorb_direction :
 			character_shadow_sprite.scale.x = 1
@@ -134,38 +132,28 @@ func anim_called_character_shadow_to_idle():
 
 func _on_Hitbox_area_entered(area):
 	if not Engine.editor_hint: 
-		print_debug(area)
 		if can_change_element:
 			if area.get_owner().is_in_group("Ice"): #要改，还未包含所有种类的冰道具
 				match element_state:
 					"Normal":
 						element_state_machine.change_state(NtoIState.new(self))
+						movement_state_machine.change_state(moveState.new(self))
 					"Ice":
 						pass
 					"Fire":
 						element_state_machine.change_state(FtoNState.new(self))
+						movement_state_machine.change_state(moveState.new(self))
 			elif area.owner.is_in_group("Fire"): #要改，还未包含所有种类的火道具
 				match element_state:
 					"Normal":
 						element_state_machine.change_state(NtoFState.new(self))
+						movement_state_machine.change_state(moveState.new(self))
 					"Ice":
 						element_state_machine.change_state(ItoNState.new(self))
+						movement_state_machine.change_state(moveState.new(self))
 					"Fire":
 						pass
 				
 		pass # Replace with function body.
 
 
-#气泡移动静止切换函数
-func move(target_position):
-	move_time += get_physics_process_delta_time()
-	
-	var offset
-	var distance = current_absolute_position.distance_to(target_position)	
-	if distance != 0:
-		offset = min (move_time / distance * move_speed,1)
-		global_position = lerp(current_absolute_position,target_position,move_curve.interpolate(offset))
-	pass
-	
-	if offset == 1:
-		movement_state_machine.change_state(idleState.new(self))
