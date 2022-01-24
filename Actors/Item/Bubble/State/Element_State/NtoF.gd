@@ -7,7 +7,7 @@ func _init(o).(o):
 
 func enter():
 	owner.element_state = "Fire"
-	owner.character_shadow_sprite.set_modulate("ffffff")#要改
+	owner.character_shadow_sprite.set_modulate("fd7d29")
 	owner.move_target = owner.fire_absolute_position
 	pass
 	
