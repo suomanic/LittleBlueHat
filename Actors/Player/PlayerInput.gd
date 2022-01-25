@@ -35,9 +35,11 @@ func _init():
 	is_weapon3_just_pressed = false
 	is_weapon4_just_pressed = false
 	
-func _physics_process(delta) -> void:
+func _physics_process(_delta) -> void:
 	# 如果处于联机模式下且自己不是master节点
-	if get_tree().has_network_peer() and !is_network_master():
+	if get_tree().has_network_peer() \
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and !is_network_master():
 		return
 	mouse_global_position = get_global_mouse_position()
 	
@@ -88,7 +90,9 @@ func _physics_process(delta) -> void:
 	
 	return # debug
 	# 如果处于联机模式下且自己是master节点
-	if get_tree().has_network_peer() and is_network_master():
+	if get_tree().has_network_peer() \
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and is_network_master():
 		var new_input_status:Dictionary = {}
 		if is_right_pressed != last_sync_input_status.is_right_pressed:
 			last_sync_input_status.is_right_pressed = is_right_pressed
@@ -151,7 +155,9 @@ puppet func change_input_status(new_input_status: Dictionary):
 	
 func get_direction() -> Vector2:
 	# 如果处于联机模式下且自己不是master节点
-	#if get_tree().has_network_peer() and !is_network_master():
+	#if get_tree().has_network_peer() \
+	#	and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+	#	and !is_network_master():
 	#	return Vector2(0, 0)
 	return Vector2(
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),

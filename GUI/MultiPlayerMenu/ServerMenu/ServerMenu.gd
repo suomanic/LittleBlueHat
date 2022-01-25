@@ -1,7 +1,7 @@
-extends MarginContainer
+extends Container
 
-onready var PortEdit:LineEdit = get_node("MenuContainer/ContentContainer/ConfigContainer/PortEdit")
-onready var NameEdit:LineEdit = get_node("MenuContainer/ContentContainer/ConfigContainer/NameEdit")
+onready var PortEdit:LineEdit = get_node("MenuMainContainer/ConfigContainer/PortEdit")
+onready var NameEdit:LineEdit = get_node("MenuMainContainer/ConfigContainer/NameEdit")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

@@ -60,7 +60,7 @@ export(Curve) var eject_curve
 
 var current_absorb_bubble
 var eject_angle
-
+var temp_rand_name
 # 记录上一次同步的状态机状态
 onready var state_machine_status : Dictionary = {
 	movement_state = "",
@@ -83,7 +83,7 @@ func _physics_process(delta) -> void:
 	
 	for i in get_slide_count():
 		var collision = get_slide_collision(i)
-		var str1 :String 
+		var str1 :String
 		str1 = collision.collider.name
 		if str1.begins_with("Slime"):
 			pass
@@ -94,7 +94,9 @@ func _physics_process(delta) -> void:
 		walk_particles.set_emitting(false)
 	
 	# 如果处于联机模式下且自己是master节点
-	if self.get_tree().has_network_peer() and self.is_network_master():
+	if get_tree().has_network_peer() \
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and self.is_network_master():
 		var new_state_machine_status:Dictionary = {}
 		
 		var curr_movement_state_name: String = ""

@@ -1,0 +1,93 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://GUI/MultiPlayerMenu/ServerMenu/ServerMenu.gd" type="Script" id=1]
+
+[node name="ServerMenu" type="AspectRatioContainer"]
+margin_right = -1787.0
+margin_bottom = -990.0
+focus_mode = 1
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuMainContainer" type="VBoxContainer" parent="."]
+margin_right = 111.0
+margin_bottom = 76.0
+alignment = 1
+
+[node name="ConfigContainer" type="GridContainer" parent="MenuMainContainer"]
+margin_right = 111.0
+margin_bottom = 52.0
+columns = 2
+
+[node name="PortLabel" type="Label" parent="MenuMainContainer/ConfigContainer"]
+margin_right = 49.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Port:"
+align = 1
+valign = 1
+
+[node name="PortEdit" type="LineEdit" parent="MenuMainContainer/ConfigContainer"]
+margin_left = 53.0
+margin_right = 111.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "12345"
+expand_to_text_length = true
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="NameLabel" type="Label" parent="MenuMainContainer/ConfigContainer"]
+margin_top = 28.0
+margin_right = 49.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Name:"
+align = 1
+valign = 1
+
+[node name="NameEdit" type="LineEdit" parent="MenuMainContainer/ConfigContainer"]
+margin_left = 53.0
+margin_top = 28.0
+margin_right = 111.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Tom"
+expand_to_text_length = true
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="ButtonContainer" type="HBoxContainer" parent="MenuMainContainer"]
+margin_top = 56.0
+margin_right = 111.0
+margin_bottom = 76.0
+alignment = 1
+
+[node name="CancelButton" type="Button" parent="MenuMainContainer/ButtonContainer"]
+margin_right = 54.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Cancel"
+expand_icon = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ServerCreateButton" type="Button" parent="MenuMainContainer/ButtonContainer"]
+margin_left = 58.0
+margin_right = 111.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Create"
+expand_icon = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="MenuMainContainer/ButtonContainer/ServerCreateButton" to="." method="_on_ServerCreateButton_pressed"]

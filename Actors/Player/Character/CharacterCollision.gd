@@ -27,7 +27,9 @@ func _physics_process(delta):
 # the boolean means is character facing right,true means right
 func facing() -> bool:
 	# 如果处于联机模式下且自己不是master节点
-	if get_tree().has_network_peer() and !is_network_master():
+	if get_tree().has_network_peer() \
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and !is_network_master():
 		return owner.anim_sprite.scale.x >= 0
 	
 	var new_facing:bool = owner.anim_sprite.scale.x >= 0
@@ -48,7 +50,9 @@ func facing() -> bool:
 
 func sync_facing(new_facing = null):
 	# 如果处于联机模式下且自己是master节点
-	if get_tree().has_network_peer() and is_network_master():
+	if get_tree().has_network_peer() \
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and is_network_master():
 		if new_facing == null:
 			new_facing = facing()
 		if new_facing != last_sync_facing:
@@ -57,7 +61,9 @@ func sync_facing(new_facing = null):
 
 # 更新朝向，true表示向右
 puppet func change_facing(new_facing: bool):
-	if get_tree().has_network_peer() and !is_network_master():
+	if get_tree().has_network_peer() \
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and !is_network_master():
 		print_debug("change facing to ", "right" if new_facing else "left")
 	if new_facing == true :
 		owner.anim_sprite.scale.x = 1

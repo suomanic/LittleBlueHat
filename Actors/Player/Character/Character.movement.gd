@@ -92,7 +92,9 @@ func jump():
 		
 func move():
 	# 如果处于联机模式下且自己不是master节点，则跳过
-	if owner.get_tree().has_network_peer() and !owner.is_network_master():
+	if owner.get_tree().has_network_peer() \
+		and owner.get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and !owner.is_network_master():
 		return
 	
 	if owner.owner.input_module.get_direction().x == 0:
@@ -109,7 +111,9 @@ func move():
 #简单复制，需要修改
 func crouch_move():
 	# 如果处于联机模式下且自己不是master节点，则跳过
-	if owner.get_tree().has_network_peer() and !owner.is_network_master():
+	if owner.get_tree().has_network_peer() \
+		and owner.get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and !owner.is_network_master():
 		return
 	
 	if owner.owner.input_module.get_direction().x == 0:
@@ -173,7 +177,9 @@ func hurt_move(hit_to_direction):
 
 func sync_basic_status():
 	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() and owner.is_network_master():
+	if owner.get_tree().has_network_peer() \
+		and owner.get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and owner.is_network_master():
 		## 同步basic_status ##
 		var new_basic_status :Dictionary = {}
 		# 如果上一次同步的内容（last_sync_basic_status）和当前内容不一样，
@@ -201,7 +207,9 @@ func sync_basic_status():
 
 func sync_extra_status():
 	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() and owner.is_network_master():
+	if owner.get_tree().has_network_peer() \
+		and owner.get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and owner.is_network_master():
 		## 同步extra_var ##
 		if jump_count != last_sync_extra_status.jump_count:
 			last_sync_extra_status.jump_count = jump_count

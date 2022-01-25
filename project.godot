@@ -39,7 +39,7 @@ _global_script_class_icons={
 [application]
 
 config/name="BRΩ"
-run/main_scene="res://GUI/MainMenu/MainMenu.tscn"
+run/main_scene="res://Levels/InitialLevel/InitialLevel.tscn"
 
 [autoload]
 

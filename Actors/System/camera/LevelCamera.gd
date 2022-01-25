@@ -24,10 +24,13 @@ func _physics_process(delta):
 			global_position = player.global_position.round()
 		force_update_scroll()
 	else:
-		if get_tree().has_network_peer():
+		if get_tree().has_network_peer() \
+			and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
 			player = get_tree().get_current_scene().get_node(MultiplayerState.myPlayerNodeName)
 		else:
-			player = get_tree().get_current_scene().get_node("Player")
+			for c in get_tree().current_scene.get_children():
+				if c.name.begins_with("Player"):
+					player = c
 func player_hurt():
 	camera_zoom_in()
 	
