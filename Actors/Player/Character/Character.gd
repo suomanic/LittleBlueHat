@@ -54,6 +54,7 @@ onready var eject_particles = $EjectParticles
 
 onready var label = $Label
 onready var label2 = $Label2
+onready var name_label = $NameLabel
 
 export(Curve) var absorbed_curve
 export(Curve) var eject_curve
@@ -93,35 +94,40 @@ func _physics_process(delta) -> void:
 	else :
 		walk_particles.set_emitting(false)
 	
-	# 如果处于联机模式下且自己是master节点
+	# 如果处于联机模式下
 	if get_tree().has_network_peer() \
-		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
-		and self.is_network_master():
-		var new_state_machine_status:Dictionary = {}
-		
-		var curr_movement_state_name: String = ""
-		var curr_anim_state_name: String = ""
-		
-		# 如果movement_state_machine和anim_state_machine的状态都不为null，
-		# 则将其状态的名称存入curr_movement_state_name和curr_anim_state_name内
-		if movement_state_machine.current_state != null:
-			curr_movement_state_name = movement_state_machine.get_curr_state_name()
-		if anim_state_machine.current_state != null:
-			curr_anim_state_name = anim_state_machine.get_curr_state_name()
-		
-		# 如果上一次同步的状态机状态（state_machine_status）和当前的状态机状态不一样，
-		# 将变更过的内容放入new_state_machine_status内并更新state_machine_status
-		if curr_movement_state_name != state_machine_status.movement_state:
-			state_machine_status.movement_state = curr_movement_state_name
-			new_state_machine_status.movement_state = curr_movement_state_name
-		if curr_anim_state_name != state_machine_status.anim_state :
-			state_machine_status.anim_state = curr_anim_state_name
-			new_state_machine_status.anim_state = curr_anim_state_name
-		
-		# 如果new_state_machine_status为空，则说明当前状态机的状态和上一次同步时相比没有改变，
-		# 则不进行同步。否则，同步。
-		if !new_state_machine_status.empty():
-			self.rpc_unreliable('_change_state_machine_status', new_state_machine_status)
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+		# 如果自己不是master节点
+		if !self.is_network_master():
+			name_label.text = MultiplayerState.remotePlayerInfo.name
+		# 如果自己是master节点
+		elif self.is_network_master():
+			name_label.text = MultiplayerState.myInfo.name
+			var new_state_machine_status:Dictionary = {}
+			
+			var curr_movement_state_name: String = ""
+			var curr_anim_state_name: String = ""
+			
+			# 如果movement_state_machine和anim_state_machine的状态都不为null，
+			# 则将其状态的名称存入curr_movement_state_name和curr_anim_state_name内
+			if movement_state_machine.current_state != null:
+				curr_movement_state_name = movement_state_machine.get_curr_state_name()
+			if anim_state_machine.current_state != null:
+				curr_anim_state_name = anim_state_machine.get_curr_state_name()
+			
+			# 如果上一次同步的状态机状态（state_machine_status）和当前的状态机状态不一样，
+			# 将变更过的内容放入new_state_machine_status内并更新state_machine_status
+			if curr_movement_state_name != state_machine_status.movement_state:
+				state_machine_status.movement_state = curr_movement_state_name
+				new_state_machine_status.movement_state = curr_movement_state_name
+			if curr_anim_state_name != state_machine_status.anim_state :
+				state_machine_status.anim_state = curr_anim_state_name
+				new_state_machine_status.anim_state = curr_anim_state_name
+			
+			# 如果new_state_machine_status为空，则说明当前状态机的状态和上一次同步时相比没有改变，
+			# 则不进行同步。否则，同步。
+			if !new_state_machine_status.empty():
+				self.rpc_unreliable('_change_state_machine_status', new_state_machine_status)
 
 
 func absorbed_by_bubble(bubble):

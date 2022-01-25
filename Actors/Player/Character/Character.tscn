@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Assets/Player/animation/animation package-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Actors/Player/Character/Character.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Actors/Player/Character/Character.movement.gd" type="Script" id=4]
 [ext_resource path="res://State_Machine/StateMachine.gd" type="Script" id=5]
 [ext_resource path="res://Actors/Player/Character/CharacterCollision.gd" type="Script" id=6]
+[ext_resource path="res://Assets/Font/FFF Forward.ttf" type="DynamicFontData" id=7]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0 ), 0.0, 3.04773, 0, 0, Vector2( 0.375839, 0.854545 ), -0.115844, 0.0, 0, 0 ]
@@ -316,6 +317,13 @@ shader = SubResource( 19 )
 [sub_resource type="RectangleShape2D" id=21]
 extents = Vector2( 5, 1 )
 
+[sub_resource type="DynamicFont" id=24]
+use_mipmaps = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="Theme" id=25]
+default_font = SubResource( 24 )
+
 [node name="Character" type="KinematicBody2D" groups=["Player"]]
 collision_mask = 35
 collision/safe_margin = 0.1
@@ -442,6 +450,19 @@ script = ExtResource( 5 )
 
 [node name="CharacterAnimStateMachine" type="Node" parent="."]
 script = ExtResource( 5 )
+
+[node name="NameLabel" type="Label" parent="."]
+margin_left = -17.1748
+margin_top = -27.0
+margin_right = 96.8252
+margin_bottom = -5.0
+rect_scale = Vector2( 0.3, 0.3 )
+theme = SubResource( 25 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_mushroom_area_entered"]
 [connection signal="area_entered" from="Trigger" to="CharacterCollision" method="_on_enemy_area_entered"]

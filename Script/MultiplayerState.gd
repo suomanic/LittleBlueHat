@@ -10,11 +10,11 @@ class PlayerInfo:
 
 # 基本属性：联网id，名字，类型
 var myId : int = 0
-var myInfo: PlayerInfo
-var myPlayerNodeName: String
+var myInfo: PlayerInfo = PlayerInfo.new()
+var myPlayerNodeName: String = ""
 var remotePlayerId : int = 0
-var remotePlayerInfo: PlayerInfo
-var remotePlayerNodeName: String
+var remotePlayerInfo: PlayerInfo = PlayerInfo.new()
+var remotePlayerNodeName: String = ""
 
 var myPlayerInstance: Node2D = null
 var remotePlayerInstance: Node2D = null
@@ -42,7 +42,8 @@ func _on_network_peer_connected(remote_id : int) -> void:
 	print_debug('player peer ', remote_id, ' connected')
 	
 	# 通过 rpc_id 将自己的信息远程发送给对方进行注册
-	rpc_id(remote_id, 'registerPlayerInfo', myInfo)
+	var my_info_var = { "name": myInfo.name, "type": myInfo.type }
+	rpc_id(remote_id, 'registerPlayerInfo', var2str(my_info_var))
 	
 	if self.get_tree().is_network_server():
 		self.get_tree().refuse_new_network_connections = true
@@ -97,14 +98,17 @@ func _on_connection_faileded() -> void:
 
 # 远程方法，处理来自其他玩家的调用，添加其他玩家的信息到 remotePlayerInfo
 # 注意，这个方法实际是其他玩家调用（发送），或者说你通过该方法接收到了来自其他玩家的信息
-remote func registerPlayerInfo(remote_info: PlayerInfo):
+remote func registerPlayerInfo(remote_info_str: String):
+	var remote_info_var = str2var(remote_info_str)
 	var remote_id = self.get_tree().get_rpc_sender_id()
 	var success = false
 	# 如果我方没被连接过，则注册新玩家id和信息
 	if(remotePlayerId == 0):
 		remotePlayerId = remote_id
 		remotePlayerNodeName = "Player" + str(remotePlayerId)
-		remotePlayerInfo = remote_info
+		if remote_info_var != null:
+			remotePlayerInfo.name = remote_info_var["name"]
+			remotePlayerInfo.type = remote_info_var["type"]
 		success = load_remote_player()
 	# 如果加载远程玩家失败，则关闭对该远程玩家的连接
 	if(!success):

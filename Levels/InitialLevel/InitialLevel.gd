@@ -6,7 +6,7 @@ func _ready():
 	pass
 
 func _on_Teleport_area_entered(area):
-	if area.owner.is_in_group('Player'):
+	if area.owner.is_in_group('Player') && !get_tree().has_network_peer():
 		popup_content.popup()
 		popup_content.grab_focus()
 
