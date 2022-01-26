@@ -27,7 +27,9 @@ func _ready() -> void:
 	self.get_tree().connect('server_disconnected', self, '_on_server_disconnected')
 	self.get_tree().connect('connected_to_server', self, '_on_connected_to_server')
 	self.get_tree().connect('connection_failed', self, '_on_connection_failed')
-	call_deferred('newGame')
+	for c in get_tree().current_scene.get_children():
+		if c.name.begins_with("Player"):
+			my_player_instance = c
 
 # 每当和终端连接成功（无论谁是发起方），就会调用该方法，不论自身是服务端还是客户端
 # ● network_peer_connected(id: int)
@@ -138,7 +140,7 @@ remote func updatePlayerInfo(remote_info: Dictionary):
 		remote_player_info = remote_info
 
 # 创建新游戏
-func newGame() -> bool:
+func newGame(scene_path: String = INITIAL_SCENE) -> bool:
 	get_tree().set_pause(true)
 	
 	# 初始化
@@ -153,7 +155,7 @@ func newGame() -> bool:
 	remote_player_instance = null
 	
 	# 加载世界
-	world = load(INITIAL_SCENE).instance()
+	world = load(scene_path).instance()
 	get_tree().root.add_child(world)
 	get_tree().current_scene = world
 	
@@ -162,6 +164,7 @@ func newGame() -> bool:
 	for c in world.get_children():
 		if c.name.begins_with("Player"):
 			tempPlayer = c
+			break
 	if tempPlayer != null && is_instance_valid(tempPlayer):
 		spanGlobalPosition = tempPlayer.global_position
 		world.remove_child(tempPlayer)
