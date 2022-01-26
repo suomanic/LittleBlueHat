@@ -33,12 +33,12 @@ func facing() -> bool:
 		return owner.anim_sprite.scale.x >= 0
 	
 	var new_facing:bool = owner.anim_sprite.scale.x >= 0
-	if owner.owner.input_module.get_direction().x > 0 :
+	if owner.input_module.get_direction().x > 0 :
 		owner.walk_particles.scale.x = 1
 		owner.walk_particles.position = Vector2(-5,12)
 		change_facing(true)
 		new_facing = true 
-	elif owner.owner.input_module.get_direction().x < 0 :
+	elif owner.input_module.get_direction().x < 0 :
 		owner.walk_particles.scale.x = -1
 		owner.walk_particles.position = Vector2(5,12)
 		change_facing(false)

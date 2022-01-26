@@ -8,7 +8,7 @@ func enter():
 	pass
 	
 func execute():
-	if !owner.owner.owner.input_module.is_crouch_pressed:
+	if !owner.owner.input_module.is_crouch_pressed:
 		if owner.owner.velocity.x == 0:
 			owner.Ground_State_Machine.change_state(owner.AS_IdleState.new(owner))
 		else:

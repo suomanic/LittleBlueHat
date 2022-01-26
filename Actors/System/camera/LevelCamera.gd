@@ -3,7 +3,6 @@ extends Camera2D
 var time = 1
 var is_player_hurt_anim_playing
 var player
-var character
 
 onready var anim_player = $AnimationPlayer
 
@@ -17,8 +16,7 @@ func _physics_process(delta):
 	
 	
 	if player != null:
-		character = player.get_node("Character")
-		if character.movement_state_machine.is_state("Absorbed"):
+		if player.movement_state_machine.is_state("Absorbed"):
 			global_position = player.current_absorb_bubble.round()
 		else:
 			global_position = player.global_position.round()

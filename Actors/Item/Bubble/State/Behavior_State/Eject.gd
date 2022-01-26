@@ -18,14 +18,14 @@ func enter():
 func execute():
 	time += owner.get_physics_process_delta_time()
 	
-	owner.bubble_sprite.global_position = lerp(owner.global_position,owner.character.global_position,owner.eject_curve.interpolate(time))
+	owner.bubble_sprite.global_position = lerp(owner.global_position,owner.player.global_position,owner.eject_curve.interpolate(time))
 	
 	if time > 0.2 :
 		owner.set_collision_mask_bit(0,1)
 	
 	if time >= 0.4 :
 		owner.behavior_state_machine.change_state(owner.freeState.new(owner))
-		owner.character = null	
+		owner.player = null	
 	pass
 
 func exit():

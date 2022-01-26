@@ -1,20 +1,478 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Actors/Player/Weapon/Weapon.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Actors/Player/Character/Character.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Assets/Font/FFF Forward.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Actors/Player/PlayerInput.gd" type="Script" id=3]
-[ext_resource path="res://Actors/Player/Player.gd" type="Script" id=4]
+[ext_resource path="res://State_Machine/StateMachine.gd" type="Script" id=4]
+[ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=5]
+[ext_resource path="res://Assets/Player/animation/animation package-Sheet.png" type="Texture" id=6]
+[ext_resource path="res://Actors/Player/Player.movement.gd" type="Script" id=7]
+[ext_resource path="res://Actors/Player/PlayerCollision.gd" type="Script" id=8]
+[ext_resource path="res://Actors/Player/Player.gd" type="Script" id=9]
 
-[node name="Player" type="Node2D"]
-position = Vector2( 0, -1 )
-script = ExtResource( 4 )
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 0 ), 0.0, 3.04773, 0, 0, Vector2( 0.375839, 0.854545 ), -0.115844, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0, 0.945454 ), 0.0, -8.57879, 0, 0, Vector2( 0.251678, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=22]
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=23]
+gradient = SubResource( 22 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+lifetime_randomness = 0.36
+emission_shape = 1
+emission_sphere_radius = 0.5
+flag_disable_z = true
+direction = Vector3( -1, -3, 0 )
+spread = 16.1
+gravity = Vector3( 0, 5, 0 )
+initial_velocity = 10.0
+initial_velocity_random = 0.5
+angular_velocity = 10.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 2.0
+color_ramp = SubResource( 23 )
+hue_variation = -1.0
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 5, 13 )
+
+[sub_resource type="Animation" id=7]
+step = 0.25
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.001, 0.25, 0.5, 0.75, 1 ),
+"transitions": PoolRealArray( 0.933035, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.568627 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.568627 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("PlayerCollision")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "invincible_anim_start"
+}, {
+"args": [  ],
+"method": "invincible_anim_end"
+} ]
+}
+
+[sub_resource type="Animation" id=8]
+length = 0.1
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 47 ]
+}
+
+[sub_resource type="Animation" id=9]
+length = 0.48
+step = 0.06
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.48 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "die_anim_start"
+}, {
+"args": [  ],
+"method": "die_anim_end"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimSpriteSheet:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.06, 0.12, 0.18, 0.24, 0.3, 0.36, 0.42 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 50, 51, 52, 53, 54, 55, 56, 57 ]
+}
+
+[sub_resource type="Animation" id=10]
+length = 0.525
+step = 0.075
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.075, 0.15, 0.225, 0.3, 0.375, 0.45 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 38, 39, 40, 41, 42, 43, 6 ]
+}
+
+[sub_resource type="Animation" id=11]
+length = 0.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 7, 8, 9, 10 ]
+}
+
+[sub_resource type="Animation" id=12]
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 48, 49 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "hurt_anim_end"
+} ]
+}
+
+[sub_resource type="Animation" id=13]
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 11, 12, 13, 14, 15, 16, 17, 18 ]
+}
+
+[sub_resource type="Animation" id=14]
+length = 0.8
+loop = true
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 19, 20, 21, 22, 23, 24, 25, 26 ]
+}
+
+[sub_resource type="Animation" id=15]
+length = 0.35
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.15, 0.2, 0.25, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 28, 29, 31, 32, 33, 34 ]
+}
+
+[sub_resource type="Animation" id=16]
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 35, 36 ]
+}
+
+[sub_resource type="Animation" id=17]
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimSpriteSheet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.15 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 44, 45, 46, 47 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "tocourch_anim_end"
+} ]
+}
+
+[sub_resource type="RectangleShape2D" id=18]
+extents = Vector2( 4, 11 )
+
+[sub_resource type="Shader" id=19]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+// Texture must have 'Filter'-flag enabled!
+
+// Automatic smoothing
+// independent of geometry and perspective
+vec4 texturePointSmooth(sampler2D smp, vec2 uv, vec2 pixel_size)
+{
+	vec2 ddx = dFdx(uv);
+	vec2 ddy = dFdy(uv);
+	vec2 lxy = sqrt(ddx * ddx + ddy * ddy);
+	
+	vec2 uv_pixels = uv / pixel_size;
+	
+	vec2 uv_pixels_floor = round(uv_pixels) - vec2(0.5f);
+	vec2 uv_dxy_pixels = uv_pixels - uv_pixels_floor;
+	
+	uv_dxy_pixels = clamp((uv_dxy_pixels - vec2(0.5f)) * pixel_size / lxy + vec2(0.5f), 0.0f, 1.0f);
+	
+	uv = uv_pixels_floor * pixel_size;
+	
+	return textureGrad(smp, uv + uv_dxy_pixels * pixel_size, ddx, ddy);
+}
+
+void fragment()
+{
+	COLOR = texturePointSmooth(TEXTURE, UV, TEXTURE_PIXEL_SIZE);
+}"
+
+[sub_resource type="ShaderMaterial" id=20]
+shader = SubResource( 19 )
+
+[sub_resource type="RectangleShape2D" id=21]
+extents = Vector2( 5, 1 )
+
+[sub_resource type="DynamicFont" id=24]
+use_mipmaps = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="Theme" id=25]
+default_font = SubResource( 24 )
+
+[node name="Player" type="KinematicBody2D" groups=["Player"]]
+collision_mask = 35
+collision/safe_margin = 0.1
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_horizontal_guides_": [ -14.0 ]
+}
+absorbed_curve = SubResource( 1 )
+eject_curve = SubResource( 2 )
 
 [node name="PlayerInput" type="Node2D" parent="."]
 script = ExtResource( 3 )
 
-[node name="Character" parent="." instance=ExtResource( 2 )]
-position = Vector2( 0, -3 )
-collision_mask = 34
-
 [node name="Weapon" parent="." instance=ExtResource( 1 )]
 position = Vector2( 15, -3 )
+
+[node name="PlayerMovement" type="Node" parent="."]
+script = ExtResource( 7 )
+jump_force = 225
+double_jump_force = 200
+
+[node name="PlayerCollision" type="Node" parent="."]
+script = ExtResource( 8 )
+
+[node name="WalkParticles" type="Particles2D" parent="."]
+position = Vector2( -4, 12 )
+amount = 40
+speed_scale = 1.5
+explosiveness = 1.0
+local_coords = false
+draw_order = 1
+process_material = SubResource( 5 )
+
+[node name="EjectParticles" type="Particles2D" parent="."]
+visible = false
+position = Vector2( -4, 12 )
+amount = 50
+lifetime = 2.0
+speed_scale = 1.5
+local_coords = false
+draw_order = 1
+process_material = SubResource( 5 )
+
+[node name="Trigger" type="Area2D" parent="."]
+visible = false
+position = Vector2( 0, 6 )
+collision_mask = 12
+
+[node name="TriggerBox" type="CollisionShape2D" parent="Trigger"]
+position = Vector2( 0, -5 )
+shape = SubResource( 6 )
+
+[node name="EffectAnimPlayer" type="AnimationPlayer" parent="."]
+anims/Invincible_Effect_Anim = SubResource( 7 )
+
+[node name="MovementAnimPlayer" type="AnimationPlayer" parent="."]
+anims/CrouchIdle_Anim = SubResource( 8 )
+anims/Die_Anim = SubResource( 9 )
+anims/DoubleJump_Anim = SubResource( 10 )
+anims/Fall_Anim = SubResource( 11 )
+anims/Hurt_Anim = SubResource( 12 )
+anims/Idle_Anim = SubResource( 13 )
+anims/Run_Anim = SubResource( 14 )
+anims/SpinUp_Anim = SubResource( 15 )
+anims/Up_Anim = SubResource( 16 )
+anims/toCrouch_Anim = SubResource( 17 )
+
+[node name="AnimSpriteSheet" type="Sprite" parent="."]
+material = ExtResource( 5 )
+texture = ExtResource( 6 )
+hframes = 7
+vframes = 9
+frame = 47
+
+[node name="Standing_Shape" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 1 )
+shape = SubResource( 18 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+material = SubResource( 20 )
+zoom = Vector2( 0.2, 0.2 )
+process_mode = 0
+drag_margin_left = 0.1
+drag_margin_top = 0.1
+drag_margin_right = 0.1
+drag_margin_bottom = 0.1
+
+[node name="RayCastL" type="RayCast2D" parent="."]
+position = Vector2( -4, -1 )
+enabled = true
+cast_to = Vector2( 0, 14 )
+collision_mask = 34
+
+[node name="RayCastR" type="RayCast2D" parent="."]
+position = Vector2( 4, -1 )
+enabled = true
+cast_to = Vector2( 0, 14 )
+collision_mask = 34
+
+[node name="SquishHitBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SquishHitBox"]
+position = Vector2( 0, -14 )
+shape = SubResource( 21 )
+
+[node name="HurtMoveTimer" type="Timer" parent="."]
+
+[node name="Label" type="Label" parent="."]
+margin_left = -20.0
+margin_top = -30.0
+margin_right = 20.0
+margin_bottom = -16.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="."]
+margin_left = -19.0
+margin_top = -45.0
+margin_right = 21.0
+margin_bottom = -31.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerMovementStateMachine" type="Node" parent="."]
+script = ExtResource( 4 )
+
+[node name="PlayerAnimStateMachine" type="Node" parent="."]
+script = ExtResource( 4 )
+
+[node name="NameLabel" type="Label" parent="."]
+margin_left = -17.1748
+margin_top = -27.0
+margin_right = 96.8252
+margin_bottom = -5.0
+rect_scale = Vector2( 0.3, 0.3 )
+theme = SubResource( 25 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="area_entered" from="Trigger" to="PlayerCollision" method="_on_mushroom_area_entered"]
+[connection signal="area_entered" from="Trigger" to="PlayerCollision" method="_on_enemy_area_entered"]
+[connection signal="body_entered" from="SquishHitBox" to="PlayerCollision" method="_on_SquishHitBox_body_entered"]
+[connection signal="timeout" from="HurtMoveTimer" to="PlayerCollision" method="_on_SDM_Timer_timeout"]

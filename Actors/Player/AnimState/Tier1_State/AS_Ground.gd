@@ -2,9 +2,9 @@ extends State
 
 var Ground_State_Machine :StateMachine
 
-const AS_IdleState = preload("res://Actors/Player/Character/AnimState/Tier2_State/AS_Idle.gd")
-const AS_RunState = preload("res://Actors/Player/Character/AnimState/Tier2_State/AS_Run.gd")
-const AS_CrouchState = preload("res://Actors/Player/Character/AnimState/Tier2_State/AS_Crouch.gd")
+const AS_IdleState = preload("res://Actors/Player/AnimState/Tier2_State/AS_Idle.gd")
+const AS_RunState = preload("res://Actors/Player/AnimState/Tier2_State/AS_Run.gd")
+const AS_CrouchState = preload("res://Actors/Player/AnimState/Tier2_State/AS_Crouch.gd")
 
 func _init(o).(o):
 	pass

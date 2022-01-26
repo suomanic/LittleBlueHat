@@ -38,7 +38,7 @@ func _physics_process(delta):
 	
 	
 		shoot_cd_counter = shoot_cd
-		if player.get_node("Character").global_position.x - player.get_node("PlayerInput").mouse_global_position.x < 0:
+		if player.global_position.x - player.get_node("PlayerInput").mouse_global_position.x < 0:
 			position_x = abs((player.get_node("PlayerInput").mouse_global_position - orb_position).x)
 			rotation_angle = Vector2(position_x, player.get_node("PlayerInput").mouse_global_position.y - orb_position.y).angle()
 		else:

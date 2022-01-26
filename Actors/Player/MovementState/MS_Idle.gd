@@ -21,7 +21,7 @@ func execute():
 	elif owner.velocity.y < 0 and owner.collision_module.is_bounced:
 		owner.movement_state_machine.change_state(owner.MS_UpState.new(owner))
 		
-	if owner.owner.input_module.is_crouch_pressed and owner.movement_module.is_on_object:
+	if owner.input_module.is_crouch_pressed and owner.movement_module.is_on_object:
 		owner.movement_state_machine.change_state(owner.MS_CrouchState.new(owner))
 	
 func exit():

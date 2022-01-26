@@ -18,7 +18,7 @@ func execute():
 	elif owner.velocity.y < 0 :
 		owner.movement_state_machine.change_state(owner.MS_UpState.new(owner))
 		
-	if owner.owner.input_module.is_jump_pressed:
+	if owner.input_module.is_jump_pressed:
 		owner.movement_state_machine.change_state(owner.MS_DoubleJumpState.new(owner))
 		
 func exit():

@@ -5,8 +5,6 @@ class_name Weapon
 
 onready var state_machine : StateMachine
 
-onready var character = owner.get_node("Character")
-
 onready var weapon_data :={
 	F_sword = preload("res://Actors/Player/Weapon/Sword/FireSword.tscn"),
 	I_sword = preload("res://Actors/Player/Weapon/Sword/IceSword.tscn"),
@@ -62,9 +60,9 @@ func follow_player():
 	# 该武器(self)位置和角色位置的目标偏移量
 	var target_offset : = Vector2(0, 0)
 	# 当前鼠标位置和角色位置的偏移量
-	var mouse_offset_from_chara : = Vector2(owner.input_module.mouse_global_position -  owner.character.global_position)
+	var mouse_offset_from_chara : = Vector2(owner.input_module.mouse_global_position -  owner.global_position)
 	# 当前该武器(self)位置和角色位置的偏移量
-	var weapon_offset_from_chara : = Vector2(global_position - owner.character.global_position)
+	var weapon_offset_from_chara : = Vector2(global_position - owner.global_position)
 	
 	# 武器y坐标绝对值的最大值（不包括固定偏移量）
 	var max_abs_y : = 16
@@ -143,9 +141,9 @@ func follow_player():
 		linear_interpolate_scale_rate.x = 0.5
 	
 	# 水平方向非线性动画
-	global_position = global_position.linear_interpolate(Vector2(owner.character.global_position.x + target_offset.x, self.global_position.y), linear_interpolate_scale_rate.x)
+	global_position = global_position.linear_interpolate(Vector2(owner.global_position.x + target_offset.x, self.global_position.y), linear_interpolate_scale_rate.x)
 	# 垂直方向非线性动画
-	global_position = global_position.linear_interpolate(Vector2(global_position.x, owner.character.global_position.y + target_offset.y), linear_interpolate_scale_rate.y)
+	global_position = global_position.linear_interpolate(Vector2(global_position.x, owner.global_position.y + target_offset.y), linear_interpolate_scale_rate.y)
 
 func change_weapon(weapon_type:String):
 	if current_weapon != null:

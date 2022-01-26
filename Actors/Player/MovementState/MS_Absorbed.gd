@@ -9,7 +9,7 @@ func _init(o).(o):
 func enter():
 	owner.velocity = Vector2(0,0)
 	absolute_position = owner.global_position
-	owner.owner.get_node("Weapon").character_absorbed()
+	owner.get_node("Weapon").character_absorbed()
 	pass
 	
 func execute():	
@@ -22,7 +22,7 @@ func execute():
 	
 
 func exit():
-	owner.owner.get_node("Weapon").character_exit_absorbed()
+	owner.get_node("Weapon").character_exit_absorbed()
 	pass
 
 static func get_name():

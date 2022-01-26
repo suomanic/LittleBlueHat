@@ -26,7 +26,7 @@ onready var character_shadow_sprite = $BubbleSprite/CharacterShadowSprite
 onready var effect_sprite = $BubbleSprite/EffectSprite
 
 onready var enter_shape = $EnterShape
-onready var character
+onready var player
 
 onready var label = $Label
 onready var label2 = $Label2
@@ -116,14 +116,14 @@ func _on_Bubble_body_entered(body):
 			else :
 				absorb_direction = false
 			
-			character = body 
+			player = body 
 			connect("absorb_signal",body,"absorbed_by_bubble")
 			emit_signal("absorb_signal",self)
 		behavior_state_machine.change_state(occupiedState.new(self))
 	
 func disconnect_absorb_signal():
 	if not Engine.editor_hint: 
-		disconnect("absorb_signal",character,"absorbed_by_bubble")
+		disconnect("absorb_signal",player,"absorbed_by_bubble")
 
 func anim_called_character_shadow_to_idle():
 	if not Engine.editor_hint: 

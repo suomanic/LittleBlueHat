@@ -21,10 +21,10 @@ func execute():
 	time += owner.get_physics_process_delta_time()
 	owner.arrow_sprite_movement()
 	
-	owner.bubble_sprite.global_position = lerp(owner.global_position,owner.character.global_position,owner.absorb_curve.interpolate(time))
+	owner.bubble_sprite.global_position = lerp(owner.global_position,owner.player.global_position,owner.absorb_curve.interpolate(time))
 	
-	if owner.character.get_parent().input_module.is_attack_just_pressed and time > 0.1 :
-		connect("eject_signal",owner.character,"ejected_from_bubble")
+	if owner.player.input_module.is_attack_just_pressed and time > 0.1 :
+		connect("eject_signal",owner.player,"ejected_from_bubble")
 		emit_signal("eject_signal",owner.eject_angle,owner)
 		owner.behavior_state_machine.change_state(owner.ejectState.new(owner))
 	pass

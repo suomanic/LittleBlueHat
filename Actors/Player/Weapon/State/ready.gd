@@ -9,7 +9,7 @@ func enter():
 	pass
 	
 func execute():
-	if owner.owner.get_node("Character") != null:
+	if owner.owner != null:
 		owner.follow_player()
 	pass
 

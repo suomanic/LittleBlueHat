@@ -63,7 +63,7 @@ func _physics_process(delta):
 	else :
 		_coyote_counter -= delta
 		
-	if owner.owner.input_module.is_jump_pressed:
+	if owner.input_module.is_jump_pressed:
 		_jump_buffer_counter = jump_buffer_time
 	else:
 		_jump_buffer_counter -= delta
@@ -84,7 +84,7 @@ func jump():
 		 jump_count = 1
 		
 	# double jump
-	elif jump_count == 1 and jump_count < 2 and  owner.owner.input_module.is_jump_pressed:
+	elif jump_count == 1 and jump_count < 2 and  owner.input_module.is_jump_pressed:
 		 owner.velocity.y = -double_jump_force;
 		 _jump_buffer_counter = 0
 		 jump_count += 1
@@ -97,14 +97,14 @@ func move():
 		and !owner.is_network_master():
 		return
 	
-	if owner.owner.input_module.get_direction().x == 0:
+	if owner.input_module.get_direction().x == 0:
 		if owner.velocity.x > 0:
 			owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
 		elif owner.velocity.x < 0:
 			owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
-	elif owner.owner.input_module.is_right_pressed:
+	elif owner.input_module.is_right_pressed:
 		owner.velocity.x = min(owner.velocity.x + owner.acceleration,max_speed)
-	elif owner.owner.input_module.is_left_pressed:
+	elif owner.input_module.is_left_pressed:
 		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-max_speed)
 
 	
@@ -116,14 +116,14 @@ func crouch_move():
 		and !owner.is_network_master():
 		return
 	
-	if owner.owner.input_module.get_direction().x == 0:
+	if owner.input_module.get_direction().x == 0:
 		if owner.velocity.x > 0:
 			owner.velocity.x = max(owner.velocity.x - owner.deceleration,0)
 		elif owner.velocity.x < 0:
 			owner.velocity.x = min(owner.velocity.x + owner.deceleration,0)
-	elif owner.owner.input_module.is_right_pressed:
+	elif owner.input_module.is_right_pressed:
 		owner.velocity.x = min(owner.velocity.x + owner.acceleration,20)
-	elif owner.owner.input_module.is_left_pressed:
+	elif owner.input_module.is_left_pressed:
 		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-20)
 
 

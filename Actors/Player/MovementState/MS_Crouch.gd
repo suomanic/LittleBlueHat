@@ -11,7 +11,7 @@ func execute():
 	owner.movement_module.apply_gravity(owner.get_physics_process_delta_time())
 	owner.collision_module.facing()
 	
-	if !owner.movement_module.is_on_object or !owner.owner.input_module.is_crouch_pressed:
+	if !owner.movement_module.is_on_object or !owner.input_module.is_crouch_pressed:
 		if owner.velocity.y != 0:
 			owner.movement_state_machine.change_state(owner.MS_FallState.new(owner)) 
 		
