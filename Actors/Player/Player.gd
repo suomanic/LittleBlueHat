@@ -98,10 +98,10 @@ func _physics_process(delta) -> void:
 		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
 		# 如果自己不是master节点
 		if !self.is_network_master():
-			name_label.text = MultiplayerState.remotePlayerInfo.name
+			name_label.text = MultiplayerState.remote_player_info['custom_name']
 		# 如果自己是master节点
 		elif self.is_network_master():
-			name_label.text = MultiplayerState.myInfo.name
+			name_label.text = MultiplayerState.my_player_info['custom_name']
 			var new_state_machine_status:Dictionary = {}
 			
 			var curr_movement_state_name: String = ""

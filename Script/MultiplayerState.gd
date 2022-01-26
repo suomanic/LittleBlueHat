@@ -3,21 +3,18 @@ extends Node
 # 定义初始加载的游戏场景
 const INITIAL_SCENE := 'res://Levels/InitialLevel/InitialLevel.tscn'
 
-class PlayerInfo:
-	var name: String = ""
-	var type: String = "" # fire or ice
-
+var player_info_template: Dictionary = {'custom_name':'','type':''}
 
 # 基本属性：联网id，名字，类型
-var myId : int = 0
-var myInfo: PlayerInfo = PlayerInfo.new()
-var myPlayerNodeName: String = ""
-var remotePlayerId : int = 0
-var remotePlayerInfo: PlayerInfo = PlayerInfo.new()
-var remotePlayerNodeName: String = ""
+var my_id : int = 0
+var my_player_info: Dictionary = player_info_template.duplicate()
+var my_player_node_name: String = ""
+var remote_id : int = 0
+var remote_player_info: Dictionary = player_info_template.duplicate()
+var remote_player_node_name: String = ""
 
-var myPlayerInstance: Node2D = null
-var remotePlayerInstance: Node2D = null
+var my_player_instance: Node2D = null
+var remote_player_instance: Node2D = null
 
 #var isMyPlayerDone:bool = false
 #var isRemotePlayerDone:bool = false
@@ -42,8 +39,7 @@ func _on_network_peer_connected(remote_id : int) -> void:
 	print_debug('player peer ', remote_id, ' connected')
 	
 	# 通过 rpc_id 将自己的信息远程发送给对方进行注册
-	var my_info_var = { "name": myInfo.name, "type": myInfo.type }
-	rpc_id(remote_id, 'registerPlayerInfo', var2str(my_info_var))
+	rpc_id(remote_id, 'registerPlayerInfo', var2str(my_player_info))
 	
 	if self.get_tree().is_network_server():
 		self.get_tree().refuse_new_network_connections = true
@@ -58,16 +54,16 @@ func _on_network_peer_disconnected(remote_id : int) -> void:
 	print_debug('player peer ', remote_id, ' disconnected')
 	# 如果是服务端，删除对方并重置远程玩家相关的变量，重新等待连接
 	if self.get_tree().is_network_server():
-		remotePlayerId = 0
-		remotePlayerNodeName = ""
-		remotePlayerInfo = PlayerInfo.new()
+		remote_id = 0
+		remote_player_node_name = ""
+		remote_player_info = player_info_template.duplicate()
 #		isRemotePlayerDone = false
 		var world:Node2D = get_tree().current_scene
-		if is_instance_valid(world) && is_instance_valid(remotePlayerInstance):
-			if world.is_a_parent_of(remotePlayerInstance):
-				world.remove_child(remotePlayerInstance)
-			remotePlayerInstance.queue_free()
-			remotePlayerInstance = null
+		if is_instance_valid(world) && is_instance_valid(remote_player_instance):
+			if world.is_a_parent_of(remote_player_instance):
+				world.remove_child(remote_player_instance)
+			remote_player_instance.queue_free()
+			remote_player_instance = null
 		self.get_tree().refuse_new_network_connections = false
 	else:
 		# 因为是双人游戏，所以不会是客户端，这里的处理没啥必要，pass
@@ -96,19 +92,20 @@ func _on_connection_faileded() -> void:
 	print_debug('failed to connect to server')
 	pass
 
-# 远程方法，处理来自其他玩家的调用，添加其他玩家的信息到 remotePlayerInfo
+# 远程方法，处理来自其他玩家的调用，添加其他玩家的信息到 remote_player_info
 # 注意，这个方法实际是其他玩家调用（发送），或者说你通过该方法接收到了来自其他玩家的信息
 remote func registerPlayerInfo(remote_info_str: String):
-	var remote_info_var = str2var(remote_info_str)
 	var remote_id = self.get_tree().get_rpc_sender_id()
 	var success = false
 	# 如果我方没被连接过，则注册新玩家id和信息
-	if(remotePlayerId == 0):
-		remotePlayerId = remote_id
-		remotePlayerNodeName = "Player" + str(remotePlayerId)
-		if remote_info_var != null:
-			remotePlayerInfo.name = remote_info_var["name"]
-			remotePlayerInfo.type = remote_info_var["type"]
+	if(remote_id == 0):
+		remote_id = remote_id
+		remote_player_node_name = "Player" + str(remote_id)
+		var temp_remote_info: Dictionary = str2var(remote_info_str)
+		print_debug(remote_info_str, temp_remote_info,temp_remote_info.has_all(['custom_name', 'type']))
+		if temp_remote_info != null && temp_remote_info.has_all(['custom_name', 'type']):
+			remote_player_info['custom_name'] = temp_remote_info['custom_name']
+			remote_player_info['type'] = temp_remote_info['type']
 		success = load_remote_player()
 	# 如果加载远程玩家失败，则关闭对该远程玩家的连接
 	if(!success):
@@ -120,25 +117,25 @@ func load_remote_player() -> bool:
 	get_tree().set_pause(true)
 	var world:Node2D = get_tree().current_scene
 	var spanGlobalPosition = Vector2(0, 20)
-	if !is_instance_valid(myPlayerInstance) || !is_instance_valid(world):
+	if !is_instance_valid(my_player_instance) || !is_instance_valid(world):
 		return false
 	
-	spanGlobalPosition = myPlayerInstance.global_position
+	spanGlobalPosition = my_player_instance.global_position
 	
-	remotePlayerInstance = load('res://Actors/Player/Player.tscn').instance()
-	remotePlayerInstance.set_name(remotePlayerNodeName)
-	remotePlayerInstance.set_network_master(remotePlayerId)
-	world.add_child(remotePlayerInstance)
-	remotePlayerInstance.global_position = spanGlobalPosition
+	remote_player_instance = load('res://Actors/Player/Player.tscn').instance()
+	remote_player_instance.set_name(remote_player_node_name)
+	remote_player_instance.set_network_master(remote_id)
+	world.add_child(remote_player_instance)
+	remote_player_instance.global_position = spanGlobalPosition
 	get_tree().set_pause(false)
 	return true
 
 # 更新玩家信息
-remote func updatePlayerInfo(remote_info: PlayerInfo):
+remote func updatePlayerInfo(remote_info: Dictionary):
 	var remote_id = self.get_tree().get_rpc_sender_id()
 	# 如果本地储存的远程id和收到的远程id是同一id，则可以更新信息，设置info
-	if(remotePlayerId == remote_id):
-		remotePlayerInfo = remote_info
+	if(remote_id == remote_id):
+		remote_player_info = remote_info
 
 # 创建新游戏
 func newGame() -> bool:
@@ -152,8 +149,8 @@ func newGame() -> bool:
 		world.queue_free()
 	
 	world = null
-	myPlayerInstance = null
-	remotePlayerInstance = null
+	my_player_instance = null
+	remote_player_instance = null
 	
 	# 加载世界
 	world = load(INITIAL_SCENE).instance()
@@ -172,9 +169,9 @@ func newGame() -> bool:
 		tempPlayer = null
 	
 	# 加载玩家（单人）
-	myPlayerInstance = load('res://Actors/Player/Player.tscn').instance()
-	world.add_child(myPlayerInstance)
-	myPlayerInstance.global_position = spanGlobalPosition
+	my_player_instance = load('res://Actors/Player/Player.tscn').instance()
+	world.add_child(my_player_instance)
+	my_player_instance.global_position = spanGlobalPosition
 	
 	get_tree().set_pause(false)
 	return true
@@ -187,7 +184,7 @@ func hostGame(port:int, myName: String) -> bool:
 		return false
 	
 	resetNetwork()
-	myInfo.name = myName
+	my_player_info['custom_name'] = myName
 	
 	var host := NetworkedMultiplayerENet.new()
 	var error := host.create_server(port, 2)
@@ -198,17 +195,17 @@ func hostGame(port:int, myName: String) -> bool:
 	self.get_tree().network_peer = host
 	self.get_tree().refuse_new_network_connections = false
 	
-	myId = self.get_tree().get_network_unique_id() # 1
-	myPlayerNodeName = "Player" + str(myId)
-	myPlayerInstance.set_name(myPlayerNodeName)
-	myPlayerInstance.set_network_master(myId)
+	my_id = self.get_tree().get_network_unique_id() # 1
+	my_player_node_name = "Player" + str(my_id)
+	my_player_instance.set_name(my_player_node_name)
+	my_player_instance.set_network_master(my_id)
 	
 	return true
 
 # 创建客户端，加入游戏，需要指定 IP 地址
 func joinGame(address: String, port:int, myName: String) -> bool:
 	resetNetwork()
-	myInfo.name = myName
+	my_player_info['custom_name'] = myName
 	
 	var host := NetworkedMultiplayerENet.new()
 	var error := host.create_client(address, port)
@@ -216,23 +213,23 @@ func joinGame(address: String, port:int, myName: String) -> bool:
 		return false
 	
 	self.get_tree().network_peer = host
-	myId = self.get_tree().get_network_unique_id()
-	myPlayerNodeName = "Player" + str(myId)
-	myPlayerInstance.set_name(myPlayerNodeName)
-	myPlayerInstance.set_network_master(myId)
+	my_id = self.get_tree().get_network_unique_id()
+	my_player_node_name = "Player" + str(my_id)
+	my_player_instance.set_name(my_player_node_name)
+	my_player_instance.set_network_master(my_id)
 	
 	return true
 
 # 重设网络，重设各个变量，断开所有连接
 func resetNetwork() -> void:
-	myId = 0
-	myPlayerNodeName = ""
-	myInfo = PlayerInfo.new()
+	my_id = 0
+	my_player_node_name = ""
+	my_player_info = player_info_template.duplicate()
 #	isMyPlayerDone = false
 	
-	remotePlayerId = 0
-	remotePlayerNodeName = ""
-	remotePlayerInfo = PlayerInfo.new()
+	remote_id = 0
+	remote_player_node_name = ""
+	remote_player_info = player_info_template.duplicate()
 #	isRemotePlayerDone = false
 	
 	if(self.get_tree().has_network_peer()):
