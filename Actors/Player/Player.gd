@@ -52,8 +52,7 @@ onready var anim_sprite = $AnimSpriteSheet
 onready var walk_particles= $WalkParticles
 onready var eject_particles = $EjectParticles
 
-onready var label = $Label
-onready var label2 = $Label2
+onready var debug_label = $DebugInfoLabel
 onready var name_label = $NameLabel
 
 export(Curve) var absorbed_curve
@@ -76,17 +75,19 @@ func _physics_process(delta) -> void:
 	anim_state_machine.update()
 	movement_state_machine.update()
 	# test only
-	if anim_state_machine.current_state != null:
-		label.text = anim_state_machine.current_state.get_name()
-	if movement_state_machine.current_state != null:
-		label2.text = movement_state_machine.current_state.get_name()
-	
-	for i in get_slide_count():
-		var collision = get_slide_collision(i)
-		var str1 :String
-		str1 = collision.collider.name
-		if str1.begins_with("Slime"):
-			pass
+	if GlobalConfig.debug_mode:
+		var temp_debug_text:String = ''
+		if anim_state_machine.current_state != null:
+			temp_debug_text = 'A: ' + anim_state_machine.current_state.get_name()
+		if movement_state_machine.current_state != null:
+			temp_debug_text += '\nM: ' + movement_state_machine.current_state.get_name()
+		debug_label.text = temp_debug_text
+#	for i in get_slide_count():
+#		var collision = get_slide_collision(i)
+#		var str1 :String
+#		str1 = collision.collider.name
+#		if str1.begins_with("Slime"):
+#			pass
 		
 	if movement_module.is_on_object and abs(velocity.x) > 40:
 		walk_particles.set_emitting(true)
@@ -100,7 +101,7 @@ func _physics_process(delta) -> void:
 		if !self.is_network_master():
 			name_label.text = MultiplayerState.remote_player_info['custom_name']
 		# 如果自己是master节点
-		elif self.is_network_master():
+		else:
 			name_label.text = MultiplayerState.my_player_info['custom_name']
 			var new_state_machine_status:Dictionary = {}
 			

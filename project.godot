@@ -44,6 +44,7 @@ run/main_scene="res://Levels/InitialLevel/InitialLevel.tscn"
 [autoload]
 
 MultiplayerState="*res://Script/MultiplayerState.gd"
+GlobalConfig="*res://Script/GlobalConfig.gd"
 
 [display]
 
