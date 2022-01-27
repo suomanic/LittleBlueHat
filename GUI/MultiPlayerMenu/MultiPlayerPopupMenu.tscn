@@ -6,8 +6,9 @@
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=4]
 
 [node name="MultiPlayerPopupMenu" type="PopupPanel"]
+visible = true
 material = ExtResource( 4 )
-margin_right = 130.0
+margin_right = 135.0
 margin_bottom = 136.0
 focus_mode = 1
 input_pass_on_modal_close_click = false
@@ -19,7 +20,7 @@ __meta__ = {
 use_parent_material = true
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 126.0
+margin_right = 131.0
 margin_bottom = 132.0
 focus_mode = 1
 theme = ExtResource( 3 )
