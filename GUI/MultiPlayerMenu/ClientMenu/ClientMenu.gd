@@ -13,10 +13,10 @@ func _on_ClientJoinButton_pressed():
 		print_debug("addr = ", AddressEdit.text, ", port = ", PortEdit.text, ", name = ", NameEdit.text)
 		var addr:String = AddressEdit.text
 		var port:int = PortEdit.text.to_int()
-		var playerName:String = NameEdit.text
+		var player_custom_name:String = NameEdit.text
 		var success:bool = false
-		if(!addr.empty() and port >=1024 and port <= 65535 and !playerName.empty()):
-			success = MultiplayerState.joinGame(addr, port, playerName)
+		if(!addr.empty() and port >=1024 and port <= 65535 and !player_custom_name.empty()):
+			success = MultiplayerState.join_game(addr, port, player_custom_name)
 		print_debug("creating game client ", "success" if success else "failed")
 		if(!success):
 			pass

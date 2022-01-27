@@ -11,10 +11,10 @@ func _on_ServerCreateButton_pressed():
 	if(PortEdit != null and NameEdit != null):
 		print_debug("port = ", PortEdit.text, ", name = ", NameEdit.text)
 		var port:int = PortEdit.text.to_int()
-		var playerName:String = NameEdit.text
+		var player_custom_name:String = NameEdit.text
 		var success:bool = false
-		if(port >=1024 and port <= 65535 and !playerName.empty()):
-			success = MultiplayerState.hostGame(port, playerName)
+		if(port >=1024 and port <= 65535 and !player_custom_name.empty()):
+			success = MultiplayerState.host_game(port, player_custom_name)
 		print_debug("creating game server ", "success" if success else "failed")
 		if(!success):
 			pass

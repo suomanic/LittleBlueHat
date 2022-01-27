@@ -245,6 +245,9 @@ __meta__ = {
 
 [node name="LevelCamera" parent="." instance=ExtResource( 4 )]
 position = Vector2( -16, 24 )
+process_mode = 0
+smoothing_enabled = true
+smoothing_speed = 10.0
 time_slow_curve = SubResource( 1 )
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -261,11 +264,11 @@ tile_data = PoolIntArray( -262136, 0, 1, -131083, 3, 0, -131082, 1, 65538, -1310
 position = Vector2( -198.676, 78.0111 )
 
 [node name="MultiPlayerPopupMenu" parent="." instance=ExtResource( 5 )]
-margin_left = 33.4317
-margin_top = 18.9577
-margin_right = 183.432
-margin_bottom = 166.958
-rect_scale = Vector2( 0.3, 0.3 )
+margin_left = 16.4543
+margin_top = -18.964
+margin_right = 146.454
+margin_bottom = 117.036
+rect_scale = Vector2( 0.6, 0.6 )
 
 [node name="Teleport" parent="." instance=ExtResource( 3 )]
 position = Vector2( 55.5, 87 )

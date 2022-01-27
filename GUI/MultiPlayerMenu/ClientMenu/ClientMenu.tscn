@@ -1,8 +1,13 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://GUI/MultiPlayerMenu/ClientMenu/ClientMenu.gd" type="Script" id=1]
+[ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=2]
+[ext_resource path="res://Assets/Font/PixelatedFont_Zfull-GB.tres" type="Theme" id=4]
 
-[node name="ClientMenu" type="AspectRatioContainer"]
+[node name="ClientMenu" type="MarginContainer"]
+material = ExtResource( 2 )
+margin_right = 134.0
+margin_bottom = 100.0
 focus_mode = 1
 script = ExtResource( 1 )
 __meta__ = {
@@ -10,105 +15,114 @@ __meta__ = {
 }
 
 [node name="MenuMainContainer" type="VBoxContainer" parent="."]
+use_parent_material = true
 margin_right = 134.0
-margin_bottom = 104.0
+margin_bottom = 100.0
 alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ConfigContainer" type="GridContainer" parent="MenuMainContainer"]
+use_parent_material = true
+margin_top = 4.0
 margin_right = 134.0
-margin_bottom = 80.0
+margin_bottom = 75.0
 columns = 2
 
 [node name="AddrLabel" type="Label" parent="MenuMainContainer/ConfigContainer"]
-margin_right = 56.0
-margin_bottom = 24.0
+use_parent_material = true
+margin_right = 60.0
+margin_bottom = 21.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Address:"
+theme = ExtResource( 4 )
+text = "IP地址:"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="AddrEdit" type="LineEdit" parent="MenuMainContainer/ConfigContainer"]
-margin_left = 60.0
+use_parent_material = true
+margin_left = 64.0
 margin_right = 134.0
-margin_bottom = 24.0
+margin_bottom = 21.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+theme = ExtResource( 4 )
 text = "127.0.0.1"
 expand_to_text_length = true
 caret_blink = true
 caret_blink_speed = 0.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="PortLabel" type="Label" parent="MenuMainContainer/ConfigContainer"]
-margin_top = 28.0
-margin_right = 56.0
-margin_bottom = 52.0
+use_parent_material = true
+margin_top = 25.0
+margin_right = 60.0
+margin_bottom = 46.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Port:"
+theme = ExtResource( 4 )
+text = "端口:"
 align = 1
 valign = 1
 
 [node name="PortEdit" type="LineEdit" parent="MenuMainContainer/ConfigContainer"]
-margin_left = 60.0
-margin_top = 28.0
+use_parent_material = true
+margin_left = 64.0
+margin_top = 25.0
 margin_right = 134.0
-margin_bottom = 52.0
+margin_bottom = 46.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+theme = ExtResource( 4 )
 text = "12345"
 expand_to_text_length = true
 caret_blink = true
 caret_blink_speed = 0.5
 
 [node name="NameLabel" type="Label" parent="MenuMainContainer/ConfigContainer"]
-margin_top = 56.0
-margin_right = 56.0
-margin_bottom = 80.0
+use_parent_material = true
+margin_top = 50.0
+margin_right = 60.0
+margin_bottom = 71.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Name:"
+theme = ExtResource( 4 )
+text = "我的名字:"
 align = 1
 valign = 1
 
 [node name="NameEdit" type="LineEdit" parent="MenuMainContainer/ConfigContainer"]
-margin_left = 60.0
-margin_top = 56.0
+use_parent_material = true
+margin_left = 64.0
+margin_top = 50.0
 margin_right = 134.0
-margin_bottom = 80.0
+margin_bottom = 71.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+theme = ExtResource( 4 )
 text = "Tom"
 expand_to_text_length = true
 caret_blink = true
 caret_blink_speed = 0.5
 
-[node name="ButtonContainer" type="HBoxContainer" parent="MenuMainContainer"]
-margin_top = 84.0
+[node name="ClientJoinButton" type="Button" parent="MenuMainContainer"]
+use_parent_material = true
+margin_top = 79.0
 margin_right = 134.0
-margin_bottom = 104.0
-alignment = 1
-
-[node name="CancelButton" type="Button" parent="MenuMainContainer/ButtonContainer"]
-margin_right = 65.0
-margin_bottom = 20.0
-focus_mode = 1
+margin_bottom = 96.0
 size_flags_horizontal = 3
-text = "Cancel"
+theme = ExtResource( 4 )
+text = "加入多人游戏"
 expand_icon = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ClientJoinButton" type="Button" parent="MenuMainContainer/ButtonContainer"]
-margin_left = 69.0
-margin_right = 134.0
-margin_bottom = 20.0
-size_flags_horizontal = 3
-text = "Join"
-expand_icon = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[connection signal="pressed" from="MenuMainContainer/ButtonContainer/ClientJoinButton" to="." method="_on_ClientJoinButton_pressed"]
+[connection signal="pressed" from="MenuMainContainer/ClientJoinButton" to="." method="_on_ClientJoinButton_pressed"]

@@ -1,7 +1,7 @@
 extends Node
 
 # 定义初始加载的游戏场景
-const INITIAL_SCENE := 'res://Levels/InitialLevel/InitialLevel.tscn'
+const initial_scene := 'res://Levels/InitialLevel/InitialLevel.tscn'
 
 var player_info_template: Dictionary = {'custom_name':'','type':''}
 
@@ -84,7 +84,7 @@ func _on_connected_to_server() -> void:
 func _on_server_disconnected() -> void:
 	print_debug('lost connection to server')
 	get_tree().set_pause(true)
-	newGame()
+	recreate_scene()
 	get_tree().set_pause(false)
 	pass
 
@@ -93,7 +93,7 @@ func _on_server_disconnected() -> void:
 # 每当此 SceneTree 的 network_peer 无法与服务器建立连接时发出。仅在客户端上发出。
 func _on_connection_failed() -> void:
 	print_debug('failed to connect to server')
-	resetNetwork()
+	reset_network()
 	pass
 
 # 远程方法，处理来自其他玩家的调用，添加其他玩家的信息到 remote_player_info
@@ -140,7 +140,7 @@ func load_remote_player() -> bool:
 	return true
 
 # 更新玩家信息
-remote func updatePlayerInfo(rpc_remote_player_info_str: String):
+remote func update_player_info(rpc_remote_player_info_str: String):
 	var rpc_remote_id = self.get_tree().get_rpc_sender_id()
 	# 如果本地储存的远程id和收到的远程id是同一id，则可以更新信息，设置info
 	if(remote_id == rpc_remote_id):
@@ -149,11 +149,11 @@ remote func updatePlayerInfo(rpc_remote_player_info_str: String):
 			remote_player_info = temp_remote_player_info
 
 # 创建新游戏
-func newGame(scene_path: String = INITIAL_SCENE) -> bool:
+func recreate_scene(scene_path: String = initial_scene) -> bool:
 	get_tree().set_pause(true)
 	
 	# 初始化
-	resetNetwork()
+	reset_network()
 	var world:Node2D = get_tree().current_scene
 	if is_instance_valid(world):
 		get_tree().root.remove_child(world)
@@ -190,7 +190,7 @@ func newGame(scene_path: String = INITIAL_SCENE) -> bool:
 
 # 创建服务器，这里返回一个结果
 # 如果一个 IP 被占用就会返回错误
-func hostGame(port:int, myName: String) -> bool:
+func host_game(port:int, myName: String) -> bool:
 	if !is_instance_valid(my_player_instance):
 		print_debug('invalid my_player_instance')
 		return false
@@ -204,7 +204,7 @@ func hostGame(port:int, myName: String) -> bool:
 		print_debug('cannot create server while the remote_player_instance is valid')
 		return false
 	
-	resetNetwork()
+	reset_network()
 	my_player_info['custom_name'] = myName
 	
 	var host := NetworkedMultiplayerENet.new()
@@ -224,7 +224,7 @@ func hostGame(port:int, myName: String) -> bool:
 	return true
 
 # 创建客户端，加入游戏，需要指定 IP 地址
-func joinGame(address: String, port:int, myName: String) -> bool:
+func join_game(address: String, port:int, myName: String) -> bool:
 	if !is_instance_valid(my_player_instance):
 		print_debug('invalid my_player_instance')
 		return false
@@ -238,7 +238,7 @@ func joinGame(address: String, port:int, myName: String) -> bool:
 		print_debug('cannot join server while the remote_player_instance is valid')
 		return false
 	
-	resetNetwork()
+	reset_network()
 	my_player_info['custom_name'] = myName
 	
 	var host := NetworkedMultiplayerENet.new()
@@ -255,7 +255,7 @@ func joinGame(address: String, port:int, myName: String) -> bool:
 	return true
 
 # 重设网络，重设各个变量，断开所有连接
-func resetNetwork() -> void:
+func reset_network() -> void:
 	var world:Node2D = get_tree().current_scene
 	if is_instance_valid(remote_player_instance):
 		if is_instance_valid(world):

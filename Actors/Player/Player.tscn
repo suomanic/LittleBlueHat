@@ -1,7 +1,6 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Actors/Player/Weapon/Weapon.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Shader_Stuff/FontPixelating/FontPixelating.tres" type="Material" id=2]
 [ext_resource path="res://Actors/Player/PlayerInput.gd" type="Script" id=3]
 [ext_resource path="res://State_Machine/StateMachine.gd" type="Script" id=4]
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=5]
@@ -9,21 +8,13 @@
 [ext_resource path="res://Actors/Player/Player.movement.gd" type="Script" id=7]
 [ext_resource path="res://Actors/Player/PlayerCollision.gd" type="Script" id=8]
 [ext_resource path="res://Actors/Player/Player.gd" type="Script" id=9]
-[ext_resource path="res://Assets/Font/SourceHanSansCN-Bold.otf" type="DynamicFontData" id=10]
+[ext_resource path="res://Assets/Font/PixelatedFont_Zfull-GB.tres" type="Theme" id=10]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0 ), 0.0, 3.04773, 0, 0, Vector2( 0.375839, 0.854545 ), -0.115844, 0.0, 0, 0 ]
 
 [sub_resource type="Curve" id=2]
 _data = [ Vector2( 0, 0.945454 ), 0.0, -8.57879, 0, 0, Vector2( 0.251678, 0 ), 0.0, 0.0, 0, 0 ]
-
-[sub_resource type="DynamicFont" id=24]
-size = 14
-use_mipmaps = true
-font_data = ExtResource( 10 )
-
-[sub_resource type="Theme" id=25]
-default_font = SubResource( 24 )
 
 [sub_resource type="Gradient" id=22]
 colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
@@ -339,15 +330,15 @@ absorbed_curve = SubResource( 1 )
 eject_curve = SubResource( 2 )
 
 [node name="NameLabel" type="Label" parent="."]
-material = ExtResource( 2 )
-margin_left = -28.0
-margin_top = -44.0
-margin_right = 112.0
-margin_bottom = -22.0
-rect_scale = Vector2( 0.4, 0.4 )
-theme = SubResource( 25 )
+margin_left = -49.0
+margin_top = -45.0
+margin_right = 115.0
+margin_bottom = -28.0
+rect_scale = Vector2( 0.6, 0.6 )
+theme = ExtResource( 10 )
 custom_colors/font_color_shadow = Color( 0.282353, 0.396078, 0.780392, 1 )
 custom_constants/shadow_as_outline = 1
+text = "中文中文中文中文中文"
 align = 1
 valign = 1
 clip_text = true
@@ -357,17 +348,18 @@ __meta__ = {
 }
 
 [node name="DebugInfoLabel" type="Label" parent="."]
-material = ExtResource( 2 )
-margin_left = -28.0
-margin_top = -56.0
-margin_right = 112.0
-margin_bottom = -20.0
-rect_scale = Vector2( 0.4, 0.4 )
-theme = SubResource( 25 )
+margin_left = -42.0
+margin_top = -65.0
+margin_right = 98.0
+margin_bottom = -29.0
+rect_scale = Vector2( 0.6, 0.6 )
+theme = ExtResource( 10 )
 custom_colors/font_color = Color( 0.34902, 0.737255, 0.411765, 1 )
-custom_constants/line_spacing = -8
+text = "aaaaa
+aaaaa"
 align = 1
 valign = 1
+max_lines_visible = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
