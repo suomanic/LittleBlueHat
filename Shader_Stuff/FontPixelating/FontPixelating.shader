@@ -1,11 +1,17 @@
 shader_type canvas_item;
 
 void fragment(){
-    vec4 curr_color = texture(TEXTURE,UV);
-	COLOR.a = (curr_color.a < 0.5f) ? 0f : 1f;
-	// label内文字阴影的颜色不能通过texture(TEXTURE,UV)获取，Godot已经将其上色至COLOR内，
-	// 所以这里检测一下COLOR是否有设置RGB。
-	// (用默认值1f判断。如果已经上色但是颜色也为全1，那么重复上一次全1也没有影响)
-	if (COLOR.rgb == vec3(1f, 1f, 1f))
-		COLOR.rgb = curr_color.rgb;
+    vec4 texture_color = texture(TEXTURE,UV);
+	
+	// 文字阴影的颜色不能通过TEXTURE获取，Godot已经将其上色至COLOR内，并将其从TEXTURE中剔除
+	// 所以这里检测一下TEXTURE内颜色是否不为默认值1f（即是否被剔除）
+	// 为了防止修改想覆盖的颜色后没有覆盖，所以检测TEXTURE而不是COLOR
+	if (texture_color.a != 1f)
+		COLOR.a = texture_color.a;
+	if (texture_color.r != 1f)
+		COLOR.r = texture_color.r;
+	if (texture_color.g != 1f)
+		COLOR.g = texture_color.g;
+	if (texture_color.b != 1f)
+		COLOR.b = texture_color.b;
 }
