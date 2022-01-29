@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/草地.png-116cd71d495c05ec919bfa9c74f41a37.stex"
+path="res://.import/Character_UI.png-51859ec56206818581cdfd65ea65daea.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/草地.png"
-dest_files=[ "res://.import/草地.png-116cd71d495c05ec919bfa9c74f41a37.stex" ]
+source_file="res://Assets/UI/Character_UI.png"
+dest_files=[ "res://.import/Character_UI.png-51859ec56206818581cdfd65ea65daea.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

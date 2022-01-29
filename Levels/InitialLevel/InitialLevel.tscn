@@ -246,8 +246,6 @@ __meta__ = {
 [node name="LevelCamera" parent="." instance=ExtResource( 4 )]
 position = Vector2( -16, 24 )
 process_mode = 0
-smoothing_enabled = true
-smoothing_speed = 10.0
 time_slow_curve = SubResource( 1 )
 
 [node name="TileMap" type="TileMap" parent="."]

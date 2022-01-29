@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=1]
+[ext_resource path="res://Assets/UI/Character_UI.png" type="Texture" id=2]
+[ext_resource path="res://GUI/InGame/CharacterStateUI/CharacterStateUI.gd" type="Script" id=3]
+
+[node name="CharacterStateUI" type="CanvasLayer"]
+scale = Vector2( 4, 4 )
+transform = Transform2D( 4, 0, 0, 4, 0, 0 )
+script = ExtResource( 3 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_right = 10.0
+margin_bottom = 10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureProgress" type="TextureProgress" parent="MarginContainer"]
+material = ExtResource( 1 )
+margin_right = 150.0
+margin_bottom = 51.0
+step = 0.0
+value = 50.0
+texture_under = ExtResource( 2 )
+texture_over = ExtResource( 2 )
+texture_progress = ExtResource( 2 )
+tint_progress = Color( 0.494118, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
