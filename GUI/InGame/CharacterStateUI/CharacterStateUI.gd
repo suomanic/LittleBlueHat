@@ -8,6 +8,10 @@ onready var hp4 = $CharacterStateTextureRect/Sprite4
 
 func _ready():
 	container.set_visible(true)
+	hp1.offset = Vector2(0,0)
+	hp2.offset = Vector2(0,0)
+	hp3.offset = Vector2(0,0)
+	hp4.offset = Vector2(0,0)
 	pass
 
 func _physics_process(delta):
