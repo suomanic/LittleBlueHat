@@ -257,7 +257,7 @@ ice_pos = Vector2( 0, 80 )
 
 [node name="Bubble10" parent="." instance=ExtResource( 9 )]
 position = Vector2( -330, -42 )
-move_speed = 40
+move_speed = 60
 fire_pos = Vector2( -200, 0 )
 ice_pos = Vector2( 0, 50 )
 

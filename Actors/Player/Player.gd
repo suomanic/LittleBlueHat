@@ -1,6 +1,6 @@
 extends Actor
 
-var hp = 2
+var hp = 4
 
 # movement state machine
 onready var movement_state_machine: StateMachine = get_node("PlayerMovementStateMachine")

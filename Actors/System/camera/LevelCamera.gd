@@ -3,6 +3,7 @@ extends Camera2D
 var time = 1
 var is_player_hurt_anim_playing
 var player
+onready var character_state_ui = $CharacterStateUI
 
 onready var anim_player = $AnimationPlayer
 

@@ -1,31 +1,36 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=1]
 [ext_resource path="res://Assets/UI/Character_UI.png" type="Texture" id=2]
 [ext_resource path="res://GUI/InGame/CharacterStateUI/CharacterStateUI.gd" type="Script" id=3]
+[ext_resource path="res://GUI/InGame/CharacterStateUI/HealthBlock.tscn" type="PackedScene" id=4]
 
 [node name="CharacterStateUI" type="CanvasLayer"]
 scale = Vector2( 4, 4 )
 transform = Transform2D( 4, 0, 0, 4, 0, 0 )
 script = ExtResource( 3 )
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-margin_right = 10.0
-margin_bottom = 10.0
+[node name="CharacterStateTextureRect" type="TextureRect" parent="."]
+material = ExtResource( 1 )
+margin_right = 157.0
+margin_bottom = 58.0
+texture = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureProgress" type="TextureProgress" parent="MarginContainer"]
-material = ExtResource( 1 )
-margin_right = 150.0
-margin_bottom = 51.0
-step = 0.0
-value = 50.0
-texture_under = ExtResource( 2 )
-texture_over = ExtResource( 2 )
-texture_progress = ExtResource( 2 )
-tint_progress = Color( 0.494118, 0, 0, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Sprite" parent="CharacterStateTextureRect" instance=ExtResource( 4 )]
+position = Vector2( 60, 34 )
+offset = Vector2( 0, 0 )
+
+[node name="Sprite2" parent="CharacterStateTextureRect" instance=ExtResource( 4 )]
+position = Vector2( 77, 34 )
+offset = Vector2( 0, 0 )
+
+[node name="Sprite3" parent="CharacterStateTextureRect" instance=ExtResource( 4 )]
+position = Vector2( 94, 34 )
+offset = Vector2( 0, 0 )
+
+[node name="Sprite4" parent="CharacterStateTextureRect" instance=ExtResource( 4 )]
+position = Vector2( 111, 34 )
+offset = Vector2( 0, 0 )

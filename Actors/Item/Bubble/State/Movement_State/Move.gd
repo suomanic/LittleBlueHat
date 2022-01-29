@@ -25,7 +25,7 @@ func execute():
 	owner.global_position = lerp(owner.global_position,owner.move_target,owner.move_curve.interpolate(offset))
 	pass
 	
-	if offset == 1:
+	if offset >= 1:
 		owner.movement_state_machine.change_state(owner.idleState.new(owner))
 
 func exit():

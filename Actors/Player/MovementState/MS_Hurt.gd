@@ -5,8 +5,9 @@ func _init(o).(o):
 
 func enter():
 	owner.hp = owner.hp - 1
-	print_debug("inininininininininin")
-	print_debug(owner.hp)
+	owner.get_owner().get_node("LevelCamera").character_state_ui.health_down()
+	#print_debug("inininininininininin")
+	#print_debug(owner.hp)
 	if owner.hp <= 0:
 		owner.movement_state_machine.change_state(owner.MS_DieState.new(owner))
 		
