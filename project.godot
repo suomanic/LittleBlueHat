@@ -114,6 +114,7 @@ weapon4={
 2d_physics/layer_4="Spring"
 2d_physics/layer_5="Bullet"
 2d_physics/layer_6="Block"
+2d_physics/layer_7="Item"
 
 [rendering]
 

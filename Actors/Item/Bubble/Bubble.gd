@@ -133,7 +133,7 @@ func anim_called_character_shadow_to_idle():
 func _on_Hitbox_area_entered(area):
 	if not Engine.editor_hint: 
 		if can_change_element:
-			if area.get_owner().is_in_group("Ice"): #要改，还未包含所有种类的冰道具
+			if area.get_owner().is_in_group("Ice"): 
 				match element_state:
 					"Normal":
 						element_state_machine.change_state(NtoIState.new(self))
@@ -143,7 +143,7 @@ func _on_Hitbox_area_entered(area):
 					"Fire":
 						element_state_machine.change_state(FtoNState.new(self))
 						movement_state_machine.change_state(moveState.new(self))
-			elif area.owner.is_in_group("Fire"): #要改，还未包含所有种类的火道具
+			elif area.owner.is_in_group("Fire"): 
 				match element_state:
 					"Normal":
 						element_state_machine.change_state(NtoFState.new(self))

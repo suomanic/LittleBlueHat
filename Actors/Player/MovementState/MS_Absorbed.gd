@@ -10,13 +10,14 @@ func enter():
 	owner.velocity = Vector2(0,0)
 	absolute_position = owner.global_position
 	owner.get_node("Weapon").character_absorbed()
+	owner.collision_module.absorbed_collision()
 	pass
 	
 func execute():	
 	time += owner.get_physics_process_delta_time()
 	
 	if time > 0.2:
-		owner.collision_module.absorbed_collision()
+		owner.anim_sprite.set_visible(false)
 	
 	owner.global_position = lerp(absolute_position,owner.current_absorb_bubble.global_position,owner.absorbed_curve.interpolate(time))
 	

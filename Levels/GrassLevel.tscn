@@ -282,4 +282,4 @@ move_speed = 40
 fire_pos = Vector2( 0, -100 )
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
-position = Vector2( 80, 14 )
+position = Vector2( -816, -126 )

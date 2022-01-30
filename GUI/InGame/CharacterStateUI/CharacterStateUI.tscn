@@ -22,19 +22,15 @@ __meta__ = {
 
 [node name="Sprite" parent="CharacterStateTextureRect" instance=ExtResource( 4 )]
 position = Vector2( 60, 34 )
-offset = Vector2( 0, 0 )
 
 [node name="Sprite2" parent="CharacterStateTextureRect" instance=ExtResource( 4 )]
 position = Vector2( 77, 34 )
-offset = Vector2( 0, 0 )
 
 [node name="Sprite3" parent="CharacterStateTextureRect" instance=ExtResource( 4 )]
 position = Vector2( 94, 34 )
-offset = Vector2( 0, 0 )
 
 [node name="Sprite4" parent="CharacterStateTextureRect" instance=ExtResource( 4 )]
 position = Vector2( 111, 34 )
-offset = Vector2( 0, 0 )
 
 [node name="TextureRect" type="TextureRect" parent="CharacterStateTextureRect"]
 material = ExtResource( 1 )

@@ -37,6 +37,7 @@ onready var standing_collision = $Standing_Shape
 #onready var crouching_collision = $Crouching_Shape
 onready var squish_collision = $SquishHitBox/CollisionShape2D
 onready var trigger_collision = $Trigger/TriggerBox
+onready var trigger = $Trigger
 
 # animation references
 onready var movement_anim_player = $MovementAnimPlayer

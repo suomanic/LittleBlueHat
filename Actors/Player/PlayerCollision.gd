@@ -137,9 +137,9 @@ func _on_SDM_Timer_timeout():
 
 
 func absorbed_collision():
-	owner.anim_sprite.set_visible(false)
 	owner.trigger_collision.set_deferred("disabled",true)
 	owner.squish_collision.set_deferred("disabled",true)
+	owner.trigger.set_collision_layer_bit(0,false)
 	owner.set_collision_layer_bit(0,false)
 	pass
 	
@@ -147,6 +147,7 @@ func exit_absorbed_collision():
 	owner.anim_sprite.set_visible(true)
 	owner.trigger_collision.set_deferred("disabled",false)
 	owner.squish_collision.set_deferred("disabled",false)
+	owner.trigger.set_collision_layer_bit(0,true)
 	owner.set_collision_layer_bit(0,true)
 	pass
 
