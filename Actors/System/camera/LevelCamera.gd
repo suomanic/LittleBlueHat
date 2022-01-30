@@ -25,7 +25,7 @@ func _physics_process(delta):
 	else:
 		if get_tree().has_network_peer() \
 			and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
-			player = get_tree().get_current_scene().get_node(MultiplayerState.myPlayerNodeName)
+			player = get_tree().get_current_scene().get_node(MultiplayerState.my_player_instance.name)
 		else:
 			for c in get_tree().current_scene.get_children():
 				if c.name.begins_with("Player"):
