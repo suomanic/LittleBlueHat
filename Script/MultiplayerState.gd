@@ -245,6 +245,12 @@ func load_player(target_player_id:int, force_override: bool, span_position = nul
 					world.add_child(remote_player_instance)
 					remote_player_instance.global_position = span_position
 			else:
+				# 如果此时还存在对应网络类型的玩家，但是节点名不一样，则判断为异常产生的玩家，清除
+				if is_instance_valid(remote_player_instance):
+					if world.is_a_parent_of(remote_player_instance):
+						world.remove_child(remote_player_instance)
+					remote_player_instance.queue_free()
+					remote_player_instance = null
 				remote_player_instance = load('res://Actors/Player/Player.tscn').instance()
 				remote_player_instance.set_name(target_player_node_name)
 				world.add_child(remote_player_instance)
@@ -277,6 +283,12 @@ func load_player(target_player_id:int, force_override: bool, span_position = nul
 					world.add_child(my_player_instance)
 					my_player_instance.global_position = span_position
 			else:
+				# 如果此时还存在对应网络类型的玩家，但是节点名不一样，则判断为异常产生的玩家，清除
+				if is_instance_valid(my_player_instance):
+					if world.is_a_parent_of(my_player_instance):
+						world.remove_child(my_player_instance)
+					my_player_instance.queue_free()
+					my_player_instance = null
 				my_player_instance = load('res://Actors/Player/Player.tscn').instance()
 				my_player_instance.set_name(target_player_node_name)
 				world.add_child(my_player_instance)
