@@ -5,6 +5,7 @@ func _init(o).(o):
 
 func enter():
 	owner.anim_player.play("N_Idle_Anim")
+	
 	pass
 	
 func execute():

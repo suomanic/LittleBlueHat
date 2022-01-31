@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/slime_freeze.wav-76029307740b9ca0e84b1111eead2e70.mp3str"
+
+[deps]
+
+source_file="res://Assets/Audio/slime_freeze.wav"
+dest_files=[ "res://.import/slime_freeze.wav-76029307740b9ca0e84b1111eead2e70.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

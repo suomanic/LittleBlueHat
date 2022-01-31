@@ -15,6 +15,9 @@ func enter():
 		owner.anim_player.play("NtoF_oppsite_Anim")
 	pass
 	
+	owner.audio_player.stream = load("res://Assets/Audio/mushroom_fire.wav")
+	owner.audio_player.play()
+	
 func execute():
 	
 	pass

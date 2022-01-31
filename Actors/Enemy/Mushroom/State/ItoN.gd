@@ -8,6 +8,7 @@ func enter():
 	owner.collision_module.change_to_normal_collision()
 	owner.element_state = "Normal"
 	owner.can_change_element = false
+	
 	pass
 	
 func execute():

@@ -13,6 +13,9 @@ func enter():
 	owner.element_state = "Ice"
 	
 	owner.anim_player.play("NtoI_Anim")
+	
+	owner.audio_player.stream = load("res://Assets/Audio/mushroom_freeze.wav")
+	owner.audio_player.play()
 	pass
 	
 func execute():

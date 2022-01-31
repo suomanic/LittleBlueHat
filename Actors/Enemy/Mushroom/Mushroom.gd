@@ -10,7 +10,7 @@ var is_hit_left
 
 export(Curve) var icefog_spread_curve
 
-
+onready var audio_player = $AudioStreamPlayer2D
 onready var anim_player = $AnimationPlayer
 
 onready var collision_module = $MushroomCollision

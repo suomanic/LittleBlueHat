@@ -9,6 +9,9 @@ func enter():
 	owner.anim_player.play("NtoF_Anim")
 	owner.element_state = "Fire"
 	owner.collision_module.change_fire_collision()
+	
+	owner.audio_player.stream = load("res://Assets/Audio/mushroom_fire.wav")
+	owner.audio_player.play()
 	pass
 	
 func execute():

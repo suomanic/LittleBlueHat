@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/mushroom_fire.wav-10cc8adc97c893b22d0f8b274a676240.sample"
+
+[deps]
+
+source_file="res://Assets/Audio/mushroom_fire.wav"
+dest_files=[ "res://.import/mushroom_fire.wav-10cc8adc97c893b22d0f8b274a676240.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -15,6 +15,8 @@ func enter():
 	owner.arrow_anim_player.play("arrow_appear_anim")
 	owner.character_shadow_anim_player.play("appear_anim")
 	
+	owner.audio_player.play()
+	
 	pass
 	
 func execute():

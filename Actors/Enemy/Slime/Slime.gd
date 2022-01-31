@@ -26,7 +26,7 @@ const ItoNState = preload("res://Actors/Enemy/Slime/State/ItoN.gd")
 const NtoFState = preload("res://Actors/Enemy/Slime/State/NtoF.gd")
 const FtoNState = preload("res://Actors/Enemy/Slime/State/FtoN.gd")
 
-
+onready var audio_player = $AudioStreamPlayer2D
 onready var anim_player = $AnimationPlayer
 
 onready var f_ray_cast = $FrontRayCast

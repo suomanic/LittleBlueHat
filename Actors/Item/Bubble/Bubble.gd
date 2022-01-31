@@ -15,6 +15,8 @@ var eject_angle
 var absorb_direction := false  #true为右，false为左
 var eject_direction := false  #true为右，false为左
 
+onready var audio_player = $AudioStreamPlayer2D
+
 onready var bubble_anim_player = $BubbleAnimationPlayer
 onready var arrow_anim_player = $ArrowAniamtionPlayer
 onready var character_shadow_anim_player = $CharacterShadowAnimationPlayer
