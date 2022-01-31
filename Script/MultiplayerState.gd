@@ -110,15 +110,13 @@ remote func register_remote_info(rpc_remote_player_info_str: String, rpc_remote_
 			remote_player_info = temp_remote_player_info
 			var temp_remote_scene_info: Dictionary = str2var(rpc_remote_scene_info_str)
 			# 如果是服务端，则不需要加载远程地图，直接加载玩家
-			if !get_tree().is_network_server():
+			if get_tree().is_network_server():
 				success = load_player(remote_id, true)
 			# 如果不是服务端，则需要先加载远程地图，成功后再加载玩家
 			else:
 				#先将自己从当前场景中提出
 				var tmp_curr_scene = get_tree().current_scene
-				var tmp_span_pos:Vector2 = Vector2(0, 0)
 				if tmp_curr_scene.is_a_parent_of(my_player_instance):
-					tmp_span_pos = my_player_instance.global_position
 					tmp_curr_scene.remove_child(my_player_instance)
 				#加载世界，覆盖
 				if load_scene(temp_remote_scene_info['scene_path_or_name'], true):
@@ -134,8 +132,8 @@ remote func register_remote_info(rpc_remote_player_info_str: String, rpc_remote_
 						tempPlayer.queue_free()
 						tempPlayer = null
 					# 加载本地玩家，不覆盖
-					if load_player(my_id, false, tmp_span_pos):
-						# 加入远程玩家，覆盖
+					if load_player(my_id, false):
+						# 加载远程玩家，覆盖
 						success = load_player(remote_id, true)
 	get_tree().set_pause(false)
 	# 如果加载远程地图或玩家失败，则关闭对该远程玩家的连接
