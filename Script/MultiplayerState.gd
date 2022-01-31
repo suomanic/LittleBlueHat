@@ -111,7 +111,10 @@ remote func register_remote_info(rpc_remote_player_info_str: String, rpc_remote_
 			var temp_remote_scene_info: Dictionary = str2var(rpc_remote_scene_info_str)
 			# 如果是服务端，则不需要加载远程地图，直接加载玩家
 			if get_tree().is_network_server():
-				success = load_player(remote_id, true)
+				# 加载本地玩家，不覆盖
+				if load_player(my_id, false):
+					# 加载远程玩家，覆盖
+					success = load_player(remote_id, true)
 			# 如果不是服务端，则需要先加载远程地图，成功后再加载玩家
 			else:
 				#先将自己从当前场景中提出
@@ -184,9 +187,8 @@ func load_scene(scene_path_or_name: String, force_override: bool) -> bool:
 # 加载玩家实体
 # target_player_id: 玩家id，用于计算玩家节点名称、检测玩家类型为本地或者远程
 # force_override: 如果已经存在相同节点名的同网络类型玩家（无论是否在场景内），是否覆盖（即删除并重新创建）。
-# span_position: 出生点，如果不设置则会从当前场景内随机挑选一个玩家实体的位置。如果都没有，则会出生在(0,0)
-# 如果设置了不覆盖，而该相同节点名的玩家存在且已经在当前场景中，则出生点设置无效
-func load_player(target_player_id:int, force_override: bool, span_position:Vector2 = Vector2(0, 0)) -> bool:
+# span_position: 出生点，如果不设置则会出生在当前场景内的传送阵内，如果找不到则随机挑选一个玩家实体的位置。如果都没有，则会出生在(0,0)
+func load_player(target_player_id:int, force_override: bool, span_position = null) -> bool:
 	var world:Node2D = get_tree().current_scene
 	var target_player_node_name: String = "Player" + str(target_player_id)
 	var is_remote: bool
@@ -207,11 +209,15 @@ func load_player(target_player_id:int, force_override: bool, span_position:Vecto
 	# --- 检测结束 ---
 	
 	# 计算出生位置
-	if span_position == Vector2(0, 0):
-		for c in world.get_children():
-			if c.name.begins_with("Player") && world.is_a_parent_of(c):
-				span_position = c.global_position
-				break
+	if typeof(span_position) != TYPE_VECTOR2:
+		var teleport = world.find_node("Teleport", false)
+		var already_player = world.find_node("Player*", false)
+		if is_instance_valid(teleport):
+			span_position = teleport.global_position
+		elif is_instance_valid(already_player):
+			span_position = already_player.global_position
+		else:
+			span_position = Vector2(0, 0)
 	# 加载远程玩家
 	if is_remote:
 		# 如果强制覆盖
@@ -230,10 +236,10 @@ func load_player(target_player_id:int, force_override: bool, span_position:Vecto
 		else:
 			# 不覆盖的情况下存在相同节点名的玩家则保留
 			if is_instance_valid(remote_player_instance) \
-			&& remote_player_instance.name != target_player_node_name:
-				# 如果该相同节点名的玩家已经在当前场景中了，则啥都不干
+			&& remote_player_instance.name == target_player_node_name:
+				# 如果该相同节点名的玩家已经在当前场景中了，则重设位置
 				if world.is_a_parent_of(remote_player_instance):
-					pass
+					remote_player_instance.global_position = span_position
 				# 如果该相同节点名的玩家不在当前场景中，则加进去
 				else:
 					world.add_child(remote_player_instance)
@@ -262,10 +268,10 @@ func load_player(target_player_id:int, force_override: bool, span_position:Vecto
 		else:
 			# 不覆盖的情况下存在相同节点名的玩家则保留
 			if is_instance_valid(my_player_instance) \
-			&& my_player_instance.name != target_player_node_name:
+			&& my_player_instance.name == target_player_node_name:
 				# 如果该相同节点名的玩家已经在当前场景中了，则啥都不干
 				if world.is_a_parent_of(my_player_instance):
-					pass
+					my_player_instance.global_position = span_position
 				# 如果该相同节点名的玩家不在当前场景中，则加进去
 				else:
 					world.add_child(my_player_instance)
@@ -276,7 +282,6 @@ func load_player(target_player_id:int, force_override: bool, span_position:Vecto
 				world.add_child(my_player_instance)
 				my_player_instance.global_position = span_position
 		my_player_instance.set_network_master(my_id)
-		pass
 	return true
 
 
