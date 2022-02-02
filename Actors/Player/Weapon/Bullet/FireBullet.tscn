@@ -58,9 +58,7 @@ tracks/0/keys = {
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 1, 2.5 )
 
-[node name="FireBullet" type="KinematicBody2D" groups=[
-"Fire",
-]]
+[node name="FireBullet" type="KinematicBody2D" groups=["Fire"]]
 modulate = Color( 1, 0, 0, 1 )
 material = ExtResource( 2 )
 collision_layer = 0

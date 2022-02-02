@@ -9,6 +9,9 @@ func enter():
 	owner.anim_player.play("FtoN_Anim")
 	owner.element_state = "Normal"
 	owner.collision_module.FtoN_collision_change()
+	
+	owner.audio_player.stream = load("res://Assets/Audio/FtoN.wav")
+	owner.audio_player.play()
 	pass
 	
 func execute():

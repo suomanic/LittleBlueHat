@@ -8,6 +8,9 @@ func enter():
 	owner.can_change_element = false
 	owner.collision_module.change_to_normal_collision()
 	owner.element_state = "Normal"
+	
+	owner.audio_player.stream = load("res://Assets/Audio/FtoN.wav")
+	owner.audio_player.play()
 	pass
 	
 func execute():

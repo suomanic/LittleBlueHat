@@ -1,5 +1,6 @@
 extends Node2D
 
+onready var audio_player = $AudioStreamPlayer2D
 onready var anim_player = $AnimationPlayer
 onready var sprite = $Sprite
 onready var player = get_parent().get_parent()
@@ -20,22 +21,29 @@ func _ready():
 	
 
 func _physics_process(delta):
-	
 	shoot_cd_counter -= delta
 	
-	if get_parent().owner.input_module.is_attack_just_pressed and shoot_cd_counter < 0 and get_parent().can_attack:
-		
+	if get_parent().owner.input_module.is_attack_just_pressed and shoot_cd_counter < 0 and get_parent().can_attack:		
+
 		var bullet
+		var audio_player = AudioStreamPlayer2D.new()
 		
 		if node_name() == "FireMagicOrb":
+			audio_player.stream = load("res://Assets/Audio/fire_bullet_shot.wav")
 			bullet = bullet_data.fire_bullet.instance()
 		elif node_name() == "IceMagicOrb":
+			audio_player.stream = load("res://Assets/Audio/ice_shoot.wav")
 			bullet = bullet_data.ice_bullet.instance()
+		
+		get_tree().get_root().add_child(audio_player)
+		audio_player.play()
+		if !audio_player.playing:
+			audio_player.queue_free()
+		
 		
 		var orb_position = get_parent().get_child(0).sprite.global_position
 		var rotation_angle
 		var position_x
-	
 	
 		shoot_cd_counter = shoot_cd
 		if player.global_position.x - player.get_node("PlayerInput").mouse_global_position.x < 0:

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/FtoN.wav-5d06443e1473d0ed0c6ae0c4c9ae13ec.sample"
+
+[deps]
+
+source_file="res://Assets/Audio/FtoN.wav"
+dest_files=[ "res://.import/FtoN.wav-5d06443e1473d0ed0c6ae0c4c9ae13ec.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

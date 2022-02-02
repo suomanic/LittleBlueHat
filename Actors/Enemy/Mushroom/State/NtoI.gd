@@ -14,7 +14,7 @@ func enter():
 	
 	owner.anim_player.play("NtoI_Anim")
 	
-	owner.audio_player.stream = load("res://Assets/Audio/mushroom_freeze.wav")
+	owner.audio_player.stream = load("res://Assets/Audio/Ice_Wind_Impact_normal.wav")
 	owner.audio_player.play()
 	pass
 	

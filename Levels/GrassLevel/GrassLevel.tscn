@@ -1,10 +1,8 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Actors/Enemy/Slime/Slime.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Actors/Item/Bubble/Bubble.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Actors/Player/Player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://GUI/MultiPlayerMenu/MultiPlayerPopupMenu.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Actors/Item/Teleport/Teleport.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Actors/Player/RespawnPoint/RespawnPoint.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Actors/System/camera/LevelCamera.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Actors/Enemy/Mushroom/Mushroom.tscn" type="PackedScene" id=8]
@@ -287,16 +285,3 @@ fire_pos = Vector2( 0, -100 )
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( -816, -126 )
-
-[node name="Teleport" parent="." instance=ExtResource( 5 )]
-position = Vector2( -778.345, -104.921 )
-
-[node name="MultiPlayerPopupMenu" parent="." instance=ExtResource( 4 )]
-margin_left = -811.634
-margin_top = -200.039
-margin_right = -676.634
-margin_bottom = -67.0394
-rect_scale = Vector2( 0.5, 0.5 )
-
-[connection signal="area_entered" from="Teleport" to="." method="_on_Teleport_area_entered"]
-[connection signal="area_exited" from="Teleport" to="." method="_on_Teleport_area_exited"]
