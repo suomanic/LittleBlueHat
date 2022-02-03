@@ -44,6 +44,9 @@ onready var movement_anim_player = $MovementAnimPlayer
 onready var effect_anim_player = $EffectAnimPlayer
 onready var animation_sprite_sheet = $AnimSpriteSheet
 
+onready var foot_step_audio_player = $FootStepAudioPlayer
+onready var jump_land_audio_player = $JumpLandAudioPlayer
+
 # timer
 onready var hurt_move_timer = $HurtMoveTimer
 
@@ -62,6 +65,10 @@ export(Curve) var eject_curve
 var current_absorb_bubble
 var eject_angle
 var temp_rand_name
+
+var pre_foot_step_sound = -1
+
+
 # 记录上一次同步的状态机状态
 onready var state_machine_status : Dictionary = {
 	movement_state = "",
@@ -175,6 +182,35 @@ puppet func _change_state_machine_status(new_state_machine_status : Dictionary):
 		if anim_state_machine.get_curr_state_name() != anim_state_name:
 			var new_state = _get_new_state_by_name(anim_state_name)
 			anim_state_machine.change_state(new_state)
+
+func anim_call_play_foot_step_sound():
+	var i = randi() % 8
+	
+	while pre_foot_step_sound == i:
+		i = randi() % 8
+	
+	match i :
+		0:
+			foot_step_audio_player.stream = preload("res://Assets/Audio/FootStep/footstep1.wav")
+		1:
+			foot_step_audio_player.stream = preload("res://Assets/Audio/FootStep/footstep2.wav")
+		2:
+			foot_step_audio_player.stream = preload("res://Assets/Audio/FootStep/footstep3.wav")
+		3:
+			foot_step_audio_player.stream = preload("res://Assets/Audio/FootStep/footstep4.wav")
+		4:
+			foot_step_audio_player.stream = preload("res://Assets/Audio/FootStep/footstep5.wav")
+		5:
+			foot_step_audio_player.stream = preload("res://Assets/Audio/FootStep/footstep6.wav")
+		6:
+			foot_step_audio_player.stream = preload("res://Assets/Audio/FootStep/footstep7.wav")
+		7:
+			foot_step_audio_player.stream = preload("res://Assets/Audio/FootStep/footstep8.wav")
+			
+	foot_step_audio_player.play()
+	pre_foot_step_sound = i		
+	
+	
 
 # 输入State的name，返回一个新建的State对象，如果找不到对应的State，则返回null
 func _get_new_state_by_name(state_name) -> State:

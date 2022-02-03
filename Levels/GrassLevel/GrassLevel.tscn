@@ -244,7 +244,10 @@ element = 1
 position = Vector2( -85, -156 )
 
 [node name="Bubble2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 310, -34 )
+position = Vector2( 316, -99 )
+move_speed = 60
+fire_pos = Vector2( 0, -100 )
+ice_pos = Vector2( 0, 150 )
 
 [node name="Bubble4" parent="." instance=ExtResource( 2 )]
 position = Vector2( -644, -69 )

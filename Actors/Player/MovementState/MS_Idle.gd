@@ -16,8 +16,9 @@ func execute():
 		owner.movement_state_machine.change_state(owner.MS_RunState.new(owner)) 
 		
 	elif (owner.movement_module._coyote_counter > 0 and owner.movement_module._jump_buffer_counter > 0)|| owner.velocity.y < 0:
+		owner.jump_land_audio_player.stream = load("res://Assets/Audio/jump.wav")
+		owner.jump_land_audio_player.play()
 		owner.movement_state_machine.change_state(owner.MS_UpState.new(owner))
-		
 	elif owner.velocity.y < 0 and owner.collision_module.is_bounced:
 		owner.movement_state_machine.change_state(owner.MS_UpState.new(owner))
 		
