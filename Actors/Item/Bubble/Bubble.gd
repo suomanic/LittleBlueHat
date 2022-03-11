@@ -158,4 +158,12 @@ func _on_Hitbox_area_entered(area):
 				
 		pass # Replace with function body.
 
-
+func inside_icefog():
+	if can_change_element:
+		match element_state:
+			"Normal":
+				element_state_machine.change_state(NtoIState.new(self))
+				movement_state_machine.change_state(moveState.new(self))
+			"Fire":
+				element_state_machine.change_state(FtoNState.new(self))
+				movement_state_machine.change_state(moveState.new(self))

@@ -103,8 +103,13 @@ func _on_enemy_area_entered(area: Area2D):
 
 func _on_mushroom_area_entered(area: Area2D):
 	if area.is_in_group("Mushroom"):
+		
 		if area.element_state == "Fire":
 			owner.movement_module.bounce()
+			var audio_player = AudioStreamPlayer2D.new()
+			audio_player.stream = load("res://Assets/Audio/spring_detect.wav")
+			owner.add_child(audio_player)
+			audio_player.play()
 	else:
 		pass
 	pass # Replace with function body.

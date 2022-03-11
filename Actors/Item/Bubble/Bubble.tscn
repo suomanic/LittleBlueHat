@@ -234,8 +234,8 @@ tracks/0/keys = {
 [sub_resource type="CircleShape2D" id=11]
 radius = 13.0384
 
-[node name="Bubble" type="Area2D" groups=["Bubble"]]
-z_index = 2
+[node name="Bubble" type="Area2D" groups=["Bubble", "CanChangeElement"]]
+z_index = 4
 collision_layer = 64
 script = ExtResource( 3 )
 absorb_curve = SubResource( 3 )
@@ -249,6 +249,7 @@ shape = SubResource( 1 )
 
 [node name="BubbleSprite" type="Sprite" parent="."]
 material = ExtResource( 1 )
+z_index = 4
 texture = ExtResource( 2 )
 hframes = 8
 vframes = 3

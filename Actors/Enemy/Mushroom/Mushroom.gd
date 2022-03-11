@@ -82,6 +82,7 @@ func ItoN_anim_end():
 	state_machine.change_state(N_IdleState.new(self))
 
 func _on_Icefog_area_body_entered(body):
+	print_debug(body)
 	if body.is_in_group("CanChangeElement"):
 		connect("icefog_signal",body,"inside_icefog")
 	pass # Replace with function body.

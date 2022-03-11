@@ -267,7 +267,8 @@ fire_pos = Vector2( -200, 0 )
 ice_pos = Vector2( 0, 50 )
 
 [node name="Bubble6" parent="." instance=ExtResource( 2 )]
-position = Vector2( 210, -31 )
+position = Vector2( 210, -45 )
+z_index = 1
 move_speed = 40
 fire_pos = Vector2( 0, -50 )
 ice_pos = Vector2( 0, 50 )
@@ -287,4 +288,4 @@ move_speed = 40
 fire_pos = Vector2( 0, -100 )
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( -816, -126 )
+position = Vector2( 134, 3 )

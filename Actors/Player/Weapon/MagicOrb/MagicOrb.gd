@@ -1,6 +1,5 @@
 extends Node2D
 
-onready var audio_player = $AudioStreamPlayer2D
 onready var anim_player = $AnimationPlayer
 onready var sprite = $Sprite
 onready var player = get_parent().get_parent()
