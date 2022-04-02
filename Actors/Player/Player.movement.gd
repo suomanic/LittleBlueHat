@@ -20,39 +20,28 @@ export var max_speed: = 100.0
 export var jump_force := 200
 export var double_jump_force := 180
 
-# 储存上一次同步的基础信息内容
-onready var last_sync_basic_status: Dictionary = {
-	global_position = owner.global_position,
-	velocity = owner.velocity,
-	gravity = owner.gravity,
-	acceleration = owner.acceleration,
-	deceleration = owner.deceleration
+# 储存上一次同步的内容
+onready var last_sync_status: Dictionary = {
+	"owner.global_position" : owner.global_position,
+	"owner.velocity" : owner.velocity,
+	"owner.gravity" : owner.gravity,
+	"owner.acceleration" : owner.acceleration,
+	"owner.deceleration" : owner.deceleration,
+	"jump_count" : 0,
+	"is_on_object" : true
 }
 
-# 定时强行同步基础信息的计时器（需要定时同步防止因为丢包造成问题）
-var rpc_timing_sync_basic_status_timer:Timer
-
-# 储存上一次同步的额外信息内容
-onready var last_sync_extra_status: Dictionary = {
-	jump_count = 0,
-	is_on_object = true
-}
-
-# 定时强行同步额外信息的计时器（需要定时同步防止因为丢包造成问题）
-var rpc_timing_sync_extra_status_timer:Timer
+# 定时强行同步的计时器（需要定时同步防止因为丢包造成问题）
+var rpc_sync_timer:Timer
 
 func _ready():
-	rpc_timing_sync_basic_status_timer = Timer.new()
-	rpc_timing_sync_basic_status_timer.one_shot = false
-	rpc_timing_sync_basic_status_timer.wait_time = 1
-	rpc_timing_sync_basic_status_timer.connect("timeout", self, "sync_basic_status")
-	rpc_timing_sync_basic_status_timer.autostart = true
-	
-	rpc_timing_sync_extra_status_timer = Timer.new()
-	rpc_timing_sync_extra_status_timer.one_shot = false
-	rpc_timing_sync_extra_status_timer.wait_time = 1
-	rpc_timing_sync_extra_status_timer.connect("timeout", self, "sync_extra_status")
-	rpc_timing_sync_extra_status_timer.autostart = true
+	rpc_sync_timer = Timer.new()
+	rpc_sync_timer.one_shot = false
+	rpc_sync_timer.process_mode = 1
+	rpc_sync_timer.wait_time = 2
+	rpc_sync_timer.connect("timeout", self, "sync_status")
+	add_child(rpc_sync_timer)
+	rpc_sync_timer.start()
 
 func _physics_process(delta):
 	owner.velocity = owner.move_and_slide_with_snap(owner.velocity,Vector2(0,1),Vector2.UP,false,4,PI/4,false)
@@ -68,8 +57,7 @@ func _physics_process(delta):
 	else:
 		_jump_buffer_counter -= delta
 	
-	sync_basic_status()
-	sync_extra_status()
+	sync_status()
 	
 
 func jump():
@@ -175,45 +163,20 @@ func hurt_move(hit_to_direction):
 	pass
 	
 
-func sync_basic_status():
+func sync_status():
 	# 如果处于联机模式下且自己是master节点
 	if owner.get_tree().has_network_peer() \
 		and owner.get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
 		and owner.is_network_master():
-		## 同步basic_status ##
-		var new_basic_status :Dictionary = {}
-		# 如果上一次同步的内容（last_sync_basic_status）和当前内容不一样，
-		# 将变更过的内容放入new_basic_status内并更新basic_status
-		if last_sync_basic_status.get('global_position') != owner.global_position:
-			last_sync_basic_status.global_position = owner.global_position
-			new_basic_status.global_position = owner.global_position
-		if last_sync_basic_status.get('velocity') != owner.velocity:
-			last_sync_basic_status.velocity = owner.velocity
-			new_basic_status.velocity = owner.velocity
-		if last_sync_basic_status.get('gravity') != owner.gravity:
-			last_sync_basic_status.gravity = owner.gravity
-			new_basic_status.gravity = owner.gravity
-		if last_sync_basic_status.get('acceleration') != owner.acceleration:
-			last_sync_basic_status.acceleration = owner.acceleration
-			new_basic_status.acceleration = owner.acceleration
-		if last_sync_basic_status.get('deceleration') != owner.deceleration:
-			last_sync_basic_status.deceleration = owner.deceleration
-			new_basic_status.deceleration = owner.deceleration
-		
-		# 如果new_basic_status为空，则说明当前状态和上一次同步时相比没有改变，则不进行同步
-		# 否则，同步
-		if !new_basic_status.values().empty():
-			owner.rpc_unreliable('_update_basic_status', new_basic_status)
+		## 同步status ##
+		var diff_status :Dictionary = {}
+		# 如果上一次同步的内容（last_sync_status）和当前内容不一样，
+		# 将变更过的内容放入diff_status内, 同时更新last_sync_status
+		diff_status = EntitySyncManager.update_property_dict(
+			self.get_path(),
+			['owner.global_position','owner.velocity','owner.gravity','owner.acceleration','owner.deceleration','jump_count','is_on_object'], 
+			last_sync_status, false)
+		# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+		if !diff_status.values().empty():
+			EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_status, false)
 
-func sync_extra_status():
-	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() \
-		and owner.get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
-		and owner.is_network_master():
-		## 同步extra_var ##
-		if jump_count != last_sync_extra_status.jump_count:
-			last_sync_extra_status.jump_count = jump_count
-			rset_unreliable('jump_count', jump_count)
-		if is_on_object != last_sync_extra_status.is_on_object:
-			last_sync_extra_status.is_on_object = is_on_object
-			rset_unreliable('is_on_object', is_on_object)

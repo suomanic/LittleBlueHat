@@ -70,9 +70,9 @@ var pre_foot_step_sound = -1
 
 
 # 记录上一次同步的状态机状态
-onready var state_machine_status : Dictionary = {
-	movement_state = "",
-	anim_state = ""
+onready var last_sync_statemachine_status : Dictionary = {
+	movement_state_machine = "",
+	anim_state_machine = ""
 }
 
 func _ready():
@@ -111,31 +111,19 @@ func _physics_process(delta) -> void:
 		# 如果自己是master节点
 		else:
 			name_label.text = MultiplayerState.my_player_info['custom_name']
-			var new_state_machine_status:Dictionary = {}
 			
-			var curr_movement_state_name: String = ""
-			var curr_anim_state_name: String = ""
+			## 同步statemachine_status ##
+			var diff_statemachine_status:Dictionary = {}
 			
-			# 如果movement_state_machine和anim_state_machine的状态都不为null，
-			# 则将其状态的名称存入curr_movement_state_name和curr_anim_state_name内
-			if movement_state_machine.current_state != null:
-				curr_movement_state_name = movement_state_machine.get_curr_state_name()
-			if anim_state_machine.current_state != null:
-				curr_anim_state_name = anim_state_machine.get_curr_state_name()
-			
-			# 如果上一次同步的状态机状态（state_machine_status）和当前的状态机状态不一样，
-			# 将变更过的内容放入new_state_machine_status内并更新state_machine_status
-			if curr_movement_state_name != state_machine_status.movement_state:
-				state_machine_status.movement_state = curr_movement_state_name
-				new_state_machine_status.movement_state = curr_movement_state_name
-			if curr_anim_state_name != state_machine_status.anim_state :
-				state_machine_status.anim_state = curr_anim_state_name
-				new_state_machine_status.anim_state = curr_anim_state_name
-			
-			# 如果new_state_machine_status为空，则说明当前状态机的状态和上一次同步时相比没有改变，
-			# 则不进行同步。否则，同步。
-			if !new_state_machine_status.empty():
-				self.rpc_unreliable('_change_state_machine_status', new_state_machine_status)
+			# 如果上一次同步的内容（last_sync_statemachine_status）和当前内容不一样，
+			# 将变更过的内容放入diff_statemachine_status内, 同时更新last_sync_statemachine_status
+			diff_statemachine_status = EntitySyncManager.update_statemachine_dict(
+				self.get_path(),
+				['movement_state_machine','anim_state_machine'], 
+				last_sync_statemachine_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_statemachine_status.values().empty():
+				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), diff_statemachine_status, false)
 
 
 func absorbed_by_bubble(bubble):
@@ -165,24 +153,6 @@ func die_anim_start():
 func die_anim_end():
 	get_owner().queue_free()
 
-# 接收rpc调用，同步状态机状态
-puppet func _change_state_machine_status(new_state_machine_status : Dictionary):
-	#print_debug(new_state_machine_status)
-	
-	var movement_state_name = new_state_machine_status.get("movement_state")
-	var anim_state_name = new_state_machine_status.get("anim_state")
-	
-	if movement_state_name != null:
-		movement_state_name = str(movement_state_name)
-		if movement_state_machine.get_curr_state_name() != movement_state_name:
-			var new_state = _get_new_state_by_name(movement_state_name)
-			movement_state_machine.change_state(new_state)
-	if anim_state_name != null:
-		anim_state_name = str(anim_state_name)
-		if anim_state_machine.get_curr_state_name() != anim_state_name:
-			var new_state = _get_new_state_by_name(anim_state_name)
-			anim_state_machine.change_state(new_state)
-
 func anim_call_play_foot_step_sound():
 	var i = randi() % 8
 	
@@ -208,36 +178,17 @@ func anim_call_play_foot_step_sound():
 			foot_step_audio_player.stream = preload("res://Assets/Audio/FootStep/footstep8.wav")
 			
 	foot_step_audio_player.play()
-	pre_foot_step_sound = i		
-	
-	
+	pre_foot_step_sound = i
+
 
 # 输入State的name，返回一个新建的State对象，如果找不到对应的State，则返回null
-func _get_new_state_by_name(state_name) -> State:
+func get_new_state_by_name(state_name) -> State:
 	# movement state
-	if state_name == MS_IdleState.get_name():
-		return MS_IdleState.new(self)
-	elif state_name == MS_RunState.get_name():
-		return MS_RunState.new(self)
-	elif state_name == MS_FallState.get_name():
-		return MS_FallState.new(self)
-	elif state_name == MS_DoubleJumpState.get_name():
-		return MS_DoubleJumpState.new(self)
-	elif state_name == MS_CrouchState.get_name():
-		return MS_CrouchState.new(self)
-	elif state_name == MS_UpState.get_name():
-		return MS_UpState.new(self)
-	elif state_name == MS_HurtState.get_name():
-		return MS_HurtState.new(self)
-	elif state_name == MS_DieState.get_name():
-		return MS_DieState.new(self)
-	# animation state
-	elif state_name == AS_HurtState.get_name():
-		return AS_HurtState.new(self)
-	elif state_name == AS_AirState.get_name():
-		return AS_AirState.new(self)
-	elif state_name == AS_GroundState.get_name():
-		return AS_GroundState.new(self)
-	elif state_name == AS_DieState.get_name():
-		return AS_DieState.new(self)
+	var state_array = [
+		MS_IdleState, MS_RunState, MS_FallState, MS_DoubleJumpState, 
+		MS_CrouchState, MS_UpState, MS_HurtState, MS_DieState, AS_HurtState, 
+		AS_AirState, AS_GroundState, AS_DieState]
+	for state_i in state_array:
+		if state_name == state_i.get_name():
+			return state_i.new(self)
 	return null
