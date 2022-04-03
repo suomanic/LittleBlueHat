@@ -20,28 +20,6 @@ export var max_speed: = 100.0
 export var jump_force := 200
 export var double_jump_force := 180
 
-# 储存上一次同步的内容
-onready var last_sync_status: Dictionary = {
-	"owner.global_position" : owner.global_position,
-	"owner.velocity" : owner.velocity,
-	"owner.gravity" : owner.gravity,
-	"owner.acceleration" : owner.acceleration,
-	"owner.deceleration" : owner.deceleration,
-	"jump_count" : 0,
-	"is_on_object" : true
-}
-
-# 定时强行同步的计时器（需要定时同步防止因为丢包造成问题）
-var rpc_sync_timer:Timer
-
-func _ready():
-	rpc_sync_timer = Timer.new()
-	rpc_sync_timer.one_shot = false
-	rpc_sync_timer.process_mode = 1
-	rpc_sync_timer.wait_time = 2
-	rpc_sync_timer.connect("timeout", self, "sync_status")
-	add_child(rpc_sync_timer)
-	rpc_sync_timer.start()
 
 func _physics_process(delta):
 	owner.velocity = owner.move_and_slide_with_snap(owner.velocity,Vector2(0,1),Vector2.UP,false,4,PI/4,false)
@@ -56,9 +34,7 @@ func _physics_process(delta):
 		_jump_buffer_counter = jump_buffer_time
 	else:
 		_jump_buffer_counter -= delta
-	
-	sync_status()
-	
+
 
 func jump():
 	# single jump
@@ -76,8 +52,8 @@ func jump():
 		 owner.velocity.y = -double_jump_force;
 		 _jump_buffer_counter = 0
 		 jump_count += 1
-	
-		
+
+
 func move():
 	# 如果处于联机模式下且自己不是master节点，则跳过
 	if owner.get_tree().has_network_peer() \
@@ -95,7 +71,7 @@ func move():
 	elif owner.input_module.is_left_pressed:
 		owner.velocity.x = max(owner.velocity.x - owner.acceleration,-max_speed)
 
-	
+
 #简单复制，需要修改
 func crouch_move():
 	# 如果处于联机模式下且自己不是master节点，则跳过
@@ -142,12 +118,12 @@ func apply_gravity(delta):
 	
 	elif is_on_object:
 		owner.velocity.y += owner.gravity / 4 * delta
-		
+
 
 func bounce():
 	jump_count = 1
 	owner.velocity.y = -300
-	
+
 
 # 精灵图scale.x转换暂时写在这里
 func hurt_move(hit_to_direction):
@@ -161,22 +137,4 @@ func hurt_move(hit_to_direction):
 		if !owner.collision_module.facing():
 			owner.collision_module.change_facing(true)
 	pass
-	
-
-func sync_status():
-	# 如果处于联机模式下且自己是master节点
-	if owner.get_tree().has_network_peer() \
-		and owner.get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
-		and owner.is_network_master():
-		## 同步status ##
-		var diff_status :Dictionary = {}
-		# 如果上一次同步的内容（last_sync_status）和当前内容不一样，
-		# 将变更过的内容放入diff_status内, 同时更新last_sync_status
-		diff_status = EntitySyncManager.update_property_dict(
-			self.get_path(),
-			['owner.global_position','owner.velocity','owner.gravity','owner.acceleration','owner.deceleration','jump_count','is_on_object'], 
-			last_sync_status, false)
-		# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
-		if !diff_status.values().empty():
-			EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_status, false)
 

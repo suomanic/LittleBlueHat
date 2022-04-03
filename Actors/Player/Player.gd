@@ -74,10 +74,30 @@ onready var last_sync_statemachine_status : Dictionary = {
 	movement_state_machine = "",
 	anim_state_machine = ""
 }
+onready var last_sync_property_status: Dictionary = {
+	"global_position" : global_position,
+	"velocity" : velocity,
+	"gravity" : gravity,
+	"acceleration" : acceleration,
+	"deceleration" : deceleration,
+	"movement_module.jump_count" : 0,
+	"movement_module.is_on_object" : true
+}
+
+# 定时强行同步的计时器（需要定时同步防止因为丢包造成问题）
+var sync_status_timer:Timer
 
 func _ready():
 	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
 	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
+	
+	sync_status_timer = Timer.new()
+	sync_status_timer.one_shot = false
+	sync_status_timer.process_mode = 1
+	sync_status_timer.wait_time = 2
+	sync_status_timer.connect("timeout", self, "clear_last_sync_status")
+	add_child(sync_status_timer)
+	sync_status_timer.start()
 
 func _physics_process(delta) -> void:
 	anim_state_machine.update()
@@ -102,6 +122,9 @@ func _physics_process(delta) -> void:
 	else :
 		walk_particles.set_emitting(false)
 	
+	sync_status()
+
+func sync_status():
 	# 如果处于联机模式下
 	if get_tree().has_network_peer() \
 		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
@@ -114,7 +137,6 @@ func _physics_process(delta) -> void:
 			
 			## 同步statemachine_status ##
 			var diff_statemachine_status:Dictionary = {}
-			
 			# 如果上一次同步的内容（last_sync_statemachine_status）和当前内容不一样，
 			# 将变更过的内容放入diff_statemachine_status内, 同时更新last_sync_statemachine_status
 			diff_statemachine_status = EntitySyncManager.update_statemachine_dict(
@@ -124,8 +146,23 @@ func _physics_process(delta) -> void:
 			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
 			if !diff_statemachine_status.values().empty():
 				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), diff_statemachine_status, false)
+			
+			## 同步property_status ##
+			var diff_property_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_property_status）和当前内容不一样，
+			# 将变更过的内容放入diff_property_status内, 同时更新last_sync_property_status
+			diff_property_status = EntitySyncManager.update_property_dict(
+				self.get_path(),
+				['global_position','velocity','gravity','acceleration','deceleration','movement_module.jump_count','movement_module.is_on_object'], 
+				last_sync_property_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_property_status.values().empty():
+				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_property_status, false)
 
-
+func clear_last_sync_status():
+	last_sync_statemachine_status.clear()
+	last_sync_property_status.clear()
+	
 func absorbed_by_bubble(bubble):
 	movement_state_machine.change_state(MS_AbsorbedState.new(self))
 	current_absorb_bubble = bubble
