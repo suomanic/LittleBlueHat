@@ -1,10 +1,9 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=1]
 [ext_resource path="res://Actors/Player/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Actors/Item/Teleport/Teleport.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Actors/System/camera/LevelCamera.tscn" type="PackedScene" id=4]
-[ext_resource path="res://GUI/MultiPlayerMenu/MultiPlayerPopupMenu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Levels/InitialLevel/InitialLevel.gd" type="Script" id=6]
 [ext_resource path="res://Assets/grass_tilemap.png" type="Texture" id=7]
 
@@ -263,13 +262,3 @@ position = Vector2( -1.78737, 76.6748 )
 
 [node name="Teleport" parent="." instance=ExtResource( 3 )]
 position = Vector2( 55.5, 87 )
-
-[node name="MultiPlayerPopupMenu" parent="." instance=ExtResource( 5 )]
-visible = false
-margin_left = 22.0
-margin_right = 157.0
-margin_bottom = 133.0
-rect_scale = Vector2( 0.5, 0.5 )
-
-[connection signal="area_entered" from="Teleport" to="." method="_on_Teleport_area_entered"]
-[connection signal="area_exited" from="Teleport" to="." method="_on_Teleport_area_exited"]

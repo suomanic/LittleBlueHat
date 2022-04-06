@@ -486,7 +486,7 @@ script = ExtResource( 4 )
 [node name="JumpLandAudioPlayer" type="AudioStreamPlayer2D" parent="."]
 volume_db = 10.0
 
-[connection signal="area_entered" from="Trigger" to="PlayerCollision" method="_on_enemy_area_entered"]
 [connection signal="area_entered" from="Trigger" to="PlayerCollision" method="_on_mushroom_area_entered"]
+[connection signal="area_entered" from="Trigger" to="PlayerCollision" method="_on_enemy_area_entered"]
 [connection signal="body_entered" from="SquishHitBox" to="PlayerCollision" method="_on_SquishHitBox_body_entered"]
 [connection signal="timeout" from="HurtMoveTimer" to="PlayerCollision" method="_on_SDM_Timer_timeout"]

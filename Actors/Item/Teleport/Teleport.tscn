@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Shader_Stuff/SmoothPixelFiltering/SmoothPixel.tres" type="Material" id=1]
+[ext_resource path="res://Actors/Item/Teleport/Teleport.gd" type="Script" id=2]
+[ext_resource path="res://GUI/MultiPlayerMenu/MultiPlayerPopupMenu.tscn" type="PackedScene" id=3]
 
 [sub_resource type="StreamTexture" id=22]
 flags = 4
@@ -29,10 +31,10 @@ extents = Vector2( 7.5, 19 )
 [node name="Teleport" type="Area2D"]
 collision_layer = 2
 collision_mask = 5
+script = ExtResource( 2 )
 
 [node name="TeleportSprite" type="Sprite" parent="."]
 material = ExtResource( 1 )
-position = Vector2( -0.5, 0 )
 texture = SubResource( 22 )
 hframes = 22
 
@@ -50,3 +52,13 @@ shape = SubResource( 25 )
 position = Vector2( 0, 15 )
 build_mode = 1
 polygon = PoolVector2Array( -10, 10, -8.5, 8, 8.5, 8, 10, 10 )
+
+[node name="MultiPlayerPopupMenu" parent="." instance=ExtResource( 3 )]
+margin_left = -33.6257
+margin_top = -101.674
+margin_right = 101.374
+margin_bottom = 31.3257
+rect_scale = Vector2( 0.5, 0.5 )
+
+[connection signal="body_entered" from="." to="." method="_on_Teleport_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_Teleport_body_exited"]
