@@ -361,9 +361,6 @@ align = 1
 valign = 1
 clip_text = true
 max_lines_visible = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="DebugInfoLabel" type="Label" parent="."]
 margin_left = -42.0
@@ -378,9 +375,6 @@ aaaaa"
 align = 1
 valign = 1
 max_lines_visible = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="PlayerInput" type="Node2D" parent="."]
 script = ExtResource( 3 )
@@ -492,7 +486,7 @@ script = ExtResource( 4 )
 [node name="JumpLandAudioPlayer" type="AudioStreamPlayer2D" parent="."]
 volume_db = 10.0
 
-[connection signal="area_entered" from="Trigger" to="PlayerCollision" method="_on_mushroom_area_entered"]
 [connection signal="area_entered" from="Trigger" to="PlayerCollision" method="_on_enemy_area_entered"]
+[connection signal="area_entered" from="Trigger" to="PlayerCollision" method="_on_mushroom_area_entered"]
 [connection signal="body_entered" from="SquishHitBox" to="PlayerCollision" method="_on_SquishHitBox_body_entered"]
 [connection signal="timeout" from="HurtMoveTimer" to="PlayerCollision" method="_on_SDM_Timer_timeout"]

@@ -80,3 +80,19 @@ func update_statemachine_dict(statemachine_owner_path:String, statemachine_list:
 			if update_if_empty or ((!update_if_empty) and state_name != ""):
 				new_pack[key] = state_name
 	return new_pack
+
+remote func call_func(func_owner_path:String, func_dict: Dictionary):
+	var func_owner = self.get_node_or_null(func_owner_path)
+	if func_owner == null:
+		return
+	for key in func_dict.keys():
+		var nest_key = key.split(".")
+		var real_func_name = nest_key[nest_key.size()-1]
+		var arg_array = func_dict.get(key,[])
+		var real_func_owner = func_owner
+		# 查找以.隔开的嵌套项
+		for i in range(0,nest_key.size()-1):
+			if typeof(real_func_owner) != TYPE_OBJECT: break
+			real_func_owner = real_func_owner.get(nest_key[i])
+		if typeof(real_func_owner) != TYPE_OBJECT : break
+		real_func_owner.callv(real_func_name, arg_array)

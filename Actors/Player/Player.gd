@@ -74,6 +74,7 @@ onready var last_sync_statemachine_status : Dictionary = {
 	movement_state_machine = "",
 	anim_state_machine = ""
 }
+# 记录上一次同步的属性状态
 onready var last_sync_property_status: Dictionary = {
 	"global_position" : global_position,
 	"velocity" : velocity,

@@ -8,10 +8,12 @@ func _ready():
 	pass
 
 func _physics_process(delta):
-	if owner.input_module.is_attack_just_pressed and get_parent().can_attack:
-		$AnimationPlayer.play("attack")
+#	if owner.input_module.is_attack_just_pressed and get_parent().can_attack:
+#		$AnimationPlayer.play("attack")
 	pass
 
+func attack():
+	$AnimationPlayer.play("attack")
 
 func _on_SwordAttackArea_area_entered(area):
 	if area.is_in_group("HurtBox"):
