@@ -36,4 +36,4 @@ func exit():
 	pass
 
 static func get_name():
-	return ""
+	return "NtoI"
