@@ -70,7 +70,7 @@ var pre_foot_step_sound = -1
 
 
 # 记录上一次同步的状态机状态
-onready var last_sync_statemachine_status : Dictionary = {}
+var last_sync_statemachine_status : Dictionary = {}
 # 记录上一次同步的属性状态
 var last_sync_property_status: Dictionary = {}
 # 记录上一次同步的node属性状态
@@ -82,13 +82,7 @@ func _ready():
 	movement_state_machine = StateMachine.new(MS_IdleState.new(self))
 	anim_state_machine = StateMachine.new(AS_GroundState.new(self))
 	
-	sync_status_timer = Timer.new()
-	sync_status_timer.one_shot = false
-	sync_status_timer.process_mode = 1
-	sync_status_timer.wait_time = 2
-	sync_status_timer.connect("timeout", self, "clear_last_sync_status")
-	add_child(sync_status_timer)
-	sync_status_timer.start()
+	sync_timer_init(sync_status_timer)
 
 func _physics_process(delta) -> void:
 	anim_state_machine.update()
@@ -115,59 +109,7 @@ func _physics_process(delta) -> void:
 	
 	sync_status()
 
-func sync_status():
-	# 如果处于联机模式下
-	if get_tree().has_network_peer() \
-		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
-		# 如果自己不是master节点
-		if !self.is_network_master():
-			name_label.text = MultiplayerState.remote_player_info['custom_name']
-		# 如果自己是master节点
-		else:
-			name_label.text = MultiplayerState.my_player_info['custom_name']
-			
-			## 同步statemachine_status ##
-			var diff_statemachine_status:Dictionary = {}
-			# 如果上一次同步的内容（last_sync_statemachine_status）和当前内容不一样，
-			# 将变更过的内容放入diff_statemachine_status内, 同时更新last_sync_statemachine_status
-			diff_statemachine_status = EntitySyncManager.update_statemachine_dict(
-				self.get_path(),
-				['movement_state_machine','anim_state_machine'], 
-				last_sync_statemachine_status, false)
-			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
-			if !diff_statemachine_status.values().empty():
-				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), diff_statemachine_status, false)
-			
-			## 同步property_status ##
-			var diff_property_status :Dictionary = {}
-			# 如果上一次同步的内容（last_sync_property_status）和当前内容不一样，
-			# 将变更过的内容放入diff_property_status内, 同时更新last_sync_property_status
-			diff_property_status = EntitySyncManager.update_property_dict(
-				self.get_path(),
-				['global_position','velocity','gravity','acceleration','deceleration','movement_module.jump_count','movement_module.is_on_object'], 
-				last_sync_property_status, false)
-			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
-			if !diff_property_status.values().empty():
-				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_property_status, false)
-			
-			## 同步node_status ##
-			var diff_node_status :Dictionary = {}
-			# 如果上一次同步的内容（last_sync_node_status）和当前内容不一样，
-			# 将变更过的内容放入diff_node_status内, 同时更新last_sync_node_status
-			diff_node_status = EntitySyncManager.update_node_dict(
-				self.get_path(),
-				['current_absorb_bubble'],
-				last_sync_node_status, false)
-			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
-			if !diff_node_status.values().empty():
-				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
 
-
-func clear_last_sync_status():
-	last_sync_statemachine_status.clear()
-	last_sync_property_status.clear()
-	last_sync_node_status.clear()
-	
 func absorbed_by_bubble(bubble):
 	movement_state_machine.change_state(MS_AbsorbedState.new(self))
 	current_absorb_bubble = bubble
@@ -225,14 +167,83 @@ func anim_call_play_foot_step_sound():
 	pre_foot_step_sound = i
 
 
+func sync_status():
+	# 如果处于联机模式下
+	if get_tree().has_network_peer() \
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+		# 如果自己不是master节点
+		if !self.is_network_master():
+			name_label.text = MultiplayerState.remote_player_info['custom_name']
+		# 如果自己是master节点
+		else:
+			name_label.text = MultiplayerState.my_player_info['custom_name']
+			
+			## 同步statemachine_status ##
+			var diff_statemachine_status:Dictionary = {}
+			# 如果上一次同步的内容（last_sync_statemachine_status）和当前内容不一样，
+			# 将变更过的内容放入diff_statemachine_status内, 同时更新last_sync_statemachine_status
+			diff_statemachine_status = EntitySyncManager.update_statemachine_dict(
+				self.get_path(),
+				['movement_state_machine','anim_state_machine'], 
+				last_sync_statemachine_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_statemachine_status.values().empty():
+				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), diff_statemachine_status, false)
+			
+			## 同步property_status ##
+			var diff_property_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_property_status）和当前内容不一样，
+			# 将变更过的内容放入diff_property_status内, 同时更新last_sync_property_status
+			diff_property_status = EntitySyncManager.update_property_dict(
+				self.get_path(),
+				['global_position','velocity','gravity','acceleration','deceleration',
+				'movement_module.jump_count','movement_module.is_on_object',
+				'eject_angle','scale'], 
+				last_sync_property_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_property_status.values().empty():
+				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_property_status, false)
+			
+			## 同步node_status ##
+			var diff_node_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_node_status）和当前内容不一样，
+			# 将变更过的内容放入diff_node_status内, 同时更新last_sync_node_status
+			diff_node_status = EntitySyncManager.update_node_dict(
+				self.get_path(),
+				['current_absorb_bubble'],
+				last_sync_node_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_node_status.values().empty():
+				EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
+
+
 # 输入State的name，返回一个新建的State对象，如果找不到对应的State，则返回null
 func get_new_state_by_name(state_name) -> State:
 	# movement state
 	var state_array = [
 		MS_IdleState, MS_RunState, MS_FallState, MS_DoubleJumpState, 
 		MS_CrouchState, MS_UpState, MS_HurtState, MS_DieState, AS_HurtState, 
-		AS_AirState, AS_GroundState, AS_DieState]
+		AS_AirState, AS_GroundState, AS_DieState,
+		MS_AbsorbedState, MS_EjectedState]
 	for state_i in state_array:
 		if state_name == state_i.get_name():
 			return state_i.new(self)
 	return null
+
+
+func clear_last_sync_status():
+	last_sync_statemachine_status.clear()
+	last_sync_property_status.clear()
+	last_sync_node_status.clear()
+
+
+func sync_timer_init(timer: Timer):
+	if typeof(timer)== TYPE_OBJECT:
+		timer.call('stop')
+	timer = Timer.new()
+	timer.one_shot = false
+	timer.process_mode = 1
+	timer.wait_time = 2
+	timer.connect("timeout", self, "clear_last_sync_status")
+	add_child(timer)
+	timer.start()

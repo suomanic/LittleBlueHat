@@ -19,7 +19,8 @@ func execute():
 	if time > 0.2:
 		owner.anim_sprite.set_visible(false)
 	
-	owner.global_position = lerp(absolute_position,owner.current_absorb_bubble.global_position,owner.absorbed_curve.interpolate(time))
+	if is_instance_valid(owner.current_absorb_bubble) and absolute_position!=null:
+		owner.global_position = lerp(absolute_position,owner.current_absorb_bubble.global_position,owner.absorbed_curve.interpolate(time))
 	
 
 func exit():

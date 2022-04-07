@@ -74,7 +74,8 @@ var last_sync_statemachine_status : Dictionary = {}
 var last_sync_property_status: Dictionary = {}
 # 记录上一次同步的node属性状态
 var last_sync_node_status: Dictionary = {}
-
+# 记录上一次同步的arrow的属性状态
+var last_sync_arrow_property_status: Dictionary = {}
 # 定时强行同步的计时器（需要定时同步防止因为丢包造成问题）
 var sync_status_timer:Timer
 
@@ -89,13 +90,7 @@ func _ready():
 		ice_absolute_position = global_position + ice_pos
 		fire_absolute_position = global_position + fire_pos
 	
-	sync_status_timer = Timer.new()
-	sync_status_timer.one_shot = false
-	sync_status_timer.process_mode = 1
-	sync_status_timer.wait_time = 2
-	sync_status_timer.connect("timeout", self, "clear_last_sync_status")
-	add_child(sync_status_timer)
-	sync_status_timer.start()
+	sync_timer_init(sync_status_timer)
 
 
 func _physics_process(delta):
@@ -108,8 +103,12 @@ func _physics_process(delta):
 		behavior_state_machine.update()
 		element_state_machine.update()
 		movement_state_machine.update()
-		
-		eject_angle = (get_global_mouse_position() - bubble_sprite.global_position).angle()
+		if get_tree().has_network_peer() \
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+			if is_instance_valid(player) and player.is_network_master():
+				eject_angle = (get_global_mouse_position() - bubble_sprite.global_position).angle()
+		else:
+			eject_angle = (get_global_mouse_position() - bubble_sprite.global_position).angle()
 		
 		if behavior_state_machine.current_state != null:
 			label.text = behavior_state_machine.current_state.get_name()
@@ -137,16 +136,26 @@ func arrow_sprite_movement():
 
 
 func _on_Bubble_body_entered(body):
-	if not Engine.editor_hint: 
+	if not Engine.editor_hint:
 		if body.is_in_group("Player") and player == null:
-			if body.collision_module.facing():
-				absorb_direction = true
-			else :
-				absorb_direction = false
+			var temp_flag:bool = false
+			if get_tree().has_network_peer() \
+			and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+				if is_network_master():
+					temp_flag = true
+			else:
+				temp_flag = true
 			
-			player = body 
-			player.absorbed_by_bubble(self)
-			behavior_state_machine.change_state(occupiedState.new(self))
+			if temp_flag:
+				if body.collision_module.facing():
+					absorb_direction = true
+				else :
+					absorb_direction = false
+				
+				player = body
+				# !!!一定要保证player在远程被设置后才变化状态
+				EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_node', self.get_path(), {'player':player.get_path()}, false)
+				behavior_state_machine.change_state(occupiedState.new(self))
 
 
 func anim_called_character_shadow_to_idle():
@@ -180,6 +189,19 @@ func _on_Hitbox_area_entered(area):
 						pass
 
 
+func eject():
+	if get_tree().has_network_peer() \
+	and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+		# 如果自己的player是master节点
+		if is_instance_valid(player) and player.is_network_master():
+			if is_network_master():
+				behavior_state_machine.change_state(ejectState.new(self))
+			else:
+				EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), {'behavior_state_machine':ejectState.get_name()}, false)
+	else:
+		behavior_state_machine.change_state(ejectState.new(self))
+
+
 func inside_icefog():
 	if can_change_element:
 		match element_state:
@@ -194,10 +216,9 @@ func inside_icefog():
 func sync_status(reliable:bool = false):
 	# 如果处于联机模式下
 	if get_tree().has_network_peer() \
-		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
-		# 如果自己是master节点且没有玩家进入，或者有玩家进入且玩家是master节点
-		if (is_network_master() and !is_instance_valid(player)) \
-		or is_instance_valid(player) and player.is_network_master():
+	and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+		# 如果自己是master节点
+		if is_network_master():
 			## 同步property_status ##
 			var diff_property_status :Dictionary = {}
 			# 如果上一次同步的内容（last_sync_property_status）和当前内容不一样，
@@ -205,10 +226,9 @@ func sync_status(reliable:bool = false):
 			diff_property_status = EntitySyncManager.update_property_dict(
 				self.get_path(),
 				['element_state', 'can_change_element', 'move_target', 
-				'eject_angle', 'absorb_direction', 'eject_direction',
+				'absorb_direction',
 				'normal_absolute_position', 'ice_absolute_position', 'fire_absolute_position',
-				'global_position',
-				'arrow_sprite.rotation', 'arrow_sprite.global_position'], 
+				'global_position'], 
 				last_sync_property_status, false)
 			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
 			if !diff_property_status.values().empty():
@@ -242,16 +262,44 @@ func sync_status(reliable:bool = false):
 				last_sync_node_status, false)
 			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
 			if !diff_node_status.values().empty():
+				EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
+		
+		# 如果自己的player是master节点
+		if is_instance_valid(player) and player.is_network_master():
+			## 同步arrow_property_status ##
+			var diff_arrow_property_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_arrow_property_status）和当前内容不一样，
+			# 将变更过的内容放入diff_arrow_property_status内, 同时更新last_sync_arrow_property_status
+			diff_arrow_property_status = EntitySyncManager.update_property_dict(
+				self.get_path(),
+				['eject_angle', 'eject_direction',
+				'arrow_sprite.rotation', 'arrow_sprite.global_position'], 
+				last_sync_arrow_property_status, false)
+			# 如果和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_arrow_property_status.values().empty():
 				if(reliable):
-					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
+					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_arrow_property_status, false)
 				else:
-					EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
-
+					EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_arrow_property_status, false)
+			pass
 
 func clear_last_sync_status():
 	last_sync_property_status.clear()
 	last_sync_statemachine_status.clear()
 	last_sync_node_status.clear()
+	last_sync_arrow_property_status.clear()
+
+
+func sync_timer_init(timer: Timer):
+	if typeof(timer)== TYPE_OBJECT:
+		timer.call('stop')
+	timer = Timer.new()
+	timer.one_shot = false
+	timer.process_mode = 1
+	timer.wait_time = 2
+	timer.connect("timeout", self, "clear_last_sync_status")
+	add_child(timer)
+	timer.start()
 
 
 # 输入State的name，返回一个新建的State对象，如果找不到对应的State，则返回null

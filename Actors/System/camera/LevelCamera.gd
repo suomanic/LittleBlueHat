@@ -17,7 +17,7 @@ func _physics_process(delta):
 	
 	
 	if player != null:
-		if player.movement_state_machine.is_state("Absorbed"):
+		if player.movement_state_machine.is_state("Absorbed") and is_instance_valid(player.current_absorb_bubble):
 			global_position = player.current_absorb_bubble.round()
 		else:
 			global_position = player.global_position.round()

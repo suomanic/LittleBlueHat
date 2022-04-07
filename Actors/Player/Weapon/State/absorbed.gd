@@ -14,7 +14,7 @@ func execute():
 	
 	if time > 0.3:
 		owner.get_child(0).sprite.set_visible(false)
-	if is_instance_valid(owner.owner.current_absorb_bubble):
+	if is_instance_valid(owner.owner.current_absorb_bubble) and owner.absolute_position!=null:
 		owner.global_position = lerp(owner.absolute_position,owner.owner.current_absorb_bubble.global_position - Vector2(0,12),owner.absorbed_position_curve.interpolate(time))
 		owner.get_child(0).scale = lerp(Vector2(1,1),Vector2(0,0),owner.absorbed_scale_curve.interpolate(time))
 	pass

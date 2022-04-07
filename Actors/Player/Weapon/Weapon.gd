@@ -38,19 +38,17 @@ onready var current_weapon_name
 onready var target_position_to_change = global_position
 
 # 记录上一次同步的状态机状态
-onready var last_sync_statemachine_status : Dictionary = {
-	state_machine = ""
-}
+var last_sync_statemachine_status : Dictionary = {}
 # 记录上一次同步的属性状态
-onready var last_sync_property_status: Dictionary = {}
-
+var last_sync_property_status: Dictionary = {}
+var sync_status_timer: Timer
 
 func _ready():
 	owner = get_parent()
 	state_machine = StateMachine.new(readyState.new(self))
-	
 	change_weapon_counter = change_weapon_cd
-	pass # Replace with function body.
+	
+	sync_timer_init(sync_status_timer)
 
 
 func _physics_process(delta):
@@ -260,8 +258,26 @@ func sync_status():
 			diff_property_status = EntitySyncManager.update_property_dict(
 				self.get_path(),
 				['target_position_to_change', 'target_weapon_to_change_name',
-				'follow_player_linear_interpolate_scale_rate'],
+				'follow_player_linear_interpolate_scale_rate','absorbed_position',
+				'scale'],
 				last_sync_property_status, false)
 			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
 			if !diff_property_status.values().empty():
 				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_property_status, false)
+
+
+func clear_last_sync_status():
+	last_sync_statemachine_status.clear()
+	last_sync_property_status.clear()
+
+
+func sync_timer_init(timer: Timer):
+	if typeof(timer)== TYPE_OBJECT:
+		timer.call('stop')
+	timer = Timer.new()
+	timer.one_shot = false
+	timer.process_mode = 1
+	timer.wait_time = 2
+	timer.connect("timeout", self, "clear_last_sync_status")
+	add_child(timer)
+	timer.start()
