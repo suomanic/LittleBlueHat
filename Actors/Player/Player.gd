@@ -70,21 +70,11 @@ var pre_foot_step_sound = -1
 
 
 # 记录上一次同步的状态机状态
-onready var last_sync_statemachine_status : Dictionary = {
-	movement_state_machine = "",
-	anim_state_machine = ""
-}
+onready var last_sync_statemachine_status : Dictionary = {}
 # 记录上一次同步的属性状态
-onready var last_sync_property_status: Dictionary = {
-	"global_position" : global_position,
-	"velocity" : velocity,
-	"gravity" : gravity,
-	"acceleration" : acceleration,
-	"deceleration" : deceleration,
-	"movement_module.jump_count" : 0,
-	"movement_module.is_on_object" : true
-}
-
+var last_sync_property_status: Dictionary = {}
+# 记录上一次同步的node属性状态
+var last_sync_node_status: Dictionary = {}
 # 定时强行同步的计时器（需要定时同步防止因为丢包造成问题）
 var sync_status_timer:Timer
 
@@ -159,10 +149,24 @@ func sync_status():
 			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
 			if !diff_property_status.values().empty():
 				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_property_status, false)
+			
+			## 同步node_status ##
+			var diff_node_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_node_status）和当前内容不一样，
+			# 将变更过的内容放入diff_node_status内, 同时更新last_sync_node_status
+			diff_node_status = EntitySyncManager.update_node_dict(
+				self.get_path(),
+				['current_absorb_bubble'],
+				last_sync_node_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_node_status.values().empty():
+				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
+
 
 func clear_last_sync_status():
 	last_sync_statemachine_status.clear()
 	last_sync_property_status.clear()
+	last_sync_node_status.clear()
 	
 func absorbed_by_bubble(bubble):
 	movement_state_machine.change_state(MS_AbsorbedState.new(self))

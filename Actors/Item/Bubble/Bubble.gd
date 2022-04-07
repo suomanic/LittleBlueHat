@@ -127,6 +127,11 @@ func _physics_process(delta):
 
 func arrow_sprite_movement():
 	if not Engine.editor_hint: 
+		# 如果处于联机模式下
+		if get_tree().has_network_peer() \
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED \
+		and !(is_instance_valid(player) and player.is_network_master()): # 如果没有玩家进入或者玩家不是master节点
+			return
 		arrow_sprite.global_position = (get_global_mouse_position() - bubble_sprite.global_position).normalized() * 25 + bubble_sprite.global_position
 		arrow_sprite.rotation = (get_global_mouse_position() - bubble_sprite.global_position).angle() + PI/2
 
@@ -190,7 +195,7 @@ func sync_status(reliable:bool = false):
 	# 如果处于联机模式下
 	if get_tree().has_network_peer() \
 		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
-		# 如果自己是master节点
+		# 如果自己是master节点且没有玩家进入，或者有玩家进入且玩家是master节点
 		if (is_network_master() and !is_instance_valid(player)) \
 		or is_instance_valid(player) and player.is_network_master():
 			## 同步property_status ##
@@ -201,7 +206,9 @@ func sync_status(reliable:bool = false):
 				self.get_path(),
 				['element_state', 'can_change_element', 'move_target', 
 				'eject_angle', 'absorb_direction', 'eject_direction',
-				'normal_absolute_position', 'ice_absolute_position', 'fire_absolute_position', 'global_position'], 
+				'normal_absolute_position', 'ice_absolute_position', 'fire_absolute_position',
+				'global_position',
+				'arrow_sprite.rotation', 'arrow_sprite.global_position'], 
 				last_sync_property_status, false)
 			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
 			if !diff_property_status.values().empty():
