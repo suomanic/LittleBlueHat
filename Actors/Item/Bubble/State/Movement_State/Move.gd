@@ -19,7 +19,7 @@ func execute():
 	
 	time += owner.get_physics_process_delta_time()
 	
-	var distance = current_absolute_position.distance_to(owner.move_target)	
+	var distance = current_absolute_position.distance_to(owner.move_target)
 	if distance != 0:
 		offset = min (time / distance * owner.move_speed,1)
 	owner.global_position = lerp(owner.global_position,owner.move_target,owner.move_curve.interpolate(offset))

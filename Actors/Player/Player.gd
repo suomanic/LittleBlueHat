@@ -167,11 +167,13 @@ func clear_last_sync_status():
 func absorbed_by_bubble(bubble):
 	movement_state_machine.change_state(MS_AbsorbedState.new(self))
 	current_absorb_bubble = bubble
+	print_debug('absorbed_by_bubble ', bubble)
 	
 func ejected_from_bubble(eject_angle :float ,bubble):
 	self.eject_angle = eject_angle
 	movement_state_machine.change_state(MS_EjectedState.new(self))
 	current_absorb_bubble = bubble
+	print_debug('ejected_from_bubble ', bubble)
 
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")

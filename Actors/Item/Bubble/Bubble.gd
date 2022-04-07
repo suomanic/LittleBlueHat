@@ -1,7 +1,7 @@
 tool
 extends Area2D
 
-signal absorb_signal
+# signal absorb_signal
 
 var behavior_state_machine : StateMachine
 var element_state_machine : StateMachine
@@ -28,7 +28,7 @@ onready var character_shadow_sprite = $BubbleSprite/CharacterShadowSprite
 onready var effect_sprite = $BubbleSprite/EffectSprite
 
 onready var enter_shape = $EnterShape
-onready var player
+onready var player = null
 
 onready var label = $Label
 onready var label2 = $Label2
@@ -68,6 +68,17 @@ export var normal_pos : Vector2
 export var fire_pos : Vector2
 export var ice_pos : Vector2
 
+# 记录上一次同步的状态机状态
+var last_sync_statemachine_status : Dictionary = {}
+# 记录上一次同步的属性状态
+var last_sync_property_status: Dictionary = {}
+# 记录上一次同步的node属性状态
+var last_sync_node_status: Dictionary = {}
+
+# 定时强行同步的计时器（需要定时同步防止因为丢包造成问题）
+var sync_status_timer:Timer
+
+
 func _ready():
 	if not Engine.editor_hint:
 		behavior_state_machine = StateMachine.new(freeState.new(self))
@@ -78,12 +89,20 @@ func _ready():
 		ice_absolute_position = global_position + ice_pos
 		fire_absolute_position = global_position + fire_pos
 	
+	sync_status_timer = Timer.new()
+	sync_status_timer.one_shot = false
+	sync_status_timer.process_mode = 1
+	sync_status_timer.wait_time = 2
+	sync_status_timer.connect("timeout", self, "clear_last_sync_status")
+	add_child(sync_status_timer)
+	sync_status_timer.start()
+
+
 func _physics_process(delta):
 	if  Engine.editor_hint: #只在编辑器中运行的代码，用于在编辑器中显示不同元素下泡泡的目标位置
 		get_node("NormalPosition").position = normal_pos
 		get_node("IcePosition").position = ice_pos
 		get_node("FirePosition").position = fire_pos
-	
 	
 	if not Engine.editor_hint: #只在游戏中运行的代码
 		behavior_state_machine.update()
@@ -102,8 +121,10 @@ func _physics_process(delta):
 			character_shadow_sprite.scale.x = 1
 		else : 
 			character_shadow_sprite.scale.x = -1
-			
 	
+	sync_status()
+
+
 func arrow_sprite_movement():
 	if not Engine.editor_hint: 
 		arrow_sprite.global_position = (get_global_mouse_position() - bubble_sprite.global_position).normalized() * 25 + bubble_sprite.global_position
@@ -112,25 +133,22 @@ func arrow_sprite_movement():
 
 func _on_Bubble_body_entered(body):
 	if not Engine.editor_hint: 
-		if body.is_in_group("Player"):
+		if body.is_in_group("Player") and player == null:
 			if body.collision_module.facing():
 				absorb_direction = true
 			else :
 				absorb_direction = false
 			
 			player = body 
-			connect("absorb_signal",body,"absorbed_by_bubble")
-			emit_signal("absorb_signal",self)
-		behavior_state_machine.change_state(occupiedState.new(self))
-	
-func disconnect_absorb_signal():
-	if not Engine.editor_hint: 
-		disconnect("absorb_signal",player,"absorbed_by_bubble")
+			player.absorbed_by_bubble(self)
+			behavior_state_machine.change_state(occupiedState.new(self))
+
 
 func anim_called_character_shadow_to_idle():
 	if not Engine.editor_hint: 
 		character_shadow_anim_player.play("idle_anim")
 		character_shadow_anim_player.advance(bubble_anim_player.current_animation_position)
+
 
 func _on_Hitbox_area_entered(area):
 	if not Engine.editor_hint: 
@@ -155,8 +173,7 @@ func _on_Hitbox_area_entered(area):
 						movement_state_machine.change_state(moveState.new(self))
 					"Fire":
 						pass
-				
-		pass # Replace with function body.
+
 
 func inside_icefog():
 	if can_change_element:
@@ -167,3 +184,77 @@ func inside_icefog():
 			"Fire":
 				element_state_machine.change_state(FtoNState.new(self))
 				movement_state_machine.change_state(moveState.new(self))
+
+
+func sync_status(reliable:bool = false):
+	# 如果处于联机模式下
+	if get_tree().has_network_peer() \
+		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+		# 如果自己是master节点
+		if (is_network_master() and !is_instance_valid(player)) \
+		or is_instance_valid(player) and player.is_network_master():
+			## 同步property_status ##
+			var diff_property_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_property_status）和当前内容不一样，
+			# 将变更过的内容放入diff_property_status内, 同时更新last_sync_property_status
+			diff_property_status = EntitySyncManager.update_property_dict(
+				self.get_path(),
+				['element_state', 'can_change_element', 'move_target', 
+				'eject_angle', 'absorb_direction', 'eject_direction',
+				'normal_absolute_position', 'ice_absolute_position', 'fire_absolute_position', 'global_position'], 
+				last_sync_property_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_property_status.values().empty():
+				if(reliable):
+					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_property_status, false)
+				else:
+					EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_property_status, false)
+			
+			## 同步statemachine_status ##
+			var diff_statemachine_status:Dictionary = {}
+			# 如果上一次同步的内容（last_sync_statemachine_status）和当前内容不一样，
+			# 将变更过的内容放入diff_statemachine_status内, 同时更新last_sync_statemachine_status
+			diff_statemachine_status = EntitySyncManager.update_statemachine_dict(
+				self.get_path(),
+				['behavior_state_machine', 'element_state_machine', 'movement_state_machine'], 
+				last_sync_statemachine_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_statemachine_status.values().empty():
+				if(reliable):
+					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), diff_statemachine_status, false)
+				else:
+					EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), diff_statemachine_status, false)
+			
+			## 同步node_status ##
+			var diff_node_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_node_status）和当前内容不一样，
+			# 将变更过的内容放入diff_node_status内, 同时更新last_sync_node_status
+			diff_node_status = EntitySyncManager.update_node_dict(
+				self.get_path(),
+				['player'],
+				last_sync_node_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_node_status.values().empty():
+				if(reliable):
+					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
+				else:
+					EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
+
+
+func clear_last_sync_status():
+	last_sync_property_status.clear()
+	last_sync_statemachine_status.clear()
+	last_sync_node_status.clear()
+
+
+# 输入State的name，返回一个新建的State对象，如果找不到对应的State，则返回null
+func get_new_state_by_name(state_name) -> State:
+	var state_array = [
+		moveState, idleState,
+		freeState, occupiedState, ejectState,
+		I_IdleState, F_IdleState, N_IdleState, ItoNState, NtoIState, FtoNState, NtoFState]
+	for state_i in state_array:
+		if state_name == state_i.get_name():
+			return state_i.new(self)
+	return null
+

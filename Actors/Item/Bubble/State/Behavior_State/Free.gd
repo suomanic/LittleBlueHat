@@ -4,6 +4,7 @@ func _init(o).(o):
 	pass
 
 func enter():
+	owner.player = null
 	pass
 	
 func execute():
