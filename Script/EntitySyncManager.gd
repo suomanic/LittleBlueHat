@@ -41,11 +41,13 @@ func update_property_dict(property_owner_path:String, property_list: PoolStringA
 # 将字典内相对当前的状态机的状态有变动的状态设置到当前状态机
 # statemachine_owner_path: 状态机持有者，指向的对象应该实现get_new_state_by_name方法
 # update_if_empty: 如果存在值为空字符串的键值，是否要应用于状态机
-remote func update_statemachine(statemachine_owner_path:String, statemachine_dict: Dictionary, update_if_empty:bool = false) -> void:
+remote func update_statemachine(statemachine_owner_path:NodePath, statemachine_dict: Dictionary, update_if_empty:bool = false) -> void:
+#	print_debug('Enter Try......', statemachine_owner_path, ': ', statemachine_dict)
 	var statemachine_owner = self.get_node_or_null(statemachine_owner_path)
 	if statemachine_owner == null or (!statemachine_owner.has_method("get_new_state_by_name")):
 		return
 	for key in statemachine_dict.keys():
+#		print_debug('Try......', statemachine_owner_path, ': ', key, statemachine_dict.get(key))
 		var nest_key = key.split(".")
 		var real_statemachine = statemachine_owner
 		# 查找以.隔开的嵌套项
@@ -53,19 +55,22 @@ remote func update_statemachine(statemachine_owner_path:String, statemachine_dic
 			if typeof(real_statemachine) != TYPE_OBJECT: break
 			real_statemachine = real_statemachine.get(nest_key[i])
 		if typeof(real_statemachine) != TYPE_OBJECT \
-		or real_statemachine.get("class_name") != "StateMachine" : break
+		or !real_statemachine.has_method('get_curr_state_name') : break
 		if real_statemachine.get_curr_state_name() != statemachine_dict.get(key):
 			if update_if_empty or ((!update_if_empty) and statemachine_dict.get(key) != ""):
 				real_statemachine.change_state(statemachine_owner.get_new_state_by_name(statemachine_dict.get(key)))
+#				print_debug('Success......', statemachine_owner_path, ': ', key, statemachine_dict.get(key))
 
 # 将当前状态机的状态相对last_pack内的状态机的状态有变动的放入新字典内返回，并同时更新旧字典（gdscript字典类型是传递引用的）
 # update_if_empty: 如果获取到的状态名称为空（也就是无状态），是否要应用于键值
 func update_statemachine_dict(statemachine_owner_path:String, statemachine_list: PoolStringArray, last_pack: Dictionary = {}, update_if_empty:bool = false) -> Dictionary:
+#	print_debug('Update dict......', statemachine_owner_path, ': ', statemachine_list)
 	var statemachine_owner = self.get_node_or_null(statemachine_owner_path)
 	if statemachine_owner == null:
 		return {}
 	var new_pack:Dictionary = {}
 	for key in statemachine_list:
+#		print_debug('	Update dict......', statemachine_owner_path, ': ', key)
 		var nest_key = key.split(".")
 		var real_statemachine = statemachine_owner
 		# 查找以.隔开的嵌套项
@@ -73,13 +78,57 @@ func update_statemachine_dict(statemachine_owner_path:String, statemachine_list:
 			if typeof(real_statemachine) != TYPE_OBJECT: break
 			real_statemachine = real_statemachine.get(nest_key[i])
 		if typeof(real_statemachine) != TYPE_OBJECT \
-		or real_statemachine.get("class_name") != "StateMachine" : break
+		or !real_statemachine.has_method('get_curr_state_name') : break
 		var state_name = real_statemachine.get_curr_state_name()
+#		print_debug('Update dict......', statemachine_owner_path, ': ', key,' ',state_name)
 		if state_name != last_pack.get(key):
 			last_pack[key] = state_name # 更新旧字典
 			if update_if_empty or ((!update_if_empty) and state_name != ""):
 				new_pack[key] = state_name
 	return new_pack
+
+
+# 与update_property一致，但是属性为节点类型
+remote func update_node(node_owner_path:String, node_dict: Dictionary, update_if_null:bool = false) -> void:
+	var node_owner = get_node_or_null(node_owner_path)
+	if node_owner == null:
+		return
+	for key in node_dict.keys():
+		var nest_key = key.split(".")
+		var real_node_owner = node_owner
+		# 查找以.隔开的嵌套项
+		for i in range(0,nest_key.size()-1):
+			if typeof(real_node_owner) != TYPE_OBJECT : break
+			real_node_owner = real_node_owner.get(nest_key[i])
+		if typeof(real_node_owner) != TYPE_OBJECT : break
+		var real_node = real_node_owner.get(nest_key[nest_key.size()-1])
+		if !is_instance_valid(real_node) or real_node.call('get_path') != node_dict.get(key):
+			var node = get_node_or_null(node_dict.get(key))
+			if update_if_null or ((!update_if_null) and node != null):
+				real_node_owner.set(nest_key[nest_key.size()-1], node)
+
+# 将当前属性相对last_pack内的属性有变动的放入新字典内返回，并同时更新旧字典（gdscript字典类型是传递引用的）
+# update_if_null: 如果存在值为null的属性，是否要应用于键值
+func update_node_dict(node_owner_path:String, node_list: PoolStringArray, last_pack: Dictionary = {}, update_if_null:bool = false) -> Dictionary:
+	var node_owner = self.get_node_or_null(node_owner_path)
+	if node_owner == null:
+		return {}
+	var new_pack:Dictionary = {}
+	for key in node_list:
+		var nest_key = key.split(".")
+		var value = node_owner
+		# 查找以.隔开的嵌套项
+		for i in range(0, nest_key.size()):
+			if typeof(value) != TYPE_OBJECT : break
+			value = value.get(nest_key[i])
+		if typeof(value) != TYPE_OBJECT : break
+		var node_path = value.get_path()
+		if node_path!=last_pack.get(key):
+			last_pack[key] = node_path # 更新旧字典
+			if update_if_null or ((!update_if_null) and node_path != null):
+				new_pack[key] = node_path
+	return new_pack
+
 
 remote func call_func(func_owner_path:String, func_dict: Dictionary):
 	var func_owner = self.get_node_or_null(func_owner_path)
