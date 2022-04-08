@@ -75,6 +75,8 @@ var last_sync_statemachine_status : Dictionary = {}
 var last_sync_property_status: Dictionary = {}
 # 记录上一次同步的node属性状态
 var last_sync_node_status: Dictionary = {}
+# 记录上一次同步的server属性状态
+var last_sync_server_property_status: Dictionary = {}
 # 定时强行同步的计时器（需要定时同步防止因为丢包造成问题）
 var sync_status_timer:Timer
 
@@ -121,6 +123,19 @@ func ejected_from_bubble(eject_angle :float ,bubble):
 	current_absorb_bubble = bubble
 	print_debug('ejected_from_bubble ', bubble)
 
+#func hurt(p_hit_to_direction = null):
+#	if(typeof(p_hit_to_direction) == TYPE_BOOL):
+#		collision_module.hit_to_direction = p_hit_to_direction
+#		movement_state_machine.change_state(MS_HurtState.new(self))
+#		anim_state_machine.change_state(AS_HurtState.new(self))
+#
+#func squish_hit_hurt(p_hit_to_direction = null):
+#	hurt_move_timer.set_wait_time(0.1)
+#	hurt_move_timer.start()
+#	set_collision_mask(00000000000000000011)
+#	hurt(p_hit_to_direction)
+#	collision_module.can_be_squished = false
+
 func tocourch_anim_end():
 	movement_anim_player.play("CrouchIdle_Anim")
 
@@ -137,7 +152,8 @@ func die_anim_start():
 	collision_module.die_collision_change()
 
 func die_anim_end():
-	get_owner().queue_free()
+	if is_instance_valid(owner):
+		owner.queue_free()
 
 func anim_call_play_foot_step_sound():
 	var i = randi() % 8
@@ -171,6 +187,20 @@ func sync_status():
 	# 如果处于联机模式下
 	if get_tree().has_network_peer() \
 		and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+		#由服务器计算的内容
+		if MultiplayerState.is_network_master():
+			## 同步server_property_status ##
+			var diff_server_property_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_property_status）和当前内容不一样，
+			# 将变更过的内容放入diff_property_status内, 同时更新last_sync_property_status
+			diff_server_property_status = EntitySyncManager.update_property_dict(
+				self.get_path(),
+				['hp'], 
+				last_sync_server_property_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_server_property_status.values().empty():
+				EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_server_property_status, false)
+			
 		# 如果自己不是master节点
 		if !self.is_network_master():
 			name_label.text = MultiplayerState.remote_player_info['custom_name']
@@ -235,6 +265,7 @@ func clear_last_sync_status():
 	last_sync_statemachine_status.clear()
 	last_sync_property_status.clear()
 	last_sync_node_status.clear()
+	last_sync_server_property_status.clear()
 
 
 func sync_timer_init(timer: Timer):

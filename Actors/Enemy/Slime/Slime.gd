@@ -48,6 +48,15 @@ onready var player_detectshape = $PlayerDetector/PlayerDetectShape
 
 onready var SDM_Timer = $SquishDamageMoveTimer
 
+# 记录上一次同步的状态机状态
+var last_sync_statemachine_status : Dictionary = {}
+# 记录上一次同步的属性状态
+var last_sync_property_status: Dictionary = {}
+# 记录上一次同步的node属性状态
+var last_sync_node_status: Dictionary = {}
+# 定时强行同步的计时器（需要定时同步防止因为丢包造成问题）
+var sync_status_timer:Timer
+
 func _ready():
 	#将每个对象的物理碰撞独立出来
 	get_node("PhysicCollision").shape = get_node("PhysicCollision").shape.duplicate()
@@ -72,6 +81,8 @@ func _ready():
 	
 	player_detectshape.disabled = true
 	
+	sync_timer_init(sync_status_timer)
+	
 func _physics_process(delta):
 	state_machine.update()
 	
@@ -79,6 +90,8 @@ func _physics_process(delta):
 	
 	if movement_module.is_moving_finished and can_change_element and (element_state == "Fire") and player != null:
 		state_machine.change_state(F_ChaseState.new(self))
+	
+	sync_status()
 	
 func _turn_around():
 	if movement_module.is_moving_finished and movement_module.is_on_object:
@@ -152,3 +165,88 @@ func inside_icefog():
 				state_machine.change_state(NtoIState.new(self))
 			"Fire":
 				state_machine.change_state(FtoNState.new(self))
+
+
+func sync_status(reliable:bool = false):
+	# 如果处于联机模式下
+	if get_tree().has_network_peer() \
+	and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+		# 如果自己是master节点
+		if is_network_master():
+			## 同步property_status ##
+			var diff_property_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_property_status）和当前内容不一样，
+			# 将变更过的内容放入diff_property_status内, 同时更新last_sync_property_status
+			diff_property_status = EntitySyncManager.update_property_dict(
+				self.get_path(), [
+					'element_state', 'can_change_element', 'can_cause_squish_damage', 
+					'velocity', 'gravity', 'deceleration', 'acceleration', 'global_position', 'scale', 
+					'movement_module.velocity', 'movement_module.gravity', 'movement_module.deceleration', 
+					'movement_module.is_normal_move', 'movement_module.is_fire_move', 'movement_module.is_hurt_move_left', 
+					'movement_module.is_moving_left', 'movement_module.is_moving_finished', 'movement_module.is_on_object'
+				], last_sync_property_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_property_status.values().empty():
+				if(reliable):
+					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_property_status, false)
+				else:
+					EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_property', self.get_path(), diff_property_status, false)
+			
+			## 同步statemachine_status ##
+			var diff_statemachine_status:Dictionary = {}
+			# 如果上一次同步的内容（last_sync_statemachine_status）和当前内容不一样，
+			# 将变更过的内容放入diff_statemachine_status内, 同时更新last_sync_statemachine_status
+			diff_statemachine_status = EntitySyncManager.update_statemachine_dict(
+				self.get_path(),
+				['state_machine'], 
+				last_sync_statemachine_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_statemachine_status.values().empty():
+				if(reliable):
+					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), diff_statemachine_status, false)
+				else:
+					EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), diff_statemachine_status, false)
+			
+			## 同步node_status ##
+			var diff_node_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_node_status）和当前内容不一样，
+			# 将变更过的内容放入diff_node_status内, 同时更新last_sync_node_status
+			diff_node_status = EntitySyncManager.update_node_dict(
+				self.get_path(),
+				['player'],
+				last_sync_node_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_node_status.values().empty():
+				EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
+
+
+func clear_last_sync_status():
+	last_sync_property_status.clear()
+	last_sync_statemachine_status.clear()
+	last_sync_node_status.clear()
+
+
+func sync_timer_init(timer: Timer):
+	if typeof(timer)== TYPE_OBJECT:
+		timer.call('stop')
+	timer = Timer.new()
+	timer.one_shot = false
+	timer.process_mode = 1
+	timer.wait_time = 2
+	timer.connect("timeout", self, "clear_last_sync_status")
+	add_child(timer)
+	timer.start()
+
+
+# 输入State的name，返回一个新建的State对象，如果找不到对应的State，则返回null
+func get_new_state_by_name(state_name) -> State:
+	var state_array = [
+		N_IdleState,I_IdleState,F_IdleState,
+		N_MoveState,F_WanderState,F_ChaseState,
+		NtoIState,ItoNState,NtoFState,FtoNState
+	]
+	for state_i in state_array:
+		if state_name == state_i.get_name():
+			return state_i.new(self)
+	return null
+

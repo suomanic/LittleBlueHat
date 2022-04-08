@@ -75,16 +75,14 @@ func die_collision_change():
 	owner.trigger_collision.set_disabled(true)
 	owner.squish_collision.set_disabled(true)
 	pass
-	
+
 
 func _on_enemy_area_entered(area: Area2D):
-	# 部分area的owner本身目前没有element_state这个变量（比如剑），会卡死游戏
-	# 所以用get方法而不是直接引用，get不到会返回null而不是卡死
 	is_bounced = true
-	var body
+	var body = area.get_owner()
 	
-	if area.get_owner() != null:
-		body = area.get_owner()
+	if body == null:
+		return
 	if body.name.begins_with("Slime"):
 		if body.get("element_state") == "Normal" :
 			pass
@@ -97,6 +95,12 @@ func _on_enemy_area_entered(area: Area2D):
 			if owner.hp > 0: 
 				owner.movement_state_machine.change_state(owner.MS_HurtState.new(owner))
 				owner.anim_state_machine.change_state(owner.AS_HurtState.new(owner))
+#				if get_tree().has_network_peer() \
+#					and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+#						if EntitySyncManager.is_network_master():
+#							owner.hurt()
+#							EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'call_func', owner.get_path(), {'hurt':[hit_to_direction]})
+#				else: owner.hurt()
 
 	pass # Replace with function body.
 
@@ -132,7 +136,14 @@ func _on_SquishHitBox_body_entered(body):
 			owner.anim_state_machine.change_state(owner.AS_HurtState.new(owner))
 			owner.movement_state_machine.change_state(owner.MS_HurtState.new(owner))
 			can_be_squished = false
-		pass
+		
+#			if get_tree().has_network_peer() \
+#			and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
+#				if EntitySyncManager.is_network_master():
+#					owner.squish_hit_hurt()
+#					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'call_func', owner.get_path(), {'squish_hit_hurt':[hit_to_direction]})
+#			else: owner.squish_hit_hurt()
+
 
 func _on_SDM_Timer_timeout():
 	owner.set_collision_mask(00000000000000100011)
