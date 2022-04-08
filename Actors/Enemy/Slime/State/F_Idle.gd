@@ -21,4 +21,4 @@ func exit():
 	pass
 
 static func get_name():
-	return "move"
+	return "F_Idle"

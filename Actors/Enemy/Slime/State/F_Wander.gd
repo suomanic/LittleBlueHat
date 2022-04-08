@@ -28,7 +28,7 @@ func exit():
 	pass
 
 static func get_name():
-	return "F_Move"
+	return "F_Wander"
 	
 	
 

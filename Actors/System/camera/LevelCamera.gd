@@ -16,7 +16,7 @@ func _physics_process(delta):
 	Engine.time_scale = time_slow_curve.interpolate(time)
 	
 	
-	if player != null:
+	if is_instance_valid(player):
 		if player.movement_state_machine.is_state("Absorbed") and is_instance_valid(player.current_absorb_bubble):
 			global_position = player.current_absorb_bubble.round()
 		else:
@@ -25,7 +25,8 @@ func _physics_process(delta):
 	else:
 		if get_tree().has_network_peer() \
 			and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
-			player = get_tree().get_current_scene().get_node(MultiplayerState.my_player_instance.name)
+			if is_instance_valid(MultiplayerState.my_player_instance):
+				player = get_tree().get_current_scene().get_node(MultiplayerState.my_player_instance.name)
 		else:
 			for c in get_tree().current_scene.get_children():
 				if c.name.begins_with("Player"):

@@ -26,6 +26,6 @@ func exit():
 	pass
 
 static func get_name():
-	return "move"
+	return "N_Move"
 	
 

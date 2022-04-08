@@ -283,7 +283,7 @@ move_speed = 40
 fire_pos = Vector2( 0, -100 )
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
-position = Vector2( -823.469, -104.108 )
+position = Vector2( -407.044, -44.2984 )
 
 [node name="Teleport" parent="." instance=ExtResource( 8 )]
-position = Vector2( -751.957, -104.991 )
+position = Vector2( -397.806, -25.09 )
