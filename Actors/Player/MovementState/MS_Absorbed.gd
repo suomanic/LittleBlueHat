@@ -19,9 +19,11 @@ func execute():
 	if time > 0.2:
 		owner.anim_sprite.set_visible(false)
 	
-	if is_instance_valid(owner.current_absorb_bubble) and absolute_position!=null:
-		owner.global_position = lerp(absolute_position,owner.current_absorb_bubble.global_position,owner.absorbed_curve.interpolate(time))
-	
+	if is_instance_valid(owner.current_absorb_bubble):
+		if absolute_position!=null:
+			owner.global_position = lerp(absolute_position,owner.current_absorb_bubble.global_position,owner.absorbed_curve.interpolate(time))
+#		if owner.current_absorb_bubble.behavior_state_machine.get_curr_state_name() == owner.current_absorb_bubble.freeState.get_name():
+#			pass
 
 func exit():
 	owner.get_node("Weapon").character_exit_absorbed()

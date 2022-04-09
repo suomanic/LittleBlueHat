@@ -138,25 +138,21 @@ func arrow_sprite_movement():
 func _on_Bubble_body_entered(body):
 	if not Engine.editor_hint:
 		if body.is_in_group("Player") and player == null:
-			var temp_flag:bool = false
+			if body.collision_module.facing():
+				absorb_direction = true
+			else :
+				absorb_direction = false
+			
+			player = body
 			if get_tree().has_network_peer() \
 			and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
 				if is_network_master():
-					temp_flag = true
+					# !!!一定要保证player在远程被设置后才变化状态
+					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_node', self.get_path(), {'player':player.get_path()}, false)
+					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_property', self.get_path(), {'absorb_direction':absorb_direction}, false)
+					behavior_state_machine.change_state(occupiedState.new(self))
 			else:
-				temp_flag = true
-			
-			if temp_flag:
-				if body.collision_module.facing():
-					absorb_direction = true
-				else :
-					absorb_direction = false
-				
-				player = body
-				# !!!一定要保证player在远程被设置后才变化状态
-				EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_node', self.get_path(), {'player':player.get_path()}, false)
 				behavior_state_machine.change_state(occupiedState.new(self))
-
 
 func anim_called_character_shadow_to_idle():
 	if not Engine.editor_hint: 
@@ -194,10 +190,11 @@ func eject():
 	and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
 		# 如果自己的player是master节点
 		if is_instance_valid(player) and player.is_network_master():
+			# 客户端：通知服务端eject
+			# 服务端：通知客户端eject，同时自己eject
+			EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), {'behavior_state_machine':ejectState.get_name()}, false)
 			if is_network_master():
 				behavior_state_machine.change_state(ejectState.new(self))
-			else:
-				EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), {'behavior_state_machine':ejectState.get_name()}, false)
 	else:
 		behavior_state_machine.change_state(ejectState.new(self))
 
@@ -219,6 +216,18 @@ func sync_status(reliable:bool = false):
 	and get_tree().network_peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED:
 		# 如果自己是master节点
 		if is_network_master():
+			## 同步node_status ##
+			var diff_node_status :Dictionary = {}
+			# 如果上一次同步的内容（last_sync_node_status）和当前内容不一样，
+			# 将变更过的内容放入diff_node_status内, 同时更新last_sync_node_status
+			diff_node_status = EntitySyncManager.update_node_dict(
+				self.get_path(),
+				['player'],
+				last_sync_node_status, false)
+			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
+			if !diff_node_status.values().empty():
+				EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
+		
 			## 同步property_status ##
 			var diff_property_status :Dictionary = {}
 			# 如果上一次同步的内容（last_sync_property_status）和当前内容不一样，
@@ -247,24 +256,14 @@ func sync_status(reliable:bool = false):
 				last_sync_statemachine_status, false)
 			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
 			if !diff_statemachine_status.values().empty():
-				if(reliable):
+				# fix:临时解决可能出现的弹出气泡时服务端气泡状态改变而客户端玩家状态未改变的问题
+				if reliable or diff_statemachine_status.get('behavior_state_machine') == ejectState.get_name():
 					EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), diff_statemachine_status, false)
 				else:
 					EntitySyncManager.rpc_unreliable_id(MultiplayerState.remote_id, 'update_statemachine', self.get_path(), diff_statemachine_status, false)
 			
-			## 同步node_status ##
-			var diff_node_status :Dictionary = {}
-			# 如果上一次同步的内容（last_sync_node_status）和当前内容不一样，
-			# 将变更过的内容放入diff_node_status内, 同时更新last_sync_node_status
-			diff_node_status = EntitySyncManager.update_node_dict(
-				self.get_path(),
-				['player'],
-				last_sync_node_status, false)
-			# 如果当前状态和上一次同步时相比没有改变，则不进行同步,否则同步
-			if !diff_node_status.values().empty():
-				EntitySyncManager.rpc_id(MultiplayerState.remote_id, 'update_node', self.get_path(), diff_node_status, false)
-		
 		# 如果自己的player是master节点
+		# comment: 放这里和放在player内哪种方案好一点?
 		if is_instance_valid(player) and player.is_network_master():
 			## 同步arrow_property_status ##
 			var diff_arrow_property_status :Dictionary = {}
